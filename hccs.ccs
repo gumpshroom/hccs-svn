@@ -1,0 +1,49 @@
+[ dairy goat ]
+if hasskill Disintegrate
+    skill disintegrate
+endif
+abort
+
+[ default ]
+try to steal an item
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ factory overseer ]
+if hasskill Disintegrate
+    skill disintegrate
+endif
+abort
+
+[ fluffy bunny ]
+if hasskill release the boots
+    skill release the boots
+endif
+abort
+
+[ gnollish bodybuilder ]
+if hasskill release the boots
+    skill release the boots
+endif
+abort
+
+[ gnollish crossdresser ]
+if hasskill release the boots
+    skill release the boots
+endif
+abort
+
+[ novelty tropical skeleton ]
+if hasskill Disintegrate
+    skill disintegrate
+endif
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ one-eyed gnoll ]
+if hasskill release the boots
+    skill release the boots
+endif
+abort
+
