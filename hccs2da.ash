@@ -93,7 +93,7 @@ boolean reach_mp(int value)
 {
 	if (my_mp() >= value)
 		return true;
-	if (have_skill($skill[Lunch Break]))
+	if (have_skill($skill[Soul Saucery]))
 	{
 		while ((my_mp() < value) && (my_soulsauce() >= 5))
 		{
