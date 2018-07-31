@@ -348,6 +348,16 @@ void main(){
 			cli_execute("boombox meat");
 		}
 
+		// unlock the briefcase
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		{
+			if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+				cli_execute("Briefcase unlock");
+				cli_execute("Briefcase booze");
+				cli_execute("Briefcase e spell adventures");
+			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
+		}
+
 		//dive in vip swimming pool
 		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
 		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
@@ -821,6 +831,9 @@ void main(){
 		{
 			cli_execute("pool 3");
 		}
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+			cli_execute("Briefcase b item");
+		}
 
 		wish = "to be Infernal Thirst";
 		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
@@ -981,6 +994,10 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		{
+			equip($slot[acc3], $item[Kremlin's Greatest Briefcase]);
+		}
 
 		//magic dragonfish does not seem to work here!
 
@@ -1056,6 +1073,10 @@ void main(){
 		{
 			equip($slot[acc1], $item[dead guy's watch]);
 		}
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		{
+			equip($slot[acc3], $item[Kremlin's Greatest Briefcase]);
+		}
 		//adv gear
 
 		cli_execute("telescope high");
@@ -1100,6 +1121,12 @@ void main(){
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
+
+		// setup briefcase
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+			cli_execute("Briefcase booze");
+			cli_execute("Briefcase e weapon hot -combat");
+		}
 
 		//fantasyland only
 		if((get_property("frAlways") == True)&&(item_amount($item[FantasyRealm G. E. M.]) < 1))
