@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.3 by iloath
+//HCCS 2day 100% v0.4 by iloath
 
 script "hccs2da.ash";
 notify iloath;
@@ -216,6 +216,10 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 
 	print("SUMMONING PANTS", "red");
 	visit_url("choice.php?whichchoice=1270&pwd&option=1&m="+m+"&e="+e+"&s1="+s1+"&s2="+s2+"&s3="+s3,true,true);
+	if (item_amount($item[pantogram pants]) == 0)
+	{
+		abort("Couldn't summon pants");
+	}
 }
 
 void main(){
