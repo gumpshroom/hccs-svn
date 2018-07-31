@@ -56,39 +56,6 @@ void complete_quest(string questname, int choicenumber)
 	try_num();
 }
 
-void burn_mp()
-{
-	print("Using up mp", "blue");
-	if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-	{
-		use_skill(1 ,$skill[Grab a Cold One]);
-	}
-	if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-	{
-		use_skill(1 ,$skill[Spaghetti Breakfast]);
-	}
-	if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Saucecrafting]);
-	}
-	if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-	}
-	if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-	{
-		use_skill(1 ,$skill[Pastamastery]);
-	}
-	if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-	{
-		use_skill(1 ,$skill[Perfect Freeze]);
-	}
-	if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-	{
-		use_skill(1 ,$skill[Lunch Break]);
-	}
-}
-
 boolean reach_mp(int value)
 {
 	if (my_mp() >= value)
@@ -198,6 +165,48 @@ void try_item(item value)
 	}
 }
 
+void burn_mp()
+{
+	print("Using up mp", "blue");
+	try_skill($skill[Grab a Cold One]);
+	try_skill($skill[Spaghetti Breakfast]);
+	try_skill($skill[Advanced Saucecrafting]);
+	try_skill($skill[Advanced Cocktailcrafting]);
+	try_skill($skill[Pastamastery]);
+	try_skill($skill[Perfect Freeze]);
+	try_skill($skill[Lunch Break]);
+	/*
+	if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
+	{
+		use_skill(1 ,$skill[Grab a Cold One]);
+	}
+	if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
+	{
+		use_skill(1 ,$skill[Spaghetti Breakfast]);
+	}
+	if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
+	{
+		use_skill(1 ,$skill[Advanced Saucecrafting]);
+	}
+	if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
+	{
+		use_skill(1 ,$skill[Advanced Cocktailcrafting]);
+	}
+	if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
+	{
+		use_skill(1 ,$skill[Pastamastery]);
+	}
+	if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
+	{
+		use_skill(1 ,$skill[Perfect Freeze]);
+	}
+	if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
+	{
+		use_skill(1 ,$skill[Lunch Break]);
+	}
+	*/
+}
+
 void summon_pants(string m, string e, string s1, string s2, string s3)
 {
 	if (item_amount($item[portable pantogram]) == 0)
@@ -252,7 +261,7 @@ void main(){
 
 	//init
 	skill ToCast = $skill[Spirit of Peppermint];
-	familiar ToTour = $familiar[Reassembled Blackbird]; //set this, TODO: auto this
+	familiar ToTour = $familiar[Origami Towel Crane]; //set this, TODO: auto this
 	boolean AddHotdog = false; //TODO
 	string wish = "init";
 	string clan = get_clan_name();
@@ -423,34 +432,7 @@ void main(){
 		try_item($item[Newbiesport&trade; tent]);
 
 		ToCast = $skill[Spirit of Peppermint];
-		/*
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[The Magical Mojomuscular Melody];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Sauce Contemplation];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		*/
+
 		force_skill($skill[Spirit of Peppermint]);
 		force_skill($skill[The Magical Mojomuscular Melody]);
 		force_skill($skill[Sauce Contemplation]);
@@ -483,6 +465,8 @@ void main(){
 		}
 
 		print("Y-RAY FAX", "blue");
+		if (my_maxmp() < mp_cost($skill[Disintegrate]))
+			abort("mp cap too law or YRAY");
 		cli_execute("shower mp");
 
 		ToCast = $skill[Disintegrate];
@@ -502,6 +486,7 @@ void main(){
 			cli_execute("mcd 11");
 
 		print("Breakfast Prep", "blue");
+		/*
 		ToCast = $skill[Advanced Saucecrafting];
 		if(have_skill(ToCast))
 		{
@@ -512,6 +497,8 @@ void main(){
 			else abort("Not enough mp.");
 		}
 		else abort("No required skill.");
+		*/
+		force_skill($skill[Advanced Saucecrafting]);
 
 		buy(1 , $item[Dramatic&trade; range], 1000);
 		use(1 , $item[Dramatic&trade; range]);
@@ -526,6 +513,8 @@ void main(){
 
 
 		//40 mp remain if fantasy mage hat
+		burn_mp();
+		/*
 		print("Using up mp", "blue");
 		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
 		{
@@ -555,6 +544,7 @@ void main(){
 		{
 			use_skill(1 ,$skill[Lunch Break]);
 		}
+		*/
 
 		complete_quest("COIL WIRE", 11);
 
@@ -759,10 +749,13 @@ void main(){
 		}
 
 		print("Perfect Drink", "blue");
+		/*
 		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
 		{
 			use_skill(1 ,$skill[Perfect Freeze]);
 		}
+		*/
+		force_skill($skill[Perfect Freeze]);
 
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 250))
 		{
@@ -828,7 +821,7 @@ void main(){
 		wish = "to be Infernal Thirst";
 		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-
+		/*
 		ToCast = $skill[Steely-Eyed Squint];
 		if(have_skill(ToCast))
 		{
@@ -838,9 +831,13 @@ void main(){
 			}
 			else abort("Not enough mp.");
 		}
+		*/
+		force_skill($skill[Steely-Eyed Squint]);
 
 		//use up mp
 		print("Using up mp", "blue");
+		burn_mp();
+		/*
 		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
 		{
 			use_skill(1 ,$skill[Grab a Cold One]);
@@ -869,6 +866,7 @@ void main(){
 		{
 			use_skill(1 ,$skill[Lunch Break]);
 		}
+		*/
 
 		complete_quest("MAKE MARGARITAS", 9);
 
@@ -928,20 +926,28 @@ void main(){
 			cli_execute("pool 2");
 		}
 
-
+		/*
 		if(have_skill($skill[Spirit of Peppermint]))
 		{
 			use_skill(1 ,$skill[Spirit of Peppermint]);
 		}
+		*/
+		force_skill($skill[Spirit of Peppermint]);
+		force_skill($skill[Simmer]);
+		/*
 		if(have_skill($skill[Simmer]))
 		{
 			use_skill(1 ,$skill[Simmer]);
-			try_num();
 		}
+		*/
+		try_num();
+		force_skill($skill[Song of Sauce]);
+		/*
 		if(have_skill($skill[Song of Sauce]) && (my_mp() >= mp_cost($skill[Song of Sauce])))
 		{
 			use_skill(1 ,$skill[Song of Sauce]);
 		}
+		*/
 		//hatter mariachi hat or powdered wig
 		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0))
 		{
@@ -996,7 +1002,7 @@ void main(){
 		use_familiar(ToTour);
 
 
-
+		/*
 		ToCast = $skill[Rage of the Reindeer];
 		if(have_skill(ToCast))
 		{
@@ -1028,6 +1034,11 @@ void main(){
 			}
 			else abort("Not enough mp.");
 		}
+		*/
+		
+		force_skill($skill[Rage of the Reindeer]);
+		force_skill($skill[Bow-Legged Swagger]);
+		force_skill($skill[Song of the North]);
 
 
 
