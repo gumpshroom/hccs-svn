@@ -215,6 +215,7 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 
 	print("SUMMONING PANTS", "red");
+	visit_url("inv_use.php?pwd&which=99&whichitem=9573");
 	visit_url("choice.php?whichchoice=1270&pwd&option=1&m="+m+"&e="+e+"&s1="+s1+"&s2="+s2+"&s3="+s3,true,true);
 	if (item_amount($item[pantogram pants]) == 0)
 	{
