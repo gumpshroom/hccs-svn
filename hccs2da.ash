@@ -761,12 +761,23 @@ void main(){
 				drink(1, $item[Perfect paloma]);
 			}
 			else abort("No perfect drink.");
+
 			if (my_inebriety() <= 8)
 			{
-				cli_execute("drink cup of tea");
+				if (item_amount($item[splendid martini]) > 0)
+				{
+					drink(1, $item[splendid martini]);
+				} else {
+					cli_execute("drink cup of tea");
+				}
 			}
 
-			drink(1, $item[thermos full of Knob coffee]);
+			if (item_amount($item[splendid martini]) > 0)
+			{
+				drink(1, $item[splendid martini]);
+			} else {
+				drink(1, $item[thermos full of Knob coffee]);
+			}
 		}
 		else abort("Ode loop fail.");
 
@@ -1379,7 +1390,13 @@ void main(){
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
-			drink(1, $item[asbestos thermos]);
+			if (item_amount($item[splendid martini]) >= 4) {
+				drink(4, $item[splendid martini]);
+			}
+			else
+			{
+				drink(1, $item[asbestos thermos]);
+			}
 			drink(1, $item[astral pilsner]);
 			//consider fruity drink if no thermos
 		}
