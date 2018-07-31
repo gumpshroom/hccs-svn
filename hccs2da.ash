@@ -500,18 +500,7 @@ void main(){
 			cli_execute("mcd 11");
 
 		print("Breakfast Prep", "blue");
-		/*
-		ToCast = $skill[Advanced Saucecrafting];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		else abort("No required skill.");
-		*/
+
 		force_skill($skill[Advanced Saucecrafting]);
 
 		buy(1 , $item[Dramatic&trade; range], 1000);
@@ -525,40 +514,8 @@ void main(){
 		eat(1 , $item[fortune cookie]);
 
 
-
 		//40 mp remain if fantasy mage hat
 		burn_mp();
-		/*
-		print("Using up mp", "blue");
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
-		*/
 
 		complete_quest("COIL WIRE", 11);
 
@@ -612,11 +569,7 @@ void main(){
 		}
 		cli_execute("hottub");
 
-
-
-
 		//if poor rng then no adv here, ode+tea now?
-
 
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
@@ -647,7 +600,6 @@ void main(){
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
 		run_combat();
 		try_num();
-
 
 
 		print("Farming until semirare", "blue");
@@ -838,52 +790,12 @@ void main(){
 		wish = "to be Infernal Thirst";
 		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-		/*
-		ToCast = $skill[Steely-Eyed Squint];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		*/
+
 		force_skill($skill[Steely-Eyed Squint]);
 
 		//use up mp
 		print("Using up mp", "blue");
 		burn_mp();
-		/*
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
-		*/
 
 		complete_quest("MAKE MARGARITAS", 9);
 
@@ -943,28 +855,11 @@ void main(){
 			cli_execute("pool 2");
 		}
 
-		/*
-		if(have_skill($skill[Spirit of Peppermint]))
-		{
-			use_skill(1 ,$skill[Spirit of Peppermint]);
-		}
-		*/
 		force_skill($skill[Spirit of Peppermint]);
 		force_skill($skill[Simmer]);
-		/*
-		if(have_skill($skill[Simmer]))
-		{
-			use_skill(1 ,$skill[Simmer]);
-		}
-		*/
 		try_num();
 		force_skill($skill[Song of Sauce]);
-		/*
-		if(have_skill($skill[Song of Sauce]) && (my_mp() >= mp_cost($skill[Song of Sauce])))
-		{
-			use_skill(1 ,$skill[Song of Sauce]);
-		}
-		*/
+
 		//hatter mariachi hat or powdered wig
 		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0))
 		{
@@ -1021,48 +916,10 @@ void main(){
 		}
 		else abort("Ode loop fail.");
 		use_familiar(ToTour);
-
-
-		/*
-		ToCast = $skill[Rage of the Reindeer];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Bow-Legged Swagger];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Song of the North];
-		if(have_skill(ToCast))
-		{
-			while ((my_mp() < mp_cost(ToCast)) && (my_soulsauce() >= 5))
-			{
-				use_skill(1 ,$skill[Soul Food]);
-			}
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		*/
 		
 		force_skill($skill[Rage of the Reindeer]);
 		force_skill($skill[Bow-Legged Swagger]);
 		force_skill($skill[Song of the North]);
-
-
-
 
 		print("Rollover Prep", "blue");
 		if ((item_amount($item[psychic's circlet]) > 0) && (my_basestat($stat[moxie]) >= 35))
@@ -1094,22 +951,6 @@ void main(){
 	//do fortune and fax a factory overseer
 	if (my_daycount() >= 2)
 	{
-		/*
-		cli_execute("/w easyfax factory overseer");
-		print("Poking Easyfax for overseer");
-		if (item_amount($item[photocopied monster]) <= 0)
-		repeat {wait(5); refresh_status();}
-		until (item_amount($item[photocopied monster]) > 0);
-		print("Done Fax");
-		*/
-		//numberology 18
-		/*
-		if(((have_skill($skill[Calculate the Universe]))&&(get_property("_universeCalculated").to_int() < get_property("skillLevel144").to_int())))
-		{
-			cli_execute("numberology 18");
-		}
-		*/
-
 		if(item_amount($item[photocopied monster]) == 0)
 		{
 			print("No photocopied monster, skipping in...");
@@ -2046,3 +1887,4 @@ void main(){
 	//page = visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 
 }
+
