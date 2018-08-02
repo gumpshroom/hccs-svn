@@ -91,7 +91,7 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[soda water]);
 	}
-	while ((my_mp() < value) && (item_amount($item[magical mystery juice]) >= 1))
+	while ((my_mp() < value) && my_meat() >= 2000)
 	{
 		use(1, $item[magical mystery juice]);
 	}
