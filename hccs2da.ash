@@ -188,36 +188,6 @@ void burn_mp()
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
 	try_skill($skill[Lunch Break]);
-	/*
-	if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-	{
-		use_skill(1 ,$skill[Grab a Cold One]);
-	}
-	if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-	{
-		use_skill(1 ,$skill[Spaghetti Breakfast]);
-	}
-	if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Saucecrafting]);
-	}
-	if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-	}
-	if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-	{
-		use_skill(1 ,$skill[Pastamastery]);
-	}
-	if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-	{
-		use_skill(1 ,$skill[Perfect Freeze]);
-	}
-	if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-	{
-		use_skill(1 ,$skill[Lunch Break]);
-	}
-	*/
 }
 
 void summon_pants(string m, string e, string s1, string s2, string s3)
