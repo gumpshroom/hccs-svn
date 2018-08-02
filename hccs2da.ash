@@ -988,7 +988,8 @@ void main(){
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
 
 		// setup briefcase
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		{
 			cli_execute("Briefcase booze");
 			cli_execute("Briefcase e weapon hot -combat");
 		}
