@@ -498,15 +498,11 @@ void main(){
 		cli_execute("shower mp");
 
 		ToCast = $skill[Disintegrate];
-		if(have_skill(ToCast))
+		if(force_skill(ToCast, false))
 		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				if (item_amount($item[photocopied monster]) > 0)
-					use(1, $item[photocopied monster]);
-				else abort("You do not have a photocopied monster.");
-			}
-			else abort("Not enough mp.");
+			if (item_amount($item[photocopied monster]) > 0)
+				use(1, $item[photocopied monster]);
+			else abort("You do not have a photocopied monster.");
 		}
 		else abort("No Y-RAY.");
 		try_num();
@@ -737,10 +733,8 @@ void main(){
 		*/
 		force_skill($skill[Perfect Freeze]);
 
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 250))
+		if ((my_meat() >= 250) && force_skill($skill[The Ode to Booze]))
 		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-
 			//drink perfect drink here
 			//wine=rum>vodka=gin>whiskey=tequila
 			if (item_amount($item[boxed wine]) > 0)
@@ -791,8 +785,7 @@ void main(){
 			} else {
 				drink(1, $item[thermos full of Knob coffee]);
 			}
-		}
-		else abort("Ode loop fail.");
+		} else abort("Ode loop fail.");
 
 		print("Task Prep (+item)", "blue");
 		//+item%
@@ -838,14 +831,10 @@ void main(){
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
 			ToCast = $skill[Disintegrate];
-			if(have_skill(ToCast))
+			if(force_skill(ToCast, false))
 			{
-				if (my_mp() >= mp_cost(ToCast))
-				{
-					adventure(1, $location[The Skeleton Store]);
-					try_num();
-				}
-				else abort("Not enough mp.");
+				adventure(1, $location[The Skeleton Store]);
+				try_num();
 			}
 			else abort("No Y-RAY.");
 		}
