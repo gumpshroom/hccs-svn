@@ -115,23 +115,33 @@ boolean reach_meat(int value)
 	return true;
 }
 
-void force_skill(skill value)
+boolean force_skill(skill value, boolean use)
 {
 	if(have_skill(value))
 	{
 		if (my_maxmp() < mp_cost(value))
 		{
 			abort("Mp cap too low");
+			return false;
 		}
 		if (reach_mp(mp_cost(value)))
 		{
-			use_skill(1 ,value);
+			if (use)
+			{
+				return use_skill(1 ,value);
+			} else return true;
 		}
 		else
 		{
 			abort("Unable to obatin sufficent mp for: " + value);
+			return false;
 		}
-	}
+	} return !use;
+}
+
+boolean force_skill(skill value)
+{
+	return force_skill(value, true);
 }
 
 void try_skill(skill value)
@@ -849,9 +859,8 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 
 		print("Task Prep (spell dmg)", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((my_meat() >= 500) && force_skill($skill[The Ode to Booze]))
 		{
-			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Sockdollager");
 		}
 		else abort("Ode loop fail.");
