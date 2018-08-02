@@ -108,6 +108,9 @@ boolean reach_meat(int value)
 		return true;
 	foreach stone in $items[strongness elixir,magicalness-in-a-can,moxie weed,Doc Galaktik's Homeopathic Elixir, meat stack]
 		autosell(item_amount(stone), stone);
+
+	use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
+
 	if (my_meat() < value)
 	{
 		return false;
@@ -1143,10 +1146,7 @@ void main(){
 			try_num();
 		}
 		//make meat here if needed
-		foreach stone in $items[moxie weed,magicalness-in-a-can,strongness elixir,fine wine, meat stack, casino pass, hermit permit, half of a gold tooth]
-			autosell(item_amount(stone), stone);
-
-		use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
+		reach_meat(999999999);
 
 		print("Task Prep (hot res, 1st part)", "blue");
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
