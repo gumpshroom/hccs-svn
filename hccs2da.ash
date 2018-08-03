@@ -253,6 +253,7 @@ void main(){
 	boolean AddHotdog = false; //TODO
 	string wish = "init";
 	string clan = get_clan_name();
+	item KGB = $item[Kremlin's Greatest Briefcase];
 	//Oh No, Hobo
 	//115
 	//1
@@ -333,10 +334,10 @@ void main(){
 		}
 
 		// unlock the briefcase
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		if (item_amount(KGB) > 0)
 		{
 			if (svn_exists("Ezandora-Briefcase-branches-Release")) {
-				cli_execute("Briefcase unlock");
+				// Unlock with booze acquisition
 				cli_execute("Briefcase booze");
 				cli_execute("Briefcase e spell adventures");
 			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
@@ -771,7 +772,8 @@ void main(){
 		{
 			cli_execute("pool 3");
 		}
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+		if ((item_amount(KGB) + equipped_amount(KGB)) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		{
 			cli_execute("Briefcase b item");
 		}
 
@@ -872,9 +874,9 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		if (item_amount(KGB) > 0)
 		{
-			equip($slot[acc3], $item[Kremlin's Greatest Briefcase]);
+			equip($slot[acc3], KGB);
 		}
 
 		//magic dragonfish does not seem to work here!
@@ -913,9 +915,9 @@ void main(){
 		{
 			equip($slot[acc1], $item[dead guy's watch]);
 		}
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0)
+		if (item_amount(KGB) > 0)
 		{
-			equip($slot[acc3], $item[Kremlin's Greatest Briefcase]);
+			equip($slot[acc3], KGB);
 		}
 		//adv gear
 
@@ -947,7 +949,7 @@ void main(){
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
 
 		// setup briefcase
-		if (item_amount($item[Kremlin's Greatest Briefcase]) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		if ((item_amount(KGB) + equipped_amount(KGB)) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
 		{
 			cli_execute("Briefcase booze");
 			cli_execute("Briefcase e weapon hot -combat");
@@ -1082,6 +1084,10 @@ void main(){
 			use_skill(1 ,$skill[Lunch Break]);
 		}
 
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc3], KGB);
+		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
 			equip($slot[pants], $item[pantogram pants]);
@@ -1281,7 +1287,10 @@ void main(){
 		{
 			equip($slot[acc2], $item[psychic's amulet]);
 		}
-		if (item_amount($item[psychic's amulet]) > 0)
+		if (item_amount(KGB) > 0) {
+			equip($slot[acc1], KGB);
+		} 
+		else if (item_amount($item[psychic's amulet]) > 0)
 		{
 			equip($slot[acc1], $item[psychic's amulet]);
 		}
@@ -1791,6 +1800,10 @@ void main(){
 		if(item_amount($item[codpiece]) > 0)
 		{
 			equip($slot[acc1], $item[Codpiece]);
+		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc2], KGB);
 		}
 		if (item_amount($item[fish hatchet]) > 0)
 		{
