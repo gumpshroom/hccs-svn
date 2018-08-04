@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.4 by iloath
+//HCCS 2day 100% v0.5 by iloath
 
 script "hccs2da.ash";
 notify iloath;
@@ -56,6 +56,23 @@ void complete_quest(string questname, int choicenumber)
 	try_num();
 }
 
+boolean reach_meat(int value)
+{
+	if (my_meat() >= value)
+		return true;
+	
+	foreach stuff in $items[strongness elixir,magicalness-in-a-can,moxie weed,Doc Galaktik's Homeopathic Elixir, meat stack, meat paste, half of a gold tooth, loose teeth, asparagus knife]
+		autosell(item_amount(stuff), stuff);
+
+	use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
+
+	if (my_meat() < value)
+	{
+		return false;
+	}
+	return true;
+}
+
 boolean reach_mp(int value)
 {
 	if (my_mp() >= value)
@@ -91,27 +108,16 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[soda water]);
 	}
-	while ((my_mp() < value) && my_meat() >= 2000)
+	while ((my_mp() < value) && (item_amount($item[magical mystery juice]) >= 1))
 	{
 		use(1, $item[magical mystery juice]);
 	}
-	if (my_mp() < value)
+	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 2000))
 	{
-		return false;
+		buy(1, $item[magical mystery juice],100);
+		use(1, $item[magical mystery juice]);
 	}
-	return true;
-}
-
-boolean reach_meat(int value)
-{
-	if (my_meat() >= value)
-		return true;
-	foreach stone in $items[strongness elixir,magicalness-in-a-can,moxie weed,Doc Galaktik's Homeopathic Elixir, meat stack]
-		autosell(item_amount(stone), stone);
-
-	use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
-
-	if (my_meat() < value)
+	if (my_mp() < value)
 	{
 		return false;
 	}
@@ -206,6 +212,111 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 }
 
+boolean eat_dog(string dog, boolean add)
+{
+	//credit cc, modifed from cc_ascend
+	if(item_amount($item[Clan VIP Lounge Key]) == 0)
+	{
+		return false;
+	}
+	if(get_property("_fancyHotDogEaten").to_boolean() && (dog != "basic hot dog"))
+	{
+		return false;
+	}
+
+	dog = to_lower_case(dog);
+
+	static int [string] dogFull;
+	static item [string] dogReq;
+	static int [string] dogAmt;
+	static int [string] dogID;
+	dogFull["basic hot dog"] = 1;
+	dogFull["savage macho dog"] = 2;
+	dogFull["one with everything"] = 2;
+	dogFull["sly dog"] = 2;
+	dogFull["devil dog"] = 3;
+	dogFull["chilly dog"] = 3;
+	dogFull["ghost dog"] = 3;
+	dogFull["junkyard dog"] = 3;
+	dogFull["wet dog"] = 3;
+	dogFull["optimal dog"] = 1;
+	dogFull["sleeping dog"] = 2;
+	dogFull["video games hot dog"] = 3;
+
+	dogReq["basic hot dog"] = $item[none];
+	dogReq["savage macho dog"] = $item[furry fur];
+	dogReq["one with everything"] = $item[cranberries];
+	dogReq["sly dog"] = $item[skeleton bone];
+	dogReq["devil dog"] = $item[hot wad];
+	dogReq["chilly dog"] = $item[cold wad];
+	dogReq["ghost dog"] = $item[spooky wad];
+	dogReq["junkyard dog"] = $item[stench wad];
+	dogReq["wet dog"] = $item[sleaze wad];
+	dogReq["optimal dog"] = $item[tattered scrap of paper];
+	dogReq["sleeping dog"] = $item[gauze hammock];
+	dogReq["video games hot dog"] = $item[GameInformPowerDailyPro magazine];
+
+	dogAmt["basic hot dog"] = 0;
+	dogAmt["savage macho dog"] = 10;
+	dogAmt["one with everything"] = 10;
+	dogAmt["sly dog"] = 10;
+	dogAmt["devil dog"] = 25;
+	dogAmt["chilly dog"] = 25;
+	dogAmt["ghost dog"] = 25;
+	dogAmt["junkyard dog"] = 25;
+	dogAmt["wet dog"] = 25;
+	dogAmt["optimal dog"] = 25;
+	dogAmt["sleeping dog"] = 10;
+	dogAmt["video games hot dog"] = 3;
+
+	dogID["basic hot dog"] = 0;
+	dogID["savage macho dog"] = -93;
+	dogID["one with everything"] = -94;
+	dogID["sly dog"] = -95;
+	dogID["devil dog"] = -96;
+	dogID["chilly dog"] = -97;
+	dogID["ghost dog"] = -98;
+	dogID["junkyard dog"] = -99;
+	dogID["wet dog"] = -100;
+	dogID["optimal dog"] = -102;
+	dogID["sleeping dog"] = -101;
+	dogID["video games hot dog"] = -103;
+
+	if(!(dogFull contains dog))
+	{
+		abort("Invalid hot dog: " + dog);
+	}
+
+	string page = visit_url("clan_viplounge.php?action=hotdogstand");
+	if(!contains_text(page, dog))
+	{
+		return false;
+	}
+
+	if(fullness_limit()-my_fullness() < dogFull[dog])
+	{
+		return false;
+	}
+
+	if(storage_amount(dogReq[dog]) < dogAmt[dog])
+	{
+		return false;
+	}
+
+	visit_url("clan_viplounge.php?action=hotdogstand");
+
+	if((dogAmt[dog] > 0) && (add))
+	{
+		visit_url("clan_viplounge.php?preaction=hotdogsupply&hagnks=1&whichdog=" + dogID[dog] + "&quantity=" + dogAmt[dog]);
+		print("Supplying hot dogs...","green");
+	}
+
+	visit_url("clan_viplounge.php?action=hotdogstand");
+
+	cli_execute("eat 1 " + dog);
+	return true;
+}
+
 void main(){
 
 	//info
@@ -250,7 +361,7 @@ void main(){
 	//init
 	skill ToCast = $skill[Spirit of Peppermint];
 	familiar ToTour = $familiar[Origami Towel Crane]; //set this, TODO: auto this
-	boolean AddHotdog = false; //TODO
+	boolean AddHotdog = true;
 	string wish = "init";
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
@@ -495,6 +606,7 @@ void main(){
 		eat(1 , $item[fortune cookie]);
 
 
+
 		//40 mp remain if fantasy mage hat
 		burn_mp();
 
@@ -550,7 +662,11 @@ void main(){
 		}
 		cli_execute("hottub");
 
+
+
+
 		//if poor rng then no adv here, ode+tea now?
+
 
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
@@ -581,6 +697,7 @@ void main(){
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
 		run_combat();
 		try_num();
+
 
 
 		print("Farming until semirare", "blue");
@@ -616,7 +733,9 @@ void main(){
 		use(1 , $item[milk of magnesium]);
 		eat(2 , $item[ultrafondue]);
 		eat(3 , $item[tasty tart]);
-		cli_execute("eat optimal dog"); //TODO: change to vist_url to stop "The 'optimal dog' is not currently available in your clan" error, add code to add hotdog ingredients.
+		if (!eat_dog("optimal dog", AddHotdog))
+			abort("Cannot eat dog");
+		//cli_execute("eat optimal dog"); //TODO: change to vist_url to stop "The 'optimal dog' is not currently available in your clan" error, add code to add hotdog ingredients.
 		//lunchbox = 114
 		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 		{
@@ -683,7 +802,7 @@ void main(){
 
 			if (!have_skill($skill[Simmer]))
 			{
-				if (my_meat() >= 125)
+				if (reach_meat(125))
 				{
 					visit_url("guild.php?action=buyskill&skillid=25");
 				}
@@ -696,15 +815,10 @@ void main(){
 		}
 
 		print("Perfect Drink", "blue");
-		/*
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		*/
+
 		force_skill($skill[Perfect Freeze]);
 
-		if ((my_meat() >= 250) && force_skill($skill[The Ode to Booze]))
+		if ((reach_meat(250)) && force_skill($skill[The Ode to Booze]))
 		{
 			//drink perfect drink here
 			//wine=rum>vodka=gin>whiskey=tequila
@@ -784,8 +898,8 @@ void main(){
 		force_skill($skill[Steely-Eyed Squint]);
 
 		//use up mp
-		print("Using up mp", "blue");
 		burn_mp();
+		
 
 		complete_quest("MAKE MARGARITAS", 9);
 
@@ -823,7 +937,7 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 
 		print("Task Prep (spell dmg)", "blue");
-		if ((my_meat() >= 500) && force_skill($skill[The Ode to Booze]))
+		if ((reach_meat(500)) && force_skill($skill[The Ode to Booze]))
 		{
 			cli_execute("drink Sockdollager");
 		}
@@ -884,7 +998,7 @@ void main(){
 		complete_quest("MAKE SAUSAGE", 7);
 
 		print("Task Prep (weapon dmg)", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Sockdollager");
@@ -966,7 +1080,7 @@ void main(){
 		// autosell pen pal gift
 		autosell(item_amount($item[electric crutch]), $item[electric crutch]);
 
-		if (my_meat() >= 24*3)
+		if (reach_meat(24*3))
 		{
 			buy(1 , $item[Ben-Gal&trade; Balm], 24);
 			buy(1 , $item[glittery mascara], 24);
@@ -1054,35 +1168,7 @@ void main(){
 			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 		}
 
-		print("Using up mp", "blue");
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
+		burn_mp();
 
 		if (item_amount(KGB) > 0)
 		{
@@ -1112,10 +1198,10 @@ void main(){
 			try_num();
 		}
 		//make meat here if needed
-		reach_meat(999999999);
+		//reach_meat(999999999);
 
 		print("Task Prep (hot res, 1st part)", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Ish Kabibble");
@@ -1126,55 +1212,10 @@ void main(){
 		buy(1 , $item[glittery mascara], 24);
 		use(1 , $item[glittery mascara]);
 
-		ToCast = $skill[The Magical Mojomuscular Melody];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
+		force_skill($skill[The Magical Mojomuscular Melody]);
+		force_skill($skill[Sauce Contemplation]);
 
-		ToCast = $skill[Sauce Contemplation];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-
-		print("Using up mp", "blue");
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
+		burn_mp();
 
 		cli_execute("shower mp");
 
@@ -1201,11 +1242,15 @@ void main(){
 		//if (my_fullness() == 12) if not saving items
 		if (my_fullness() >= 0)
 		{
-			cli_execute("eat wet dog");
+			if (!eat_dog("wet dog", AddHotdog))
+				abort("Cannot eat dog");
+			//cli_execute("eat wet dog");
 		}
 		else
 		{
-			cli_execute("eat optimal dog");
+			if (!eat_dog("optimal dog", AddHotdog))
+				abort("Cannot eat dog");
+			//cli_execute("eat optimal dog");
 			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 			{
 				visit_url("adventure.php?snarfblat=113"); //semirare
@@ -1218,25 +1263,9 @@ void main(){
 		}
 
 		print("Task Prep (hot res, 2nd part)", "blue");
-		ToCast = $skill[Elemental Saucesphere];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-
-		ToCast = $skill[Astral Shell];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
+		
+		force_skill($skill[Elemental Saucesphere]);
+		force_skill($skill[Astral Shell]);
 
 		use_familiar($familiar[Exotic Parrot]);
 
@@ -1245,32 +1274,14 @@ void main(){
 			cli_execute("pool 1");
 		}
 
-		ToCast = $skill[Leash of Linguini];
-		if((have_skill(ToCast)) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		if((have_skill($skill[Leash of Linguini])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
 		{
-			while ((my_mp() < mp_cost(ToCast)) && (my_soulsauce() >= 5))
-			{
-				use_skill(1 ,$skill[Soul Food]);
-			}
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
+			force_skill($skill[Leash of Linguini]);
 		}
 
-		ToCast = $skill[Empathy of the Newt];
-		if((have_skill(ToCast)) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		if((have_skill($skill[Empathy of the Newt])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
 		{
-			while ((my_mp() < mp_cost(ToCast)) && (my_soulsauce() >= 5))
-			{
-				use_skill(1 ,$skill[Soul Food]);
-			}
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
+			force_skill($skill[Empathy of the Newt]);
 		}
 
 
@@ -1320,12 +1331,10 @@ void main(){
 		}
 
 		print("Main drink", "blue");
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
+
+		force_skill($skill[Perfect Freeze]);
 		//drinks
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Bee's Knees");
@@ -1382,38 +1391,11 @@ void main(){
 
 		print("Task Prep (hp/mus)", "blue");
 		//spells
-		ToCast = $skill[Sauce Contemplation];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Rage of the Reindeer];
-		if(have_skill(ToCast))
-		{
-			while ((my_mp() < mp_cost(ToCast)) && (my_soulsauce() >= 5))
-			{
-				use_skill(1 ,$skill[Soul Food]);
-			}
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Song of Bravado];
-		if(have_skill(ToCast) && (my_mp() >= mp_cost(ToCast)))
-		{
-			use_skill(1 ,ToCast);
-		}
-		ToCast = $skill[Song of Starch];
-		if(have_skill(ToCast) && (my_mp() >= mp_cost(ToCast)))
-		{
-			use_skill(1 ,ToCast);
-		}
+
+		force_skill($skill[Sauce Contemplation]);
+		force_skill($skill[Rage of the Reindeer]);
+		try_skill($skill[Song of Bravado]);
+		
 
 
 		//buffs
@@ -1525,7 +1507,7 @@ void main(){
 
 		print("Task Prep (mys)", "blue");
 		//drink
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Bee's Knees");
@@ -1533,29 +1515,10 @@ void main(){
 		else abort("Ode loop fail.");
 
 		//spells
-		ToCast = $skill[The Magical Mojomuscular Melody];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Sauce Contemplation];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Song of Bravado];
-		if(have_skill(ToCast) && (my_mp() >= mp_cost(ToCast)))
-		{
-			use_skill(1 ,ToCast);
-		}
+
+		force_skill($skill[The Magical Mojomuscular Melody]);
+		force_skill($skill[Sauce Contemplation]);
+		try_skill($skill[Song of Bravado]);
 
 		//item
 		if (item_amount($item[tomato juice of powerful power]) > 0)
@@ -1617,24 +1580,9 @@ void main(){
 
 		print("Task Prep (mox)", "blue");
 		//spells
-		ToCast = $skill[The Moxious Madrigal];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Song of Bravado];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
+
+		force_skill($skill[The Moxious Madrigal]);
+		try_skill($skill[Song of Bravado]);
 
 		//item
 		if (item_amount($item[oil of expertise]) > 0)
@@ -1716,24 +1664,10 @@ void main(){
 		complete_quest("BUILD FEED CONSPIRATORS", 4);
 
 		print("Task Prep (fam weight)", "blue");
-		ToCast = $skill[Leash of Linguini];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Empathy of the Newt];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
+
+		force_skill($skill[Leash of Linguini]);
+		force_skill($skill[Empathy of the Newt]);
+		
 		if(item_amount($item[beastly paste]) > 0)
 		{
 			chew(1, $item[beastly paste]);
@@ -1775,24 +1709,9 @@ void main(){
 		complete_quest("BREED MORE COLLIES", 5);
 
 		print("Task Prep (-combat)", "blue");
-		ToCast = $skill[Smooth Movement];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[The Sonata of Sneakiness];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
+
+		force_skill($skill[Smooth Movement]);
+		force_skill($skill[The Sonata of Sneakiness]);
 		if (have_effect($effect[Silent Running]) <= 0)
 		{
 			cli_execute("swim noncombat");
