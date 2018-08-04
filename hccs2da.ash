@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.3 by iloath
+//HCCS 2day 100% v0.4 by iloath
 
 script "hccs2da.ash";
 notify iloath;
@@ -91,7 +91,7 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[soda water]);
 	}
-	while ((my_mp() < value) && (item_amount($item[magical mystery juice]) >= 1))
+	while ((my_mp() < value) && my_meat() >= 2000)
 	{
 		use(1, $item[magical mystery juice]);
 	}
@@ -108,6 +108,9 @@ boolean reach_meat(int value)
 		return true;
 	foreach stone in $items[strongness elixir,magicalness-in-a-can,moxie weed,Doc Galaktik's Homeopathic Elixir, meat stack]
 		autosell(item_amount(stone), stone);
+
+	use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
+
 	if (my_meat() < value)
 	{
 		return false;
@@ -115,23 +118,33 @@ boolean reach_meat(int value)
 	return true;
 }
 
-void force_skill(skill value)
+boolean force_skill(skill value, boolean use)
 {
 	if(have_skill(value))
 	{
 		if (my_maxmp() < mp_cost(value))
 		{
 			abort("Mp cap too low");
+			return false;
 		}
 		if (reach_mp(mp_cost(value)))
 		{
-			use_skill(1 ,value);
+			if (use)
+			{
+				return use_skill(1 ,value);
+			} else return true;
 		}
 		else
 		{
 			abort("Unable to obatin sufficent mp for: " + value);
+			return false;
 		}
-	}
+	} return !use;
+}
+
+boolean force_skill(skill value)
+{
+	return force_skill(value, true);
 }
 
 void try_skill(skill value)
@@ -175,36 +188,6 @@ void burn_mp()
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
 	try_skill($skill[Lunch Break]);
-	/*
-	if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-	{
-		use_skill(1 ,$skill[Grab a Cold One]);
-	}
-	if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-	{
-		use_skill(1 ,$skill[Spaghetti Breakfast]);
-	}
-	if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Saucecrafting]);
-	}
-	if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-	{
-		use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-	}
-	if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-	{
-		use_skill(1 ,$skill[Pastamastery]);
-	}
-	if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-	{
-		use_skill(1 ,$skill[Perfect Freeze]);
-	}
-	if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-	{
-		use_skill(1 ,$skill[Lunch Break]);
-	}
-	*/
 }
 
 void summon_pants(string m, string e, string s1, string s2, string s3)
@@ -215,7 +198,12 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 
 	print("SUMMONING PANTS", "red");
+	visit_url("inv_use.php?pwd&which=99&whichitem=9573");
 	visit_url("choice.php?whichchoice=1270&pwd&option=1&m="+m+"&e="+e+"&s1="+s1+"&s2="+s2+"&s3="+s3,true,true);
+	if (item_amount($item[pantogram pants]) == 0)
+	{
+		abort("Couldn't summon pants");
+	}
 }
 
 void main(){
@@ -265,6 +253,7 @@ void main(){
 	boolean AddHotdog = false; //TODO
 	string wish = "init";
 	string clan = get_clan_name();
+	item KGB = $item[Kremlin's Greatest Briefcase];
 	//Oh No, Hobo
 	//115
 	//1
@@ -342,6 +331,16 @@ void main(){
 		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
 		{
 			cli_execute("boombox meat");
+		}
+
+		// unlock the briefcase
+		if (item_amount(KGB) > 0)
+		{
+			if (svn_exists("Ezandora-Briefcase-branches-Release")) {
+				// Unlock with booze acquisition
+				cli_execute("Briefcase booze");
+				cli_execute("Briefcase e spell adventures");
+			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
 		}
 
 		//dive in vip swimming pool
@@ -470,15 +469,11 @@ void main(){
 		cli_execute("shower mp");
 
 		ToCast = $skill[Disintegrate];
-		if(have_skill(ToCast))
+		if(force_skill(ToCast, false))
 		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				if (item_amount($item[photocopied monster]) > 0)
-					use(1, $item[photocopied monster]);
-				else abort("You do not have a photocopied monster.");
-			}
-			else abort("Not enough mp.");
+			if (item_amount($item[photocopied monster]) > 0)
+				use(1, $item[photocopied monster]);
+			else abort("You do not have a photocopied monster.");
 		}
 		else abort("No Y-RAY.");
 		try_num();
@@ -486,18 +481,7 @@ void main(){
 			cli_execute("mcd 11");
 
 		print("Breakfast Prep", "blue");
-		/*
-		ToCast = $skill[Advanced Saucecrafting];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		else abort("No required skill.");
-		*/
+
 		force_skill($skill[Advanced Saucecrafting]);
 
 		buy(1 , $item[Dramatic&trade; range], 1000);
@@ -511,40 +495,8 @@ void main(){
 		eat(1 , $item[fortune cookie]);
 
 
-
 		//40 mp remain if fantasy mage hat
 		burn_mp();
-		/*
-		print("Using up mp", "blue");
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
-		*/
 
 		complete_quest("COIL WIRE", 11);
 
@@ -598,11 +550,7 @@ void main(){
 		}
 		cli_execute("hottub");
 
-
-
-
 		//if poor rng then no adv here, ode+tea now?
-
 
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
@@ -633,7 +581,6 @@ void main(){
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
 		run_combat();
 		try_num();
-
 
 
 		print("Farming until semirare", "blue");
@@ -757,10 +704,8 @@ void main(){
 		*/
 		force_skill($skill[Perfect Freeze]);
 
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 250))
+		if ((my_meat() >= 250) && force_skill($skill[The Ode to Booze]))
 		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-
 			//drink perfect drink here
 			//wine=rum>vodka=gin>whiskey=tequila
 			if (item_amount($item[boxed wine]) > 0)
@@ -794,14 +739,24 @@ void main(){
 				drink(1, $item[Perfect paloma]);
 			}
 			else abort("No perfect drink.");
+
 			if (my_inebriety() <= 8)
 			{
-				cli_execute("drink cup of tea");
+				if (item_amount($item[splendid martini]) > 0)
+				{
+					drink(1, $item[splendid martini]);
+				} else {
+					cli_execute("drink cup of tea");
+				}
 			}
 
-			drink(1, $item[thermos full of Knob coffee]);
-		}
-		else abort("Ode loop fail.");
+			if (item_amount($item[splendid martini]) > 0)
+			{
+				drink(1, $item[splendid martini]);
+			} else {
+				drink(1, $item[thermos full of Knob coffee]);
+			}
+		} else abort("Ode loop fail.");
 
 		print("Task Prep (+item)", "blue");
 		//+item%
@@ -817,56 +772,20 @@ void main(){
 		{
 			cli_execute("pool 3");
 		}
+		if ((item_amount(KGB) + equipped_amount(KGB)) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		{
+			cli_execute("Briefcase b item");
+		}
 
 		wish = "to be Infernal Thirst";
 		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-		/*
-		ToCast = $skill[Steely-Eyed Squint];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		*/
+
 		force_skill($skill[Steely-Eyed Squint]);
 
 		//use up mp
 		print("Using up mp", "blue");
 		burn_mp();
-		/*
-		if(have_skill($skill[Grab a Cold One]) && (my_mp() >= mp_cost($skill[Grab a Cold One])))
-		{
-			use_skill(1 ,$skill[Grab a Cold One]);
-		}
-		if(have_skill($skill[Spaghetti Breakfast]) && (my_mp() >= mp_cost($skill[Spaghetti Breakfast])))
-		{
-			use_skill(1 ,$skill[Spaghetti Breakfast]);
-		}
-		if(have_skill($skill[Advanced Saucecrafting]) && (my_mp() >= mp_cost($skill[Advanced Saucecrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Saucecrafting]);
-		}
-		if(have_skill($skill[Advanced Cocktailcrafting]) && (my_mp() >= mp_cost($skill[Advanced Cocktailcrafting])))
-		{
-			use_skill(1 ,$skill[Advanced Cocktailcrafting]);
-		}
-		if(have_skill($skill[Pastamastery]) && (my_mp() >= mp_cost($skill[Pastamastery])))
-		{
-			use_skill(1 ,$skill[Pastamastery]);
-		}
-		if(have_skill($skill[Perfect Freeze]) && (my_mp() >= mp_cost($skill[Perfect Freeze])))
-		{
-			use_skill(1 ,$skill[Perfect Freeze]);
-		}
-		if(have_skill($skill[Lunch Break]) && (my_mp() >= mp_cost($skill[Lunch Break])))
-		{
-			use_skill(1 ,$skill[Lunch Break]);
-		}
-		*/
 
 		complete_quest("MAKE MARGARITAS", 9);
 
@@ -884,14 +803,10 @@ void main(){
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
 			ToCast = $skill[Disintegrate];
-			if(have_skill(ToCast))
+			if(force_skill(ToCast, false))
 			{
-				if (my_mp() >= mp_cost(ToCast))
-				{
-					adventure(1, $location[The Skeleton Store]);
-					try_num();
-				}
-				else abort("Not enough mp.");
+				adventure(1, $location[The Skeleton Store]);
+				try_num();
 			}
 			else abort("No Y-RAY.");
 		}
@@ -908,9 +823,8 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 
 		print("Task Prep (spell dmg)", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
+		if ((my_meat() >= 500) && force_skill($skill[The Ode to Booze]))
 		{
-			use_skill(1 ,$skill[The Ode to Booze]);
 			cli_execute("drink Sockdollager");
 		}
 		else abort("Ode loop fail.");
@@ -926,28 +840,11 @@ void main(){
 			cli_execute("pool 2");
 		}
 
-		/*
-		if(have_skill($skill[Spirit of Peppermint]))
-		{
-			use_skill(1 ,$skill[Spirit of Peppermint]);
-		}
-		*/
 		force_skill($skill[Spirit of Peppermint]);
 		force_skill($skill[Simmer]);
-		/*
-		if(have_skill($skill[Simmer]))
-		{
-			use_skill(1 ,$skill[Simmer]);
-		}
-		*/
 		try_num();
 		force_skill($skill[Song of Sauce]);
-		/*
-		if(have_skill($skill[Song of Sauce]) && (my_mp() >= mp_cost($skill[Song of Sauce])))
-		{
-			use_skill(1 ,$skill[Song of Sauce]);
-		}
-		*/
+
 		//hatter mariachi hat or powdered wig
 		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0))
 		{
@@ -977,6 +874,10 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc3], KGB);
+		}
 
 		//magic dragonfish does not seem to work here!
 
@@ -1000,48 +901,10 @@ void main(){
 		}
 		else abort("Ode loop fail.");
 		use_familiar(ToTour);
-
-
-		/*
-		ToCast = $skill[Rage of the Reindeer];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Bow-Legged Swagger];
-		if(have_skill(ToCast))
-		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		ToCast = $skill[Song of the North];
-		if(have_skill(ToCast))
-		{
-			while ((my_mp() < mp_cost(ToCast)) && (my_soulsauce() >= 5))
-			{
-				use_skill(1 ,$skill[Soul Food]);
-			}
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				use_skill(1 ,ToCast);
-			}
-			else abort("Not enough mp.");
-		}
-		*/
 		
 		force_skill($skill[Rage of the Reindeer]);
 		force_skill($skill[Bow-Legged Swagger]);
 		force_skill($skill[Song of the North]);
-
-
-
 
 		print("Rollover Prep", "blue");
 		if ((item_amount($item[psychic's circlet]) > 0) && (my_basestat($stat[moxie]) >= 35))
@@ -1051,6 +914,10 @@ void main(){
 		if (item_amount($item[dead guy's watch]) > 0)
 		{
 			equip($slot[acc1], $item[dead guy's watch]);
+		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc3], KGB);
 		}
 		//adv gear
 
@@ -1069,22 +936,6 @@ void main(){
 	//do fortune and fax a factory overseer
 	if (my_daycount() >= 2)
 	{
-		/*
-		cli_execute("/w easyfax factory overseer");
-		print("Poking Easyfax for overseer");
-		if (item_amount($item[photocopied monster]) <= 0)
-		repeat {wait(5); refresh_status();}
-		until (item_amount($item[photocopied monster]) > 0);
-		print("Done Fax");
-		*/
-		//numberology 18
-		/*
-		if(((have_skill($skill[Calculate the Universe]))&&(get_property("_universeCalculated").to_int() < get_property("skillLevel144").to_int())))
-		{
-			cli_execute("numberology 18");
-		}
-		*/
-
 		if(item_amount($item[photocopied monster]) == 0)
 		{
 			print("No photocopied monster, skipping in...");
@@ -1096,6 +947,13 @@ void main(){
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
+
+		// setup briefcase
+		if ((item_amount(KGB) + equipped_amount(KGB)) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		{
+			cli_execute("Briefcase booze");
+			cli_execute("Briefcase e weapon hot -combat");
+		}
 
 		//fantasyland only
 		if((get_property("frAlways") == True)&&(item_amount($item[FantasyRealm G. E. M.]) < 1))
@@ -1226,6 +1084,10 @@ void main(){
 			use_skill(1 ,$skill[Lunch Break]);
 		}
 
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc3], KGB);
+		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
 			equip($slot[pants], $item[pantogram pants]);
@@ -1250,10 +1112,7 @@ void main(){
 			try_num();
 		}
 		//make meat here if needed
-		foreach stone in $items[moxie weed,magicalness-in-a-can,strongness elixir,fine wine, meat stack, casino pass, hermit permit, half of a gold tooth]
-			autosell(item_amount(stone), stone);
-
-		use(item_amount($item[Gathered Meat-Clip]), $item[Gathered Meat-Clip]);
+		reach_meat(999999999);
 
 		print("Task Prep (hot res, 1st part)", "blue");
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (my_meat() >= 500))
@@ -1428,7 +1287,10 @@ void main(){
 		{
 			equip($slot[acc2], $item[psychic's amulet]);
 		}
-		if (item_amount($item[psychic's amulet]) > 0)
+		if (item_amount(KGB) > 0) {
+			equip($slot[acc1], KGB);
+		} 
+		else if (item_amount($item[psychic's amulet]) > 0)
 		{
 			equip($slot[acc1], $item[psychic's amulet]);
 		}
@@ -1506,7 +1368,13 @@ void main(){
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
 		{
 			use_skill(1 ,$skill[The Ode to Booze]);
-			drink(1, $item[asbestos thermos]);
+			if (item_amount($item[splendid martini]) >= 4) {
+				drink(4, $item[splendid martini]);
+			}
+			else
+			{
+				drink(1, $item[asbestos thermos]);
+			}
 			drink(1, $item[astral pilsner]);
 			//consider fruity drink if no thermos
 		}
@@ -1933,6 +1801,10 @@ void main(){
 		{
 			equip($slot[acc1], $item[Codpiece]);
 		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc2], KGB);
+		}
 		if (item_amount($item[fish hatchet]) > 0)
 		{
 			equip($slot[weapon], $item[fish hatchet]);
@@ -2015,3 +1887,4 @@ void main(){
 	//page = visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 
 }
+
