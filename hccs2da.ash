@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.5 by iloath
+//HCCS 2day 100% v0.6 by iloath
 
 script "hccs2da.ash";
 notify iloath;
@@ -212,6 +212,37 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 }
 
+void use_bastille_battalion(int item_type)
+{
+	if (item_amount($item[Bastille Battalion control rig]) == 0) return;
+
+	// Use Bastille Battalion control rig
+	visit_url("inv_use.php?pwd&whichitem=9928");
+
+	// Cycle through reward types to get to the one we want
+	// 0 = mys, 1 = mox, 2 = mus
+	for (int i = 0; i < item_type; i++)
+	{
+		run_choice(2);
+	}
+
+	run_choice(5); // Start!
+
+	boolean fighting = true;
+
+	while(fighting)
+	{
+		run_choice(3); // Cheese
+		run_choice(1); // First cheese option
+		run_choice(3); // More Cheese
+		run_choice(1); // First cheese option
+		string fight_result = run_choice(1); // Get the jump
+		fighting = fight_result.contains_text("You have razed");
+	}
+
+	run_choice(3); // Done for now
+}
+
 boolean eat_dog(string dog, boolean add)
 {
 	//credit cc, modifed from cc_ascend
@@ -400,42 +431,21 @@ void main(){
 
 	if (my_daycount() == 1)
 	{
-		//first get the dairy goat fax and clanmate fortunes,
+		// Use free pulls
+		if (storage_amount($item[Bastille Battalion control rig]) > 0)
+		{
+			take_storage(1, $item[Bastille Battalion control rig]);
+		}
 
+
+		// Get the dairy goat fax and clanmate fortunes,
 		if(item_amount($item[photocopied monster]) == 0)
 		{
 			print("No photocopied monster, skipping in...");
 			wait(5);
 		}
 
-
-		//dont always work :(
-		/*
-		cli_execute("/w cheesefax dairy goat");
-		print("Poking Cheesefax for goat");
-		if (item_amount($item[photocopied monster]) <= 0)
-		repeat {wait(5); refresh_status();}
-		until (item_amount($item[photocopied monster]) > 0);
-		print("Done Fax");
-
-		cli_execute("/whitelist Bonus Adventures from Hell"); //bugged
-		if (get_clan_name() == "Bonus Adventures from Hell")
-		{
-			cli_execute("fortune cheesefax");
-			print("Poking Cheesefax for fortune");
-		}
-		else
-		{
-			abort("Wrong Clan");
-		}
-		int prev = item_amount($item[genie's turbane])+item_amount($item[genie's scimitar])+item_amount($item[genie's pants])+item_amount($item[genie's bracers])+item_amount($item[psychic's circlet])+item_amount($item[psychic's crystal ball])+item_amount($item[psychic's pslacks])+item_amount($item[psychic's amulet]);
-		if (item_amount($item[genie's turbane])+item_amount($item[genie's scimitar])+item_amount($item[genie's pants])+item_amount($item[genie's bracers])+item_amount($item[psychic's circlet])+item_amount($item[psychic's crystal ball])+item_amount($item[psychic's pslacks])+item_amount($item[psychic's amulet]) <= prev)
-			repeat {wait(5); refresh_status();}
-		until (item_amount($item[genie's turbane])+item_amount($item[genie's scimitar])+item_amount($item[genie's pants])+item_amount($item[genie's bracers])+item_amount($item[psychic's circlet])+item_amount($item[psychic's crystal ball])+item_amount($item[psychic's pslacks])+item_amount($item[psychic's amulet]) > prev);
-		print("Done Fortune");
-		cli_execute("/whitelist "+clan);//bugged
-		*/
-
+		// Try Calculating the Universe
 		try_num();
 
 		// Make meat from BoomBox if we can
@@ -615,6 +625,9 @@ void main(){
 		if (item_amount($item[a ten-percent bonus]) > 0)
 			use(1, $item[a ten-percent bonus]);
 		else abort("You do not have a ten-percent bonus.");
+
+		// Get driving gloves from Bastille Battalion if we can (now that we've wasted 60 adventures)
+		use_bastille_battalion(0);
 
 		print("First Drink", "blue");
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
@@ -980,13 +993,17 @@ void main(){
 		{
 			equip($slot[off-hand], $item[astral statuette]);
 		}
-		if (item_amount($item[psychic's amulet]) > 0)
-		{
-			equip($slot[acc2], $item[psychic's amulet]);
-		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
 			equip($slot[pants], $item[pantogram pants]);
+		}
+		if (item_amount($item[Draftsman's driving gloves]) > 0)
+		{
+			equip($slot[acc1], $item[Draftsman's driving gloves]);
+		}
+		if (item_amount($item[psychic's amulet]) > 0)
+		{
+			equip($slot[acc2], $item[psychic's amulet]);
 		}
 		if (item_amount(KGB) > 0)
 		{
@@ -1029,6 +1046,10 @@ void main(){
 		{
 			equip($slot[acc1], $item[dead guy's watch]);
 		}
+		if (item_amount($item[Draftsman's driving gloves]) > 0)
+		{
+			equip($slot[acc2], $item[Draftsman's driving gloves]);
+		}
 		if (item_amount(KGB) > 0)
 		{
 			equip($slot[acc3], KGB);
@@ -1056,8 +1077,11 @@ void main(){
 			wait(5);
 		}
 
-		//TODO check if success
+		// Try to Calculate the Universe
 		try_num();
+
+		// Get brogues from Bastille Battalion if we can
+		use_bastille_battalion(2);
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
@@ -1170,13 +1194,17 @@ void main(){
 
 		burn_mp();
 
-		if (item_amount(KGB) > 0)
-		{
-			equip($slot[acc3], KGB);
-		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
 			equip($slot[pants], $item[pantogram pants]);
+		}
+		if (item_amount($item[Brutal brogues]) > 0)
+		{
+			equip($slot[acc2], $item[Brutal brogues]);
+		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc3], KGB);
 		}
 
 		complete_quest("REDUCE GAZELLE POPULATION", 6);
@@ -1466,18 +1494,6 @@ void main(){
 		{
 			equip($slot[hat], $item[FantasyRealm Warrior's Helm]);
 		}
-		if (item_amount($item[ring of telling skeletons what to do]) > 0)
-		{
-			equip($slot[acc3], $item[ring of telling skeletons what to do]);
-		}
-		if (item_amount($item[three-legged pants]) > 0)
-		{
-			equip($slot[pants], $item[three-legged pants]);
-		}
-		if (item_amount($item[pantogram pants]) > 0)
-		{
-			equip($slot[pants], $item[pantogram pants]);
-		}
 		if (item_amount($item[remaindered axe]) > 0)
 		{
 			equip($slot[weapon], $item[remaindered axe]);
@@ -1489,6 +1505,22 @@ void main(){
 		if (item_amount($item[psychic's crystal ball]) > 0)
 		{
 			equip($slot[off-hand], $item[psychic's crystal ball]);
+		}
+		if (item_amount($item[three-legged pants]) > 0)
+		{
+			equip($slot[pants], $item[three-legged pants]);
+		}
+		if (item_amount($item[pantogram pants]) > 0)
+		{
+			equip($slot[pants], $item[pantogram pants]);
+		}
+		if (item_amount($item[Brutal brogues]) > 0)
+		{
+			equip($slot[acc2], $item[Brutal brogues]);
+		}
+		if (item_amount($item[ring of telling skeletons what to do]) > 0)
+		{
+			equip($slot[acc3], $item[ring of telling skeletons what to do]);
 		}
 
 
@@ -1697,6 +1729,10 @@ void main(){
 		if ((item_amount($item[psychic's circlet]) > 0) && (my_basestat($stat[moxie]) >= 35))
 		{
 			equip($slot[hat], $item[psychic's circlet]);
+		}
+		if (item_amount($item[Brutal brogues]) > 0)
+		{
+			equip($slot[acc2], $item[Brutal brogues]);
 		}
 
 		//borrow time here
