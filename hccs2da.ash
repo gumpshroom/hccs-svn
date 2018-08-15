@@ -393,15 +393,17 @@ void main(){
 
 	set_property("manaBurningThreshold", -0.05);
 
-	set_property("customCombatScript", "hccs");
-	//customCombatScript=hccs
-
 	cli_execute("refresh all");
 
 	if(my_path() != "Community Service") abort("Not Community Service.");
 
 	if (my_daycount() == 1)
 	{
+
+		// Set CCS for the run
+		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
+		set_property("customCombatScript", "hccs");
+
 		// Use free pulls
 		if (storage_amount($item[Bastille Battalion control rig]) > 0)
 		{
@@ -1776,30 +1778,11 @@ void main(){
 		visit_url("council.php");
 		visit_url("choice.php?pwd&whichchoice=1089&option=30");
 
+		// Restore previous CCS
+		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
+
 		print("FINISHED.", "red");
 	}
-
-	//paste list
-	//any,any,clown,gnoll in gym,crate,fluffy bunny in dire warren
-
-	//fortune list
-	//hangk, gunther
-
-	//speakeasy
-	//tea, in a lather, in a lather
-	//all res, stats100%, stats100%
-
-
-
-	/*
-	foreach stone in $items[moxie weed,strongness elixir,concentrated magicalness pill,giant moxie weed,haunted battery,extra-strength strongness elixir,enchanted barbell,jug-o-magicalness,suntan lotion of moxiousness,synthetic marrow,the funk,meat stack,dense meat stack]
-		autosell(item_amount(stone), stone);
-	*/
-
-
-	//string wish = "for more wishes";
-	//string page = visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9529", false);
-	//page = visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-
 }
+
 
