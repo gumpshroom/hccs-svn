@@ -348,73 +348,47 @@ boolean eat_dog(string dog, boolean add)
 	return true;
 }
 
+boolean should_tour(string ascensionsHtml, familiar fam)
+{
+	matcher m = create_matcher("alt=\"" + fam + " .([0-9.]+)..", ascensionsHtml);
+	while(find(m))
+	{
+		string percentMatch = group(m, 1);
+		if (to_float(percentMatch) == 100) return false;
+	}
+
+	return true;
+}
+
+familiar pick_familiar_to_tour()
+{
+	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
+
+	foreach fam in $familiars[]
+	{
+		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) return fam;
+	}
+
+	return $familiar[none];
+}
+
 void main(){
-
-	//info
-	//_aprilShower
-	//_bootStomps
-	//_borrowedTimeUsed
-	//_clipartSummons
-	//_deluxeKlawSummons
-	//_demandSandwich
-	//_discoKnife
-	//_hotTubSoaks
-	//_klawSummons
-	//_lookingGlass
-	//_lunchBreak
-	//_madTeaParty
-	//_poolGames
-	//_spaghettiBreakfast
-	//_spaghettiBreakfastEaten
-	//_speakeasyDrinksDrunk
-	//bootsCharged
-	//lastBarrelSmashed
-	//telescopeLookedHigh
-	//TODO: use variables
-	//wait(5);
-
-
-
-	//snorkel 7  	Moxie +10
-	//disco mask 9  	Weapon Damage +15
-	//ravioli hat 	10  Mysticality +10
-	//mariachi hat 11 Spell Damage +30%
-	//helmet turtle 12  	Maximum HP +50
-	//coconut shell 12 	Maximum HP +50
-	//seal-skull helmet 16  	+10 Cold Damage
-	//Hollandaise 17  	+10 Spooky Damage
-	//Dolphin King's crown 18  	+10 Stench Damage
-	//Kentucky-style derby 19 +10 hot Damage
-	//mage hat 22? +40% Meat from Monsters
-	//rogue mask 23?  	Mysticality +20%
-	//war hat 25? +3 Stat Gains from Fights
-
 	//init
-	skill ToCast = $skill[Spirit of Peppermint];
-	familiar ToTour = $familiar[Origami Towel Crane]; //set this, TODO: auto this
+	familiar ToTour = pick_familiar_to_tour();
 	boolean AddHotdog = true;
 	string wish = "init";
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
-	//Oh No, Hobo
-	//115
-	//1
-	//The Singing Tree
-	//116
-	//4?
-	//Trespasser
-	//117
-	//1?
+
 	//The Baker's Dilemma
-	//114
-	//2?
-	//Temporarily Out of Skeletons
-	//1060
-	//1 then 4 then maybe 2
-	set_property("choiceAdventure115", 1);
-	set_property("choiceAdventure116", 4);
-	set_property("choiceAdventure117", 1);
 	set_property("choiceAdventure114", 2);
+	//Oh No, Hobo
+	set_property("choiceAdventure115", 1);
+	//The Singing Tree
+	set_property("choiceAdventure116", 4);
+	//Trespasser
+	set_property("choiceAdventure117", 1);
+	//Temporarily Out of Skeletons
 	set_property("choiceAdventure1060", 1);
 
 	set_property("manaBurningThreshold", -0.05);
@@ -424,10 +398,7 @@ void main(){
 
 	cli_execute("refresh all");
 
-	if(my_path() != "Community Service")
-	{
-		abort("Not Community Service.");
-	}
+	if(my_path() != "Community Service") abort("Not Community Service.");
 
 	if (my_daycount() == 1)
 	{
@@ -547,11 +518,7 @@ void main(){
 			}
 		}
 
-
-		//use(1, $item[Newbiesport&trade; tent]);
 		try_item($item[Newbiesport&trade; tent]);
-
-		ToCast = $skill[Spirit of Peppermint];
 
 		force_skill($skill[Spirit of Peppermint]);
 		force_skill($skill[The Magical Mojomuscular Melody]);
@@ -589,8 +556,7 @@ void main(){
 			abort("mp cap too law or YRAY");
 		cli_execute("shower mp");
 
-		ToCast = $skill[Disintegrate];
-		if(force_skill(ToCast, false))
+		if(force_skill($skill[Disintegrate], false))
 		{
 			if (item_amount($item[photocopied monster]) > 0)
 				use(1, $item[photocopied monster]);
@@ -929,8 +895,7 @@ void main(){
 		print("Farming fruits", "blue");
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
-			ToCast = $skill[Disintegrate];
-			if(force_skill(ToCast, false))
+			if(force_skill($skill[Disintegrate], false))
 			{
 				adventure(1, $location[The Skeleton Store]);
 				try_num();
@@ -1248,16 +1213,11 @@ void main(){
 		cli_execute("shower mp");
 
 		print("Y-RAY FAX", "blue");
-		ToCast = $skill[Disintegrate];
-		if(have_skill(ToCast))
+		if(force_skill($skill[Disintegrate], false))
 		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				if (item_amount($item[photocopied monster]) > 0)
-					use(1, $item[photocopied monster]);
-				else abort("You do not have a photocopied monster.");
-			}
-			else abort("Not enough mp.");
+			if (item_amount($item[photocopied monster]) > 0)
+				use(1, $item[photocopied monster]);
+			else abort("You do not have a photocopied monster.");
 		}
 		else abort("No Y-RAY.");
 
