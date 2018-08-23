@@ -212,21 +212,48 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 }
 
-void use_bastille_battalion(int item_type)
+void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff, int desired_potion)
 {
 	if (item_amount($item[Bastille Battalion control rig]) == 0) return;
 
-	// Use Bastille Battalion control rig
-	visit_url("inv_use.php?pwd&whichitem=9928");
+	int [4] desired_state;
+	int [4] current_state;
 
-	// Cycle through reward types to get to the one we want
-	// 0 = mys, 1 = mox, 2 = mus
-	for (int i = 0; i < item_type; i++)
+	desired_state[0] = desired_stat;
+	desired_state[1] = desired_item;
+	desired_state[2] = desired_buff;
+	desired_state[3] = desired_potion;
+
+	// Use Bastille Battalion control rig
+	string page = visit_url("inv_use.php?pwd&whichitem=9928");
+
+	// Determine current state
+	if (page.contains_text('barb1.png')) current_state[0] = 0; // Mys (Barbecue)
+	else if (page.contains_text('barb2.png')) current_state[0] = 1; // Mus (Babar)
+	else if (page.contains_text('barb3.png')) current_state[0] = 2; // Mox (Barbershop)
+
+	if (page.contains_text('bridge1.png')) current_state[1] = 0; // Mus (Brutalist)
+	else if (page.contains_text('bridge2.png')) current_state[1] = 1; // Mys (Draftsman)
+	else if (page.contains_text('bridge3.png')) current_state[1] = 2; // Mox (Art Nouveau)
+
+	if (page.contains_text('holes1.png')) current_state[2] = 0; // Mus (Cannon)
+	else if (page.contains_text('holes2.png')) current_state[2] = 1; // Mys (Catapult)
+	else if (page.contains_text('holes3.png')) current_state[2] = 2; // Mox (Gesture)
+
+	if (page.contains_text('moat1.png')) current_state[3] = 0; // Military (Sharks)
+	else if (page.contains_text('moat2.png')) current_state[3] = 1; // Castle (Lava)
+	else if (page.contains_text('moat3.png')) current_state[3] = 2; // Psychological (Truth Serum)
+
+	// Cycle through each reward type to get the correct one for us
+	for (int reward = 0; reward < 4; reward++)
 	{
-		run_choice(2);
+		int clicks = ((desired_state[reward] - current_state[reward]) + 3) % 3;
+		print('thing ' + reward + ' is at ' + current_state[reward] + ' but needs to be at ' + desired_state[reward] + ' so we will click ' + clicks + ' times');
+		for (int i = 0; i < clicks; i++) run_choice(reward + 1);
 	}
 
-	run_choice(5); // Start!
+	// Start fighting
+	run_choice(5);
 
 	boolean fighting = true;
 
@@ -240,7 +267,7 @@ void use_bastille_battalion(int item_type)
 		fighting = fight_result.contains_text("You have razed");
 	}
 
-	run_choice(3); // Done for now
+	run_choice(1); // Lock in your score
 }
 
 boolean eat_dog(string dog, boolean add)
@@ -348,89 +375,62 @@ boolean eat_dog(string dog, boolean add)
 	return true;
 }
 
+boolean should_tour(string ascensionsHtml, familiar fam)
+{
+	matcher m = create_matcher("alt=\"" + fam + " .([0-9.]+)..", ascensionsHtml);
+	while(find(m))
+	{
+		string percentMatch = group(m, 1);
+		if (to_float(percentMatch) == 100) return false;
+	}
+
+	return true;
+}
+
+familiar pick_familiar_to_tour()
+{
+	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
+
+	foreach fam in $familiars[]
+	{
+		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) return fam;
+	}
+
+	return $familiar[none];
+}
+
 void main(){
-
-	//info
-	//_aprilShower
-	//_bootStomps
-	//_borrowedTimeUsed
-	//_clipartSummons
-	//_deluxeKlawSummons
-	//_demandSandwich
-	//_discoKnife
-	//_hotTubSoaks
-	//_klawSummons
-	//_lookingGlass
-	//_lunchBreak
-	//_madTeaParty
-	//_poolGames
-	//_spaghettiBreakfast
-	//_spaghettiBreakfastEaten
-	//_speakeasyDrinksDrunk
-	//bootsCharged
-	//lastBarrelSmashed
-	//telescopeLookedHigh
-	//TODO: use variables
-	//wait(5);
-
-
-
-	//snorkel 7  	Moxie +10
-	//disco mask 9  	Weapon Damage +15
-	//ravioli hat 	10  Mysticality +10
-	//mariachi hat 11 Spell Damage +30%
-	//helmet turtle 12  	Maximum HP +50
-	//coconut shell 12 	Maximum HP +50
-	//seal-skull helmet 16  	+10 Cold Damage
-	//Hollandaise 17  	+10 Spooky Damage
-	//Dolphin King's crown 18  	+10 Stench Damage
-	//Kentucky-style derby 19 +10 hot Damage
-	//mage hat 22? +40% Meat from Monsters
-	//rogue mask 23?  	Mysticality +20%
-	//war hat 25? +3 Stat Gains from Fights
-
 	//init
-	skill ToCast = $skill[Spirit of Peppermint];
-	familiar ToTour = $familiar[Origami Towel Crane]; //set this, TODO: auto this
+	familiar ToTour = pick_familiar_to_tour();
 	boolean AddHotdog = true;
 	string wish = "init";
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
-	//Oh No, Hobo
-	//115
-	//1
-	//The Singing Tree
-	//116
-	//4?
-	//Trespasser
-	//117
-	//1?
+
 	//The Baker's Dilemma
-	//114
-	//2?
-	//Temporarily Out of Skeletons
-	//1060
-	//1 then 4 then maybe 2
-	set_property("choiceAdventure115", 1);
-	set_property("choiceAdventure116", 4);
-	set_property("choiceAdventure117", 1);
 	set_property("choiceAdventure114", 2);
+	//Oh No, Hobo
+	set_property("choiceAdventure115", 1);
+	//The Singing Tree
+	set_property("choiceAdventure116", 4);
+	//Trespasser
+	set_property("choiceAdventure117", 1);
+	//Temporarily Out of Skeletons
 	set_property("choiceAdventure1060", 1);
 
 	set_property("manaBurningThreshold", -0.05);
 
-	set_property("customCombatScript", "hccs");
-	//customCombatScript=hccs
-
 	cli_execute("refresh all");
 
-	if(my_path() != "Community Service")
-	{
-		abort("Not Community Service.");
-	}
+	if(my_path() != "Community Service") abort("Not Community Service.");
 
 	if (my_daycount() == 1)
 	{
+
+		// Set CCS for the run
+		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
+		set_property("customCombatScript", "hccs");
+
 		// Use free pulls
 		if (storage_amount($item[Bastille Battalion control rig]) > 0)
 		{
@@ -547,11 +547,7 @@ void main(){
 			}
 		}
 
-
-		//use(1, $item[Newbiesport&trade; tent]);
 		try_item($item[Newbiesport&trade; tent]);
-
-		ToCast = $skill[Spirit of Peppermint];
 
 		force_skill($skill[Spirit of Peppermint]);
 		force_skill($skill[The Magical Mojomuscular Melody]);
@@ -589,8 +585,7 @@ void main(){
 			abort("mp cap too law or YRAY");
 		cli_execute("shower mp");
 
-		ToCast = $skill[Disintegrate];
-		if(force_skill(ToCast, false))
+		if(force_skill($skill[Disintegrate], false))
 		{
 			if (item_amount($item[photocopied monster]) > 0)
 				use(1, $item[photocopied monster]);
@@ -627,7 +622,7 @@ void main(){
 		else abort("You do not have a ten-percent bonus.");
 
 		// Get driving gloves from Bastille Battalion if we can (now that we've wasted 60 adventures)
-		use_bastille_battalion(0);
+		use_bastille_battalion(0, 1, 2, random(3));
 
 		print("First Drink", "blue");
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
@@ -929,8 +924,7 @@ void main(){
 		print("Farming fruits", "blue");
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
-			ToCast = $skill[Disintegrate];
-			if(force_skill(ToCast, false))
+			if(force_skill($skill[Disintegrate], false))
 			{
 				adventure(1, $location[The Skeleton Store]);
 				try_num();
@@ -1081,7 +1075,7 @@ void main(){
 		try_num();
 
 		// Get brogues from Bastille Battalion if we can
-		use_bastille_battalion(2);
+		use_bastille_battalion(0, 0, 2, random(3));
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
@@ -1248,16 +1242,11 @@ void main(){
 		cli_execute("shower mp");
 
 		print("Y-RAY FAX", "blue");
-		ToCast = $skill[Disintegrate];
-		if(have_skill(ToCast))
+		if(force_skill($skill[Disintegrate], false))
 		{
-			if (my_mp() >= mp_cost(ToCast))
-			{
-				if (item_amount($item[photocopied monster]) > 0)
-					use(1, $item[photocopied monster]);
-				else abort("You do not have a photocopied monster.");
-			}
-			else abort("Not enough mp.");
+			if (item_amount($item[photocopied monster]) > 0)
+				use(1, $item[photocopied monster]);
+			else abort("You do not have a photocopied monster.");
 		}
 		else abort("No Y-RAY.");
 
@@ -1816,30 +1805,11 @@ void main(){
 		visit_url("council.php");
 		visit_url("choice.php?pwd&whichchoice=1089&option=30");
 
+		// Restore previous CCS
+		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
+
 		print("FINISHED.", "red");
 	}
-
-	//paste list
-	//any,any,clown,gnoll in gym,crate,fluffy bunny in dire warren
-
-	//fortune list
-	//hangk, gunther
-
-	//speakeasy
-	//tea, in a lather, in a lather
-	//all res, stats100%, stats100%
-
-
-
-	/*
-	foreach stone in $items[moxie weed,strongness elixir,concentrated magicalness pill,giant moxie weed,haunted battery,extra-strength strongness elixir,enchanted barbell,jug-o-magicalness,suntan lotion of moxiousness,synthetic marrow,the funk,meat stack,dense meat stack]
-		autosell(item_amount(stone), stone);
-	*/
-
-
-	//string wish = "for more wishes";
-	//string page = visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9529", false);
-	//page = visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-
 }
+
 
