@@ -212,21 +212,48 @@ void summon_pants(string m, string e, string s1, string s2, string s3)
 	}
 }
 
-void use_bastille_battalion(int item_type)
+void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff, int desired_potion)
 {
 	if (item_amount($item[Bastille Battalion control rig]) == 0) return;
 
-	// Use Bastille Battalion control rig
-	visit_url("inv_use.php?pwd&whichitem=9928");
+	int [4] desired_state;
+	int [4] current_state;
 
-	// Cycle through reward types to get to the one we want
-	// 0 = mys, 1 = mox, 2 = mus
-	for (int i = 0; i < item_type; i++)
+	desired_state[0] = desired_stat;
+	desired_state[1] = desired_item;
+	desired_state[2] = desired_buff;
+	desired_state[3] = desired_potion;
+
+	// Use Bastille Battalion control rig
+	string page = visit_url("inv_use.php?pwd&whichitem=9928");
+
+	// Determine current state
+	if (page.contains_text('barb1.png')) current_state[0] = 0; // Mys (Barbecue)
+	else if (page.contains_text('barb2.png')) current_state[0] = 1; // Mus (Babar)
+	else if (page.contains_text('barb3.png')) current_state[0] = 2; // Mox (Barbershop)
+
+	if (page.contains_text('bridge1.png')) current_state[1] = 0; // Mus (Brutalist)
+	else if (page.contains_text('bridge2.png')) current_state[1] = 1; // Mys (Draftsman)
+	else if (page.contains_text('bridge3.png')) current_state[1] = 2; // Mox (Art Nouveau)
+
+	if (page.contains_text('holes1.png')) current_state[2] = 0; // Mus (Cannon)
+	else if (page.contains_text('holes2.png')) current_state[2] = 1; // Mys (Catapult)
+	else if (page.contains_text('holes3.png')) current_state[2] = 2; // Mox (Gesture)
+
+	if (page.contains_text('moat1.png')) current_state[3] = 0; // Military (Sharks)
+	else if (page.contains_text('moat2.png')) current_state[3] = 1; // Castle (Lava)
+	else if (page.contains_text('moat3.png')) current_state[3] = 2; // Psychological (Truth Serum)
+
+	// Cycle through each reward type to get the correct one for us
+	for (int reward = 0; reward < 4; reward++)
 	{
-		run_choice(2);
+		int clicks = ((desired_state[reward] - current_state[reward]) + 3) % 3;
+		print('thing ' + reward + ' is at ' + current_state[reward] + ' but needs to be at ' + desired_state[reward] + ' so we will click ' + clicks + ' times');
+		for (int i = 0; i < clicks; i++) run_choice(reward + 1);
 	}
 
-	run_choice(5); // Start!
+	// Start fighting
+	run_choice(5);
 
 	boolean fighting = true;
 
@@ -240,7 +267,7 @@ void use_bastille_battalion(int item_type)
 		fighting = fight_result.contains_text("You have razed");
 	}
 
-	run_choice(3); // Done for now
+	run_choice(1); // Lock in your score
 }
 
 boolean eat_dog(string dog, boolean add)
@@ -595,7 +622,7 @@ void main(){
 		else abort("You do not have a ten-percent bonus.");
 
 		// Get driving gloves from Bastille Battalion if we can (now that we've wasted 60 adventures)
-		use_bastille_battalion(0);
+		use_bastille_battalion(0, 1, 2, random(3));
 
 		print("First Drink", "blue");
 		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
@@ -1048,7 +1075,7 @@ void main(){
 		try_num();
 
 		// Get brogues from Bastille Battalion if we can
-		use_bastille_battalion(2);
+		use_bastille_battalion(0, 0, 2, random(3));
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
