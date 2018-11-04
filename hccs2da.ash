@@ -1868,6 +1868,9 @@ void main(){
 		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
 		set_property("counterScript", get_property("hccs2da_backupCounterScript"));
 
+		cli_execute("pull all");
+		cli_execute("breakfast");
+
 		print("FINISHED.", "red");
 	}
 }
