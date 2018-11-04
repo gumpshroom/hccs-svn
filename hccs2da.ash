@@ -1095,7 +1095,13 @@ void main(){
 		{
 			equip($slot[hat], $item[psychic's circlet]);
 		}
-		if (item_amount($item[dead guy's watch]) > 0)
+
+		if (item_amount($item[metal meteoroid]) > 0) create(1, $item[meteorthopedic shoes]);
+		if (item_amount($item[meteorthopedic shoes]) > 0)
+		{
+		    equip($slot[acc1], $item[meteorthopedic shoes]);
+		}
+		else if (item_amount($item[dead guy's watch]) > 0)
 		{
 			equip($slot[acc1], $item[dead guy's watch]);
 		}
@@ -1109,7 +1115,13 @@ void main(){
 		{
 			equip($slot[acc3], KGB);
 		}
-		//adv gear
+
+		if (have_familiar($familiar[Trick-or-Treating Tot]) && my_meat() > 1200)
+		{
+		    use_familiar($familiar[Trick-or-Treating Tot]);
+		    buy(1, $item[li'l unicorn costume]);
+		    equip($item[li'l unicorn costume]);
+		}
 
 		cli_execute("telescope high");
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
@@ -1466,8 +1478,6 @@ void main(){
 		force_skill(1, $skill[Sauce Contemplation]);
 		force_skill(1, $skill[Rage of the Reindeer]);
 		try_skill($skill[Song of Bravado]);
-		
-
 
 		//buffs
 		wish = "to be Preemptive Medicine";
