@@ -1075,11 +1075,13 @@ void main(){
 	//do fortune and fax a factory overseer
 	if (my_daycount() >= 2)
 	{
-		if(item_amount($item[photocopied monster]) == 0)
-		{
-			print("No photocopied monster, skipping in...");
-			wait(5);
-		}
+		use_familiar(ToTour);
+
+		// Collect your consults if you can
+		try_consult();
+
+		// Get the dairy goat fax and clanmate fortunes,
+		try_fax("factory overseer");
 
 		// Try to Calculate the Universe
 		try_num();
