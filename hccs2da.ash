@@ -448,19 +448,8 @@ void main(){
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
-		// Use free pulls
-		if (storage_amount($item[Bastille Battalion control rig]) > 0)
-		{
-			take_storage(1, $item[Bastille Battalion control rig]);
-		}
-
-
-		// Get the dairy goat fax and clanmate fortunes,
-		if(item_amount($item[photocopied monster]) == 0)
-		{
-			print("No photocopied monster, skipping in...");
-			wait(5);
-		}
+		// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
+		visit_url("peevpee.php?action=smashstone&pwd&confirm=on", true);
 
 		// Try Calculating the Universe
 		try_num();
