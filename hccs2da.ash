@@ -538,7 +538,7 @@ void main(){
 		use_familiar(ToTour);
 		equip($item[Hollandaise helmet]);
 		equip($item[saucepan]);
-		equip($item[astral statuette]);
+	        if (item_amount($item[astral statuette]) > 0) equip($item[astral statuette]);
 		equip($item[old sweatpants]);
 
 		//fantasyland only
@@ -672,7 +672,7 @@ void main(){
 		print("Combat Prep", "blue");
 		if (have_effect($effect[There's No N in Love]) <= 0)
 		{
-			cli_execute("fortune buff hagnk");
+			cli_execute("try; fortune buff hagnk");
 		}
 		cli_execute("hottub");
 
@@ -733,12 +733,13 @@ void main(){
 		}
 
 
-		//ash get_property("semirareLocation")
 		print("Hit semirare, main meal", "blue");
-		//tasty tart = 113
 		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 		{
-			visit_url("adventure.php?snarfblat=113"); //semirare
+			while (item_amount($item[tasty tart]) == 0)
+			{
+				adventure(1, $location[The Haunted Pantry]);
+			}
 		}
 		else
 		{
@@ -747,13 +748,16 @@ void main(){
 		use(1 , $item[milk of magnesium]);
 		eat(2 , $item[ultrafondue]);
 		eat(3 , $item[tasty tart]);
+
 		if (!eat_dog("optimal dog", AddHotdog))
 			abort("Cannot eat dog");
-		//cli_execute("eat optimal dog"); //TODO: change to vist_url to stop "The 'optimal dog' is not currently available in your clan" error, add code to add hotdog ingredients.
-		//lunchbox = 114
+
 		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 		{
-			visit_url("adventure.php?snarfblat=114"); //semirare
+			while (item_amount($item[Knob Goblin lunchbox]) == 0)
+			{
+				adventure(1, $location[The Outskirts of Cobb's Knob]);
+			}
 		}
 		else
 		{
@@ -1266,17 +1270,20 @@ void main(){
 		if (my_fullness() >= 0)
 		{
 			if (!eat_dog("wet dog", AddHotdog))
-				abort("Cannot eat dog");
+				abort("Cannot eat wet dog");
 			//cli_execute("eat wet dog");
 		}
 		else
 		{
 			if (!eat_dog("optimal dog", AddHotdog))
-				abort("Cannot eat dog");
-			//cli_execute("eat optimal dog");
+				abort("Cannot eat optimal dog");
+
 			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 			{
-				visit_url("adventure.php?snarfblat=113"); //semirare
+				while (item_amount($item[tasty tart]) == 0)
+				{
+					adventure(1, $location[The Haunted Pantry]);
+				}
 			}
 			else
 			{
@@ -1346,7 +1353,7 @@ void main(){
 		}
 
 		print("Base Booze Farming (if needed)", "blue");
-		cli_execute("fortune buff gunther");
+		cli_execute("try; fortune buff gunther");
 
 		if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
 		{
