@@ -147,6 +147,91 @@ void burn_mp()
 	try_skill($skill[Lunch Break]);
 }
 
+void ode_drink(int quantity, item booze)
+{
+	int need = booze.inebriety;
+	int curr = have_effect($effect[Ode to Booze]);
+	int casts = ceil((need.to_float() - curr.to_float()) / 5);
+	if (need > curr)
+	{
+		boolean result = force_skill(casts, $skill[The Ode to Booze]);
+		if (!result) abort("Ode failed");
+	}
+
+    cli_execute("overdrink " + quantity + " " + booze.name);
+}
+
+void drink_to(int inebriety)
+{
+	while (my_inebriety() < inebriety)
+	{
+        if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]);
+		else if (item_amount($item[splendid martini]) > 0) ode_drink(1, $item[splendid martini]);
+		else if (item_amount($item[meadeorite]) > 0) ode_drink(1, $item[meadeorite]);
+		else if (item_amount($item[thermos full of Knob coffee]) > 0) ode_drink(1, $item[thermos full of Knob coffee]);
+		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]);
+		else break;
+	}
+}
+
+void try_num()
+{
+	if (have_skill($skill[Calculate the Universe]))
+	{
+		if (get_property("_universeCalculated").to_int() == 0)
+		{
+			int [int] testcon;
+			testcon = reverse_numberology();
+			if (testcon contains 18)
+			{
+				reach_mp(1);
+				cli_execute("numberology 18");
+			}
+			else if (testcon contains 44)
+			{
+				reach_mp(1);
+				cli_execute("numberology 44");
+			}
+			else if (testcon contains 75)
+			{
+				reach_mp(1);
+				cli_execute("numberology 75");
+			}
+			else if (testcon contains 99)
+			{
+				reach_mp(1);
+				cli_execute("numberology 99");
+			}
+		}
+		else if (get_property("_universeCalculated").to_int() < get_property("skillLevel144").to_int())
+		{
+			int [int] testcon;
+			testcon = reverse_numberology();
+			if (testcon contains 69)
+			{
+				reach_mp(1);
+				cli_execute("numberology 69");
+			}
+		}
+	}
+}
+
+void complete_quest(string questname, int choicenumber)
+{
+	int adv = 0;
+	print("QUEST - "+questname, "red");
+	adv = my_adventures();
+	visit_url("council.php");
+	visit_url("choice.php?pwd&whichchoice=1089&option="+choicenumber);
+	adv = adv - my_adventures();
+	if (adv == 0)
+	{
+		abort("Not enough adventures to complete quest");
+	}
+	print("USED " + adv + " ADV", "red");
+	try_num();
+}
+
 void summon_pants(string m, string e, string s1, string s2, string s3)
 {
 	if (item_amount($item[portable pantogram]) == 0)
@@ -628,14 +713,7 @@ void main(){
 		use_bastille_battalion(0, 1, 2, random(3));
 
 		print("First Drink", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
-		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-			while (my_inebriety() < 5)
-			{
-				drink(1, $item[astral pilsner]);
-			}
-		}
+		drink_to(5);
 
 		if(have_skill($skill[Summon Clip Art]) && (my_mp() >= mp_cost($skill[Summon Clip Art])) && (get_property("tomeSummons").to_int() < 3))
 		{
@@ -869,22 +947,7 @@ void main(){
 			}
 			else abort("No perfect drink.");
 
-			if (my_inebriety() <= 8)
-			{
-				if (item_amount($item[splendid martini]) > 0)
-				{
-					drink(1, $item[splendid martini]);
-				} else {
-					cli_execute("drink cup of tea");
-				}
-			}
-
-			if (item_amount($item[splendid martini]) > 0)
-			{
-				drink(1, $item[splendid martini]);
-			} else {
-				drink(1, $item[thermos full of Knob coffee]);
-			}
+			drink_to(10);
 		} else abort("Ode loop fail.");
 
 		print("Task Prep (+item)", "blue");
@@ -951,12 +1014,8 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 
 		print("Task Prep (spell dmg)", "blue");
-		if ((reach_meat(500)) && force_skill($skill[The Ode to Booze]))
-		{
-			cli_execute("drink Sockdollager");
-		}
-		else abort("Ode loop fail.");
-
+		
+		ode_drink(1, $item[Sockdollager]);
 
 		if ((have_effect($effect[Indescribable Flavor]) <= 0) && (item_amount($item[indescribably horrible paste]) > 0))
 		{
@@ -1016,23 +1075,15 @@ void main(){
 		complete_quest("MAKE SAUSAGE", 7);
 
 		print("Task Prep (weapon dmg)", "blue");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
-		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-			cli_execute("drink Sockdollager");
-			use_familiar($familiar[Stooper]);
-			if(item_amount($item[Cold One]) > 0)
-				drink(1, $item[Cold One]);
-		}
-		else abort("Ode loop fail.");
+		
+		if (!force_skill(1, $skill[The Ode to Booze])) abort("Ode loop fail");
 
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= 2*mp_cost($skill[The Ode to Booze])))
-		{
-			use_skill(2 ,$skill[The Ode to Booze]);
-			overdrink(1, $item[emergency margarita]);
-		}
-		else abort("Ode loop fail.");
-		use_familiar(ToTour);
+		if (reach_meat(500)) ode_drink(1, $item[Sockdollager]);
+
+		use_familiar($familiar[Stooper]);
+
+	        drink_to(inebriety_limit());
+		ode_drink(1, $item[emergency margarita]);
 		
 		force_skill(1, $skill[Rage of the Reindeer]);
 		force_skill(1, $skill[Bow-Legged Swagger]);
@@ -1405,20 +1456,9 @@ void main(){
 			else abort("No perfect drink.");
 		}
 		else abort("Ode loop fail.");
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])))
-		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-			if (item_amount($item[splendid martini]) >= 4) {
-				drink(4, $item[splendid martini]);
-			}
-			else
-			{
-				drink(1, $item[asbestos thermos]);
-			}
-			drink(1, $item[astral pilsner]);
-			//consider fruity drink if no thermos
-		}
-		else abort("Ode loop fail.");
+
+		drink_to(12);
+		if (my_inebriety() < 9) ode_drink(1, $item[asbestos thermos]);
 
 		print("Task Prep (hp/mus)", "blue");
 		//spells
@@ -1541,15 +1581,9 @@ void main(){
 		complete_quest("FEED CHILDREN", 2);
 
 		print("Task Prep (mys)", "blue");
-		//drink
-		if ((have_skill($skill[The Ode to Booze])) && (my_mp() >= mp_cost($skill[The Ode to Booze])) && (reach_meat(500)))
-		{
-			use_skill(1 ,$skill[The Ode to Booze]);
-			cli_execute("drink Bee's Knees");
-		}
-		else abort("Ode loop fail.");
 
-		//spells
+		// drink
+		ode_drink(1, $item[Bee's Knees]);
 
 		//spells
 		force_skill(1, $skill[The Magical Mojomuscular Melody]);
