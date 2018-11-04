@@ -33,6 +33,10 @@ boolean reach_mp(int value)
 			use_skill(1 ,$skill[Soul Food]);
 		}
 	}
+	while ((my_mp() < value) && (get_property("timesRested").to_int() < total_free_rests()))
+	{
+		cli_execute("campground rest");
+	}
 	while ((my_mp() < value) && (item_amount($item[Dyspepsi-Cola]) >= 1))
 	{
 		use(1, $item[Dyspepsi-Cola]);
