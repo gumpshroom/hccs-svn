@@ -443,6 +443,8 @@ void main(){
 		try_fax("dairy goat");
 
 		// Set CCS for the run
+		set_property("hccs2da_backupCounterScript", get_property("counterScript"));
+		set_property("counterScript", "scripts/counterskip.ash");
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
@@ -1822,6 +1824,7 @@ void main(){
 
 		// Restore previous CCS
 		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
+		set_property("counterScript", get_property("hccs2da_backupCounterScript"));
 
 		print("FINISHED.", "red");
 	}
