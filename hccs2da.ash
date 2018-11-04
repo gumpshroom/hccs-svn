@@ -1,60 +1,9 @@
 //HCCS 2day 100% v0.6 by iloath
-
 script "hccs2da.ash";
+
 notify iloath;
 
-void try_num()
-{
-	if (have_skill($skill[Calculate the Universe]))
-	{
-		if (get_property("_universeCalculated").to_int() == 0)
-		{
-			int [int] testcon;
-			testcon = reverse_numberology();
-			if (testcon contains 18)
-			{
-				cli_execute("numberology 18");
-			}
-			else if (testcon contains 44)
-			{
-				cli_execute("numberology 44");
-			}
-			else if (testcon contains 75)
-			{
-				cli_execute("numberology 75");
-			}
-			else if (testcon contains 99)
-			{
-				cli_execute("numberology 99");
-			}
-		}
-		else if (get_property("_universeCalculated").to_int() < get_property("skillLevel144").to_int())
-		{
-			int [int] testcon;
-			testcon = reverse_numberology();
-			if (testcon contains 69)
-			{
-				cli_execute("numberology 69");
-			}
-		}
-	}
-}
-
-void complete_quest(string questname, int choicenumber)
-{
-	int adv = 0;
-	print("QUEST - "+questname, "red");
-	adv = my_adventures();
-	visit_url("council.php");
-	visit_url("choice.php?pwd&whichchoice=1089&option="+choicenumber);
-	adv = adv - my_adventures();
-	if (adv == 0)
-	{
-		abort("Not enough adventures to complete quest");
-	}
-	print("USED " + adv + " ADV", "red");
-	try_num();
-}
+import <zlib>
 
 boolean reach_meat(int value)
 {
@@ -393,7 +342,13 @@ familiar pick_familiar_to_tour()
 
 	foreach fam in $familiars[]
 	{
-		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) return fam;
+		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) {
+			if (getvar("bbb_famitems") != "")
+			{
+				cli_execute("zlib bbb_famitems = false");
+			}
+			return fam;
+		}
 	}
 
 	return $familiar[none];
