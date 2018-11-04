@@ -310,7 +310,8 @@ boolean eat_dog(string dog, boolean add)
 
 	if(storage_amount(dogReq[dog]) < dogAmt[dog])
 	{
-		return false;
+		boolean bought = buy_using_storage(dogAmt[dog], dogReq[dog]);
+		if (bought == false) return false;
 	}
 
 	visit_url("clan_viplounge.php?action=hotdogstand");
