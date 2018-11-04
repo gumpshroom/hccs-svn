@@ -358,6 +358,57 @@ familiar pick_familiar_to_tour()
 	return $familiar[none];
 }
 
+boolean try_fax(string m)
+{
+    if ($item[photocopied monster].item_amount() > 0) return true;
+
+    cli_execute("chat"); // apparently chat has to be open to receive a fax
+    waitq(5); // 5 seconds for chat to open
+    if (cli_execute("faxbot " + m))
+    {
+        if ($item[photocopied monster].item_amount() > 0) return true;
+    }
+    abort("Could not fax " + m);
+    return false;
+}
+
+boolean try_join_clan(int clan_id)
+{
+    //@TODO check you're whitelisted to the current clan
+	string url = visit_url("showclan.php?recruiter=1&whichclan="+ clan_id +"&pwd&whichclan=" + clan_id + "&action=joinclan&apply=Apply+to+this+Clan&confirm=on");
+    // Successful
+	if(contains_text(url, "clanhalltop.gif")) return true;
+    // Already in BAFH
+	else if(contains_text(url, "You can't apply to a clan you're already in.")) return true;
+    // Failed
+	else return false;
+}
+
+void try_consult()
+{
+    int bafh = 90485;
+    int initial_clan = get_clan_id();
+
+    boolean joined = try_join_clan(bafh);
+
+    if (!joined)
+    {
+	    print("Unable to join BAFH to collect our Fortune Teller Equipment from Cheesefax. Consider getting whitelisted to automate this step");
+        return;
+    }
+
+    // @TODO Replace this with a less spammy direct solution
+    while (get_property("_clanFortuneConsultUses") < 3)
+    {
+        cli_execute("fortune cheesefax pizza batman thick");
+        waitq(1);
+    }
+
+    boolean returned = try_join_clan(initial_clan);
+
+    if (!returned) abort("Couldn't get back into original clan");
+}
+
 void main(){
 	//init
 	familiar ToTour = pick_familiar_to_tour();
@@ -385,6 +436,11 @@ void main(){
 
 	if (my_daycount() == 1)
 	{
+		// Collect your consults if you can
+		try_consult();
+
+		// Get the dairy goat fax and clanmate fortunes,
+		try_fax("dairy goat");
 
 		// Set CCS for the run
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
