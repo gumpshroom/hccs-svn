@@ -65,9 +65,9 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[magical mystery juice]);
 	}
-	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 2000))
+	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 500))
 	{
-		buy(1, $item[magical mystery juice],100);
+		buy(1, $item[magical mystery juice], 100);
 		use(1, $item[magical mystery juice]);
 	}
 	if (my_mp() < value)
