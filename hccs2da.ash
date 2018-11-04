@@ -201,7 +201,6 @@ void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff
 	for (int reward = 0; reward < 4; reward++)
 	{
 		int clicks = ((desired_state[reward] - current_state[reward]) + 3) % 3;
-		print('thing ' + reward + ' is at ' + current_state[reward] + ' but needs to be at ' + desired_state[reward] + ' so we will click ' + clicks + ' times');
 		for (int i = 0; i < clicks; i++) run_choice(reward + 1);
 	}
 
