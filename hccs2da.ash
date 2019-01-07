@@ -1132,12 +1132,13 @@ void main(){
 		    equip($item[li'l unicorn costume]);
 		}
 		//TODO: check sausage limits, make sausage
-        while (item_amount($item[Magical sausage]) >= 1))
-    	{
-    		eat(1, $item[Magical sausage]);
-    	}
+		while (item_amount($item[Magical sausage]) >= 1))
+		{
+			eat(1, $item[Magical sausage]);
+		}
 		cli_execute("telescope high");
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
+		cli_execute("flowers");
 		cli_execute("hottub");
 		abort("END DAY 1.");
 	}
