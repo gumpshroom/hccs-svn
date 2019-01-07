@@ -151,7 +151,10 @@ void burn_mp()
 	try_skill($skill[Advanced Cocktailcrafting]);
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
+	try_skill($skill[Love Mixology]);
 	try_skill($skill[Lunch Break]);
+	try_skill($skill[Request Sandwich]);
+	try_skill($skill[Acquire Rhinestones]);
 }
 
 void ode_drink(int quantity, item booze)
@@ -644,8 +647,13 @@ void main(){
 		}
 
 		try_item($item[Newbiesport&trade; tent]);
-
+        
+        try_skill($skill[Communism!]);
 		force_skill(1, $skill[Spirit of Peppermint]);
+		if (have_effect($effect[Blood Sugar Sauce Magic]) == 0)
+		{
+            force_skill(1, $skill[Blood Sugar Sauce Magic]);
+        }
 		force_skill(1, $skill[The Magical Mojomuscular Melody]);
 		force_skill(1, $skill[Sauce Contemplation]);
 		cli_execute("swim laps");
@@ -711,7 +719,7 @@ void main(){
 		burn_mp();
 
 		complete_quest("COIL WIRE", 11);
-
+        force_skill(1, $skill[Inscrutable Gaze]);
 		if (item_amount($item[a ten-percent bonus]) > 0)
 			use(1, $item[a ten-percent bonus]);
 		else abort("You do not have a ten-percent bonus.");
@@ -1034,11 +1042,15 @@ void main(){
 			cli_execute("pool 2");
 		}
 
+		
 		force_skill(1, $skill[Spirit of Peppermint]);
 		force_skill(1, $skill[Simmer]);
 		try_num();
 		force_skill(1, $skill[Carol of the Hells]);
 		force_skill(1, $skill[Song of Sauce]);
+		force_skill(1, $skill[Arched Eyebrow of the Archmage]);
+		//TODO: need 8 spooky res and 500hp, heal first
+		//try_skill(1, $skill[Deep Dark Visions]);
 
 		//hatter mariachi hat or powdered wig
 		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0))
@@ -1096,9 +1108,12 @@ void main(){
 		ode_drink(1, $item[emergency margarita]);
 		
 		force_skill(1, $skill[Rage of the Reindeer]);
+		force_skill(1, $skill[Scowl of the Auk]);
 		force_skill(1, $skill[Carol of the Bulls]);
 		force_skill(1, $skill[Bow-Legged Swagger]);
 		force_skill(1, $skill[Song of the North]);
+		force_skill(1, $skill[Tenacity of the Snapper]);
+		force_skill(1, $skill[Blessing of the War Snapper]);
 
 		print("Rollover Prep", "blue");
 
@@ -1491,9 +1506,17 @@ void main(){
 		print("Task Prep (hp/mus)", "blue");
 		//spells
 
-		force_skill(1, $skill[Sauce Contemplation]);
+		force_skill(1, $skill[The Power Ballad of the Arrowsmith]);
+		force_skill(1, $skill[Quiet Determination]);
 		force_skill(1, $skill[Rage of the Reindeer]);
+		force_skill(1, $skill[Get Big]);
+		force_skill(1, $skill[Sauce Contemplation]);
+		force_skill(1, $skill[Seal Clubbing Frenzy]);
+		force_skill(1, $skill[Patience of the Tortoise]);
+		force_skill(1, $skill[Moxie of the Mariachi]);
+		try_skill($skill[Bind Undead Elbow Macaroni]);
 		try_skill($skill[Song of Bravado]);
+		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//buffs
 		wish = "to be Preemptive Medicine";
@@ -1601,9 +1624,21 @@ void main(){
 			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 		}
+		
+		//Cancel max mp buff
+		if (have_effect($effect[Blood Sugar Sauce Magic]) > 0)
+		{
+            force_skill(1, $skill[Blood Sugar Sauce Magic]);
+        }
 
 		complete_quest("DONATE BLOOD", 1);
-
+		
+		//Redo max mp buff
+        if (have_effect($effect[Blood Sugar Sauce Magic]) == 0)
+		{
+            force_skill(1, $skill[Blood Sugar Sauce Magic]);
+        }
+        
 		complete_quest("FEED CHILDREN", 2);
 
 		print("Task Prep (mys)", "blue");
@@ -1613,8 +1648,13 @@ void main(){
 
 		//spells
 		force_skill(1, $skill[The Magical Mojomuscular Melody]);
+		force_skill(1, $skill[Quiet Judgement]);
+		force_skill(1, $skill[Get Big]);
+		force_skill(1, $skill[Manicotti Meditation]);
 		force_skill(1, $skill[Sauce Contemplation]);
+		try_skill($skill[Blessing of She-Who-Was]);
 		try_skill($skill[Song of Bravado]);
+		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//item
 		if (item_amount($item[tomato juice of powerful power]) > 0)
@@ -1681,7 +1721,13 @@ void main(){
 		//spells
 
 		force_skill(1, $skill[The Moxious Madrigal]);
+		force_skill(1, $skill[Quiet Desperation]);
+		force_skill(1, $skill[Get Big]);
+		force_skill(1, $skill[Disco Fever]);
+		force_skill(1, $skill[Disco Aerobics]);
+		force_skill(1, $skill[Moxie of the Mariachi]);
 		try_skill($skill[Song of Bravado]);
+		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//item
 		if (item_amount($item[oil of expertise]) > 0)
