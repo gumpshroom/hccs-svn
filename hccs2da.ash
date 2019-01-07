@@ -977,7 +977,7 @@ void main(){
 		wish = "to be Infernal Thirst";
 		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
-
+        //TODO: wad of used tape
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
 		//use up mp
@@ -1079,7 +1079,7 @@ void main(){
 		//magic dragonfish does not seem to work here!
 		
 		//try_skill(1, $skill[Carol of the Thrills]);
-        //TODO:best place for free fights? use NEP?
+        //TODO:best place for free fights? use NEP/makeshift garbage shirt
 		complete_quest("MAKE SAUSAGE", 7);
 
 		print("Task Prep (weapon dmg)", "blue");
@@ -1669,7 +1669,7 @@ void main(){
 		}
 		
 		//try_skill(1, $skill[Carol of the Thrills]);
-        //TODO:best place for free fights? use NEP?
+        //TODO:best place for free fights? use NEP/makeshift garbage shirt
 
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
