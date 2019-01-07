@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.6 by iloath
+//HCCS 2day 100% v0.8 by iloath
 script "hccs2da.ash";
 
 notify iloath;
