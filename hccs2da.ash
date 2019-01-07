@@ -65,6 +65,11 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[magical mystery juice]);
 	}
+	//TODO: add check for 21 sausage. auto make sausage
+	while ((my_mp() < value) && (item_amount($item[Magical sausage]) >= 1))
+	{
+		eat(1, $item[Magical sausage]);
+	}
 	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 500))
 	{
 		buy(1, $item[magical mystery juice], 100);
@@ -1030,6 +1035,7 @@ void main(){
 		force_skill(1, $skill[Spirit of Peppermint]);
 		force_skill(1, $skill[Simmer]);
 		try_num();
+		force_skill(1, $skill[Carol of the Hells]);
 		force_skill(1, $skill[Song of Sauce]);
 
 		//hatter mariachi hat or powdered wig
@@ -1071,7 +1077,9 @@ void main(){
 		}
 
 		//magic dragonfish does not seem to work here!
-
+		
+		//try_skill(1, $skill[Carol of the Thrills]);
+        //TODO:best place for free fights? use NEP?
 		complete_quest("MAKE SAUSAGE", 7);
 
 		print("Task Prep (weapon dmg)", "blue");
@@ -1086,6 +1094,7 @@ void main(){
 		ode_drink(1, $item[emergency margarita]);
 		
 		force_skill(1, $skill[Rage of the Reindeer]);
+		force_skill(1, $skill[Carol of the Bulls]);
 		force_skill(1, $skill[Bow-Legged Swagger]);
 		force_skill(1, $skill[Song of the North]);
 
@@ -1122,7 +1131,11 @@ void main(){
 		    buy(1, $item[li'l unicorn costume]);
 		    equip($item[li'l unicorn costume]);
 		}
-
+		//TODO: check sausage limits, make sausage
+        while (item_amount($item[Magical sausage]) >= 1))
+    	{
+    		eat(1, $item[Magical sausage]);
+    	}
 		cli_execute("telescope high");
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 		cli_execute("hottub");
@@ -1653,6 +1666,9 @@ void main(){
 		{
 			equip($slot[weapon], $item[5-Alarm Saucepan]);
 		}
+		
+		//try_skill(1, $skill[Carol of the Thrills]);
+        //TODO:best place for free fights? use NEP?
 
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
