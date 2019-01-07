@@ -201,7 +201,7 @@ void main(){
 	use_skill(1 ,$skill[Inigo's Incantation of Inspiration]);
 	visit_url("campground.php?action=rest", false);
 	
-	cli_execute("pvp 1000 fame With Your Bare Hands");
+	cli_execute("flowers");
 	
 	
 	
