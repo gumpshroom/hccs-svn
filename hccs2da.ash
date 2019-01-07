@@ -66,6 +66,8 @@ boolean reach_mp(int value)
 		use(1, $item[magical mystery juice]);
 	}
 	//TODO: add check for 21 sausage. auto make sausage
+	//visit_url("inventory.php?action=grind");
+    //visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=2",true);
 	while ((my_mp() < value) && (item_amount($item[Magical sausage]) >= 1))
 	{
 		eat(1, $item[Magical sausage]);
