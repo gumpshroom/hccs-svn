@@ -157,6 +157,11 @@ boolean force_skill(int casts, skill value)
 	return force_skill(casts, value, true);
 }
 
+boolean force_skill(skill value)
+{
+	return force_skill(1, value, true);
+}
+
 void try_skill(skill value)
 {
 	if(have_skill(value))
@@ -666,11 +671,14 @@ void main(){
 
 		if (item_amount($item[toy accordion]) < 1)
 			buy(1, $item[toy accordion]);
-
-		while (item_amount($item[turtle totem]) < 1)
-		{
-			buy(1, $item[chewing gum on a string]);
-			use(1, $item[chewing gum on a string]);
+        
+        if (have_skill($skill[Empathy of the Newt])) || (have_skill($skill[Astral Shell])) || (have_skill($skill[Tenacity of the Snapper])) || (have_skill($skill[Reptilian Fortitude]))
+        {
+    		while (item_amount($item[turtle totem]) < 1)
+    		{
+    			buy(1, $item[chewing gum on a string]);
+    			use(1, $item[chewing gum on a string]);
+    		}
 		}
 
 		//Set fam here
@@ -1147,10 +1155,12 @@ void main(){
 		if (!force_skill(1, $skill[The Ode to Booze])) abort("Ode loop fail");
 
 		if (reach_meat(500)) ode_drink(1, $item[Sockdollager]);
-
-		use_familiar($familiar[Stooper]);
-
-	        drink_to(inebriety_limit());
+        
+        if (have_familiar($familiar[Stooper]))
+        {
+		    use_familiar($familiar[Stooper]);
+        }
+	    drink_to(inebriety_limit());
 		ode_drink(1, $item[emergency margarita]);
 		
 		force_skill(1, $skill[Rage of the Reindeer]);
@@ -1437,8 +1447,10 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
-
-		use_familiar($familiar[Exotic Parrot]);
+        
+        if (have_familiar($familiar[Exotic Parrot])) {
+		    use_familiar($familiar[Exotic Parrot]);
+		}
 
 		if (have_effect($effect[Billiards Belligerence]) <= 0)
 		{
@@ -1563,6 +1575,7 @@ void main(){
 		try_skill($skill[Bind Undead Elbow Macaroni]);
 		try_skill($skill[Song of Bravado]);
 		try_skill($skill[Stevedave's Shanty of Superiority]);
+		try_skill($skill[Reptilian Fortitude]);
 
 		//buffs
 		wish = "to be Preemptive Medicine";
@@ -1894,7 +1907,7 @@ void main(){
 			equip($slot[acc2], $item[Brutal brogues]);
 		}
 
-		//borrow time here
+		//borrow time here (TODO: borrow only if needed)
 		print("Borrowing Time", "blue");
 		if (item_amount($item[borrowed time]) > 0)
 		{
@@ -1963,7 +1976,7 @@ void main(){
 			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
 			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 		}
-
+        //TODO: use stooper if barely not enough adv
 		complete_quest("BE A LIVING STATUE", 8);
 
 		if (have_effect($effect[The Sonata of Sneakiness]) > 0)
