@@ -561,7 +561,7 @@ void try_consult()
 
 	if (!joined)
 	{
-	    print("Unable to join BAFH to collect our Fortune Teller Equipment from Cheesefax. Consider getting whitelisted to automate this step");
+		print("Unable to join BAFH to collect our Fortune Teller Equipment from Cheesefax. Consider getting whitelisted to automate this step");
 		return;
 	}
 
@@ -1245,6 +1245,9 @@ void main(){
 		}
 		
 		complete_quest("MAKE SAUSAGE", 7);
+		
+		//DO THIS BEFORE BUFFS
+		cli_execute("flowers"); 
 
 		print("Task Prep (weapon dmg)", "blue");
 		
@@ -1269,7 +1272,10 @@ void main(){
 		force_skill(1, $skill[Blessing of the War Snapper]);
 
 		print("Rollover Prep", "blue");
-
+		if (item_amount($item[pentagram bandana]) > 0)
+		{
+			equip($slot[hat], $item[pentagram bandana]);
+		}
 		if ((item_amount($item[psychic's circlet]) > 0) && (my_basestat($stat[moxie]) >= 35))
 		{
 			equip($slot[hat], $item[psychic's circlet]);
@@ -1309,7 +1315,6 @@ void main(){
 		
 		cli_execute("telescope high");
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
-		cli_execute("flowers");
 		if (get_property("_hotTubSoaks").to_int() < 5)
 		{
 			cli_execute("hottub");
@@ -1797,6 +1802,18 @@ void main(){
 		{
 			equip($slot[off-hand], $item[psychic's crystal ball]);
 		}
+		if (item_amount($item[cosmetic football]) > 0)
+		{
+			equip($slot[off-hand], $item[cosmetic football]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[denim jacket]) > 0))
+		{
+			equip($slot[shirt], $item[denim jacket]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[shoe ad T-shirt]) > 0))
+		{
+			equip($slot[shirt], $item[shoe ad T-shirt]);
+		}
 		if (item_amount($item[three-legged pants]) > 0)
 		{
 			equip($slot[pants], $item[three-legged pants]);
@@ -1884,13 +1901,22 @@ void main(){
 
 
 		//equip
-		if (item_amount($item[chef's hat]) > 0)
+		if(item_amount($item[dorky glasses]) > 0)
 		{
-			equip($slot[hat], $item[chef's hat]);
+			equip($slot[acc2], $item[dorky glasses]);
 		}
 		if ((item_amount($item[psychic's circlet]) > 0) && (my_basestat($stat[moxie]) >= 35))
 		{
 			equip($slot[hat], $item[psychic's circlet]);
+		}
+		if (item_amount($item[chef's hat]) > 0)
+		{
+			equip($slot[hat], $item[chef's hat]);
+		}
+		if (item_amount($item[January's Garbage Tote]) > 0)
+		{
+			cli_execute("fold wad of used tape");
+			equip($slot[hat], $item[wad of used tape]);
 		}
 		if (item_amount($item[Dolphin King's crown]) > 0)
 		{
@@ -1899,6 +1925,22 @@ void main(){
 		if (item_amount($item[FantasyRealm Mage's Hat]) > 0)
 		{
 			equip($slot[hat], $item[FantasyRealm Mage's Hat]);
+		}
+		if (item_amount($item[pentagram bandana]) > 0)
+		{
+			equip($slot[hat], $item[pentagram bandana]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[shoe ad T-shirt]) > 0))
+		{
+			equip($slot[shirt], $item[shoe ad T-shirt]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[denim jacket]) > 0))
+		{
+			equip($slot[shirt], $item[denim jacket]);
+		}
+		if (item_amount($item[psychic's crystal ball]) > 0)
+		{
+			equip($slot[off-hand], $item[psychic's crystal ball]);
 		}
 		if (item_amount($item[astral statuette]) > 0)
 		{
@@ -1970,6 +2012,10 @@ void main(){
 		{
 			use(1, $item[hair spray]);
 		}
+		if (item_amount($item[runproof mascara]) > 0)
+		{
+			use(1, $item[runproof mascara]);
+		}
 		if(item_amount($item[pocket maze]) > 0)
 		{
 			use(1, $item[pocket maze]);
@@ -1989,9 +2035,13 @@ void main(){
 		{
 			equip($slot[acc1], $item[Codpiece]);
 		}
-		if (item_amount($item[Dolphin King's crown]) > 0)
+		if(item_amount($item[pump-up high-tops]) > 0)
 		{
-			equip($slot[hat], $item[Dolphin King's crown]);
+			equip($slot[acc2], $item[pump-up high-tops]);
+		}
+		if(item_amount($item[noticeable pumps]) > 0)
+		{
+			equip($slot[acc3], $item[noticeable pumps]);
 		}
 		if (item_amount($item[FantasyRealm Mage's Hat]) > 0)
 		{
@@ -2017,9 +2067,22 @@ void main(){
 		{
 			equip($slot[hat], $item[Dolphin King's crown]);
 		}
+		if (item_amount($item[January's Garbage Tote]) > 0)
+		{
+			cli_execute("fold wad of used tape");
+			equip($slot[hat], $item[wad of used tape]);
+		}
 		if (item_amount($item[FantasyRealm Rogue's Mask]) > 0)
 		{
 			equip($slot[hat], $item[FantasyRealm Rogue's Mask]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[denim jacket]) > 0))
+		{
+			equip($slot[shirt], $item[denim jacket]);
+		}
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[shoe ad T-shirt]) > 0))
+		{
+			equip($slot[shirt], $item[shoe ad T-shirt]);
 		}
 		if (item_amount($item[stylish swimsuit]) > 0)
 		{
