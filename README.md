@@ -17,6 +17,6 @@ Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, FantasyR
 counterskip.ash: place this in your script folder, it prevent kolmafia from aborting upon hitting a semirare counter in CS runs (there is probably a better way of doing this)
 
 hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
-(You need disintegrate, cursed mortar shell and curse of weaksauce to use this css without modification.)
+(You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification.)
 
 postCS.ash: in alpha state, run in CS aftercore to attempt finishing your aftercore, needs a lot of fixing before it is fit for the general public
