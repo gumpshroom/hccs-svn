@@ -5,6 +5,47 @@ notify iloath;
 
 import <zlib>
 
+int make_sausage(int count_lim, int paste_lim)
+{
+	if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) <= 0) && !(have_equipped($item[Kramco Sausage-o-Matic&trade;])))
+	{
+		print("No grinder");
+		return 0;
+	}
+	int count = 0;
+	while(count < count_lim){
+		if (item_amount($item[magical sausage casing]) <= 0)
+		{
+			print("no casing for next sausage");
+			visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=3&sumbit=Nevermind!",true);
+			return count;
+		}
+		int paste = -1;
+		string page = visit_url("inventory.php?action=grind");
+		matcher match_paste = create_matcher("It looks like your grinder needs (\\d+\\,?\\d+) of the" , page);
+		if(match_paste.find()) {
+			paste = match_paste.group(1).to_int();
+			print("paste: "+paste);
+		}
+		if(paste > 0) {
+			if(paste > min(paste_lim, my_meat())){
+				print("next sausage too expensive");
+				visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=3&sumbit=Nevermind!",true);
+				return count;
+			}
+			paste = ceil(to_float(paste) / 10.0);
+			print("paste items: "+paste);
+			visit_url("craft.php?action=makepaste&pwd=" + my_hash() + "&whichitem=25&iid=88&qty=" + paste + "&sumbit=Make",true);
+			visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=1&iid=25&qty=" + paste + "&sumbit=Grind!",true);
+		}
+		visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=2",true);
+		count = count + 1;
+	}
+	print("made enough ("+ count +") sausages");
+	visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=3&sumbit=Nevermind!",true);
+	return count;
+}
+
 boolean reach_meat(int value)
 {
 	if (my_meat() >= value)
@@ -65,12 +106,17 @@ boolean reach_mp(int value)
 	{
 		use(1, $item[magical mystery juice]);
 	}
-	//TODO: add check for 21 sausage. auto make sausage
-	//visit_url("inventory.php?action=grind");
-    //visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=2",true);
+	//TODO: add check for sausage limits.
 	while ((my_mp() < value) && (item_amount($item[Magical sausage]) >= 1))
 	{
 		eat(1, $item[Magical sausage]);
+	}
+	while ((my_mp() < value) && ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) || (have_equipped($item[Kramco Sausage-o-Matic&trade;]))))
+	{
+	    if (make_sausage(1, my_meat() - 500) > 0)
+	    {
+		    eat(1, $item[Magical sausage]);
+		}
 	}
 	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 500))
 	{
