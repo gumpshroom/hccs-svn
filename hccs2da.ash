@@ -34,7 +34,7 @@ int make_sausage(int count_lim, int paste_lim)
 			}
 			paste = ceil(to_float(paste) / 10.0);
 			print("paste items: "+paste,"blue");
-			visit_url("craft.php?action=makepaste&pwd=" + my_hash() + "&whichitem=25&iid=88&qty=" + paste + "&sumbit=Make",true);
+			visit_url("craft.php?action=makepaste&pwd=" + my_hash() + "&whichitem=25&qty=" + paste + "&sumbit=Make",true);
 			visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=1&iid=25&qty=" + paste + "&sumbit=Grind!",true);
 		}
 		visit_url("choice.php?whichchoice=1339&pwd=" + my_hash() + "&option=2",true);
@@ -255,6 +255,10 @@ void drink_to(int inebriety)
 		else if (item_amount($item[meadeorite]) > 0) ode_drink(1, $item[meadeorite]);
 		else if (item_amount($item[thermos full of Knob coffee]) > 0) ode_drink(1, $item[thermos full of Knob coffee]);
 		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]);
+		else if (item_amount($item[Shot of grapefruit schnapps]) > 0) ode_drink(1, $item[Shot of grapefruit schnapps]);
+		else if (item_amount($item[Shot of tomato schnapps]) > 0) ode_drink(1, $item[Shot of tomato schnapps]);
+		else if (item_amount($item[Shot of orange schnapps]) > 0) ode_drink(1, $item[Shot of orange schnapps]);
+		else if (item_amount($item[Fine wine]) > 0) ode_drink(1, $item[Fine wine]);
 		else break;
 	}
 }
@@ -1246,7 +1250,7 @@ void main(){
 		
 		complete_quest("MAKE SAUSAGE", 7);
 		
-		//DO THIS BEFORE BUFFS
+		//DO THIS BEFORE BUFFING
 		cli_execute("flowers"); 
 
 		print("Task Prep (weapon dmg)", "blue");
@@ -2093,7 +2097,7 @@ void main(){
 			equip($slot[off-hand], $item[psychic's crystal ball]);
 		}
 
-		complete_quest("BUILD FEED CONSPIRATORS", 4);
+		complete_quest("FEED CONSPIRATORS", 4);
 
 		print("Task Prep (fam weight)", "blue");
 
