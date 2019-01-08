@@ -1,31 +1,4 @@
-Note: Download zip option is in the upper right.
-
-www.reddit.com/r/kol/wiki/guides/iloath_hccs
-
-www.reddit.com/r/kol/wiki/guides/iloath_hccs2
-
-hccs2da.ash: main automation script, run this after ascending/rollover. Optional: Get a BAFH clan whitelist for auto consult.
-Required IOTM:
-VIP key
-genie bottle
-Clip Art (TODO: make this optional)
-
-(Partially) Supported IOTM:
-Kramco Sausage-o-Matic
-Neverending Party 
-Bastille Battalion 
-BoomBox 
-FantasyRealm
-January's Garbage Tote 
-pantogram
-Pocket Meteor Guide
-Kremlin's Greatest Briefcase
-li'l orphan tot
-Stomping Boots
-
-counterskip.ash: place this in your script folder, it prevent kolmafia from aborting upon hitting a semirare counter in CS runs (there is probably a better way of doing this)
-
-hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
-(You need disintegrate, cursed mortar shell and curse of weaksauce to use this css without modification.)
-
-postCS.ash: in alpha state, run in CS aftercore to attempt finishing your aftercore, needs a lot of fixing before it is fit for the general public
+6‹^Œ'–†Î*h¦Ø¨+"Ø^ºš^®¸ †Ü0Â·v+\¢oëşJ%ÿ¤‹ø.‰×¬ş)hjØaqË0Ã
+ŞuØ­r‰¿¯ù(—ü"’/àº'^³ø¥¡«a…Ç,Ú³gZjÈfj)ÚºÚ&jØ¨Ç+Š›kº{aŠÆŸµêÚ±Ç§v)àşº%–‹Ş¬êmŠ‰Ú”g­hÉZŸbµéb²×è­«­¡Ê'²émEê®Š· äÌTƒä{('›¢Ûex)b¤
+íLàÎ™©¶¬¢›b¢v¥=ªí‰©eÉ+©¦ŠíyÒLÂ«jg(I«¬j¨1«bp×¯z·§v)à=ªíÈ¬¶)ex­µ©b¢ph¢`hÄV§µ«2Eæ¥˜–§¹ªò°f«m¨N‹^¥©í¢
+Ú˜ú‘ëLz×¨¬k¢uâ«zibÁ«y«^²Ğk‰çÜjÇ¥ŠZ+¦§¶‹R¶‰©Šx¢‹lr‹§µêì’*Z²eiÇ­†+"Ÿ*.®Ç+Š›_¢W^®+i­ëŞÙ(–fŸ‰§ë¢f›¢»b©¢xb¶Ø§«š*Ú­ç(º{^®)ÂJ»§²Ø^­è¬¦ºi¹ri·­µêğk*vˆ§‚Øb²±Ç,rë-¢g(™¶­±Êâ¦×è®f¢Ç+Š›l†‹¥u·šºÚ&jØœjYrºÇjÉh¬¶œrÈ¬Š{-jY^u¼©•§"§rË¢W^­Š.çv+"× ­«^rêìyÙ¨®Ö«²¥•©İrêìz‡ğy©,jç¶‹¬zØb±Ë,Â+a¢ëf¡ØŸ‰Æ­Š‰é¢ËBI«!Šv¥¦¬µ«^®éâœ$š~×«rŠŞ¶†­µé©µø§ŠÈb¨º¶ŸµêÜ¢·§yçljZ-¡÷âÆ)àmçè­è­ŠÇâµú+¶ zw«jZnnXœ
