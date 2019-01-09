@@ -608,6 +608,7 @@ void main(){
 
 	if (my_daycount() == 1)
 	{
+		/*
 		// Collect your consults if you can
 		try_consult();
 
@@ -616,7 +617,7 @@ void main(){
 
 		// Set CCS for the run
 		set_property("hccs2da_backupCounterScript", get_property("counterScript"));
-		set_property("counterScript", "scripts\counterskip.ash");
+		set_property("counterScript", "scripts\\counterskip.ash");
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
@@ -771,7 +772,7 @@ void main(){
 			use(1, $item[Codpiece]);
 			use(8 ,$item[bubblin' crude]);
 			autosell(1, $item[oil cap]);
-			equip($slot[acc1], $item[Codpiece]);
+			equip($slot[acc3], $item[Codpiece]);
 		}
 		else abort("You do not have a Codpiece.");
 
@@ -810,6 +811,11 @@ void main(){
 		eat(1 , $item[cheezburger]);
 		buy(1 , $item[fortune cookie], 40);
 		eat(1 , $item[fortune cookie]);
+		
+		if (my_adventures() < 60)
+		{
+			ode_drink(1, $item[cup of &quot;tea&quot;]);
+		}
 
 		//40 mp remain if fantasy mage hat
 		burn_mp();
@@ -865,7 +871,6 @@ void main(){
 
 
 
-		//if poor rng then no adv here, ode+tea now?
 		
 		//use kramco before farming
 		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
@@ -923,7 +928,7 @@ void main(){
 			}
 			try_num();
 		}
-
+		
 		print("Hit semirare, main meal", "blue");
 		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 		{
@@ -1127,7 +1132,12 @@ void main(){
 
 		//hunt for fruit skeleton (one of the best place to shattering punch/snokebomb)
 		//y-ray fruit skeleton
-
+		*/
+		//use kramco before farming
+		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		{
+			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+		}
 		print("Farming fruits", "blue");
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
@@ -1217,8 +1227,6 @@ void main(){
 		}
 
 		//magic dragonfish does not seem to work here!
-		
-		//try_skill(1, $skill[Carol of the Thrills]);
 
 		// NEP FIGHT
 		if (get_property("neverendingPartyAlways") == true)
@@ -1284,7 +1292,10 @@ void main(){
 		{
 			equip($slot[hat], $item[psychic's circlet]);
 		}
-		
+		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[shoe ad T-shirt]) > 0))
+		{
+			equip($slot[shirt], $item[shoe ad T-shirt]);
+		}
 		if (item_amount($item[astral statuette]) > 0)
 		{
 			equip($slot[off-hand], $item[astral statuette]);
@@ -1303,6 +1314,11 @@ void main(){
 		if (item_amount($item[Draftsman's driving gloves]) > 0)
 		{
 			equip($slot[acc2], $item[Draftsman's driving gloves]);
+		}
+		
+		if (item_amount($item[codpiece]) > 0)
+		{
+			equip($slot[acc3], $item[codpiece]);
 		}
 
 		if (item_amount(KGB) > 0)
@@ -1646,6 +1662,11 @@ void main(){
 
 		print("Base Booze Farming (if needed)", "blue");
 		cli_execute("try; fortune buff gunther");
+		
+		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		{
+			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+		}
 
 		if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
 		{
@@ -1966,6 +1987,10 @@ void main(){
 				cli_execute("fold makeshift garbage shirt");
 				equip($slot[shirt], $item[makeshift garbage shirt]);
 			}
+			if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+			{
+				equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+			}
 			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
 			{
 				if (my_hp() < my_maxhp())
@@ -1980,6 +2005,23 @@ void main(){
 					}
 				}
 				adv1_NEP();
+			}
+			
+			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[shoe ad T-shirt]) > 0))
+			{
+				equip($slot[shirt], $item[shoe ad T-shirt]);
+			}
+			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[denim jacket]) > 0))
+			{
+				equip($slot[shirt], $item[denim jacket]);
+			}
+			if (item_amount($item[psychic's crystal ball]) > 0)
+			{
+				equip($slot[off-hand], $item[psychic's crystal ball]);
+			}
+			if (item_amount($item[astral statuette]) > 0)
+			{
+				equip($slot[off-hand], $item[astral statuette]);
 			}
 		}
 
@@ -2224,7 +2266,9 @@ void main(){
 		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
 		set_property("counterScript", get_property("hccs2da_backupCounterScript"));
 
-		cli_execute("pull all");
+		//DONT PULL WITH PVP
+		//cli_execute("pull all");
+		
 		cli_execute("breakfast");
 
 		print("FINISHED.", "red");
