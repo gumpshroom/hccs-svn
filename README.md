@@ -4,7 +4,8 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
-hccs2da.ash: main automation script, run this after ascending/rollover. Optional: Get a BAFH clan whitelist for auto consult.
+hccs2da.ash: main automation script, run this after ascending/rollover. Optional: BAFH whitelist for auto consult.
+(You need to declare pvp clan for the season to prevent abort)
 
 Required IOTM: 
 
