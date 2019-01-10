@@ -250,10 +250,10 @@ void drink_to(int inebriety)
 {
 	while (my_inebriety() < inebriety)
 	{
-		if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]);
-		else if (item_amount($item[splendid martini]) > 0) ode_drink(1, $item[splendid martini]);
+		if (item_amount($item[splendid martini]) > 0) ode_drink(1, $item[splendid martini]);
 		else if (item_amount($item[meadeorite]) > 0) ode_drink(1, $item[meadeorite]);
 		else if (item_amount($item[thermos full of Knob coffee]) > 0) ode_drink(1, $item[thermos full of Knob coffee]);
+		else if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]);
 		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]);
 		else if (item_amount($item[Shot of grapefruit schnapps]) > 0) ode_drink(1, $item[Shot of grapefruit schnapps]);
 		else if (item_amount($item[Shot of tomato schnapps]) > 0) ode_drink(1, $item[Shot of tomato schnapps]);
@@ -608,7 +608,7 @@ void main(){
 
 	if (my_daycount() == 1)
 	{
-		/*
+		
 		// Collect your consults if you can
 		try_consult();
 
@@ -1132,13 +1132,14 @@ void main(){
 
 		//hunt for fruit skeleton (one of the best place to shattering punch/snokebomb)
 		//y-ray fruit skeleton
-		*/
+		
 		//use kramco before farming
 		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 		print("Farming fruits", "blue");
+		
 		while ((item_amount($item[cherry]) <= 0) || (item_amount($item[lemon]) <= 0) || (item_amount($item[grapefruit]) <= 0))
 		{
 			if(force_skill(1, $skill[Disintegrate], false))
@@ -1241,7 +1242,7 @@ void main(){
 			}
 			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
 			{
-				if (my_hp() < my_maxhp())
+				if (my_hp() < (my_maxhp()-15))
 				{
 					if (get_property("_hotTubSoaks").to_int() < 5)
 					{
@@ -1284,6 +1285,13 @@ void main(){
 		force_skill(1, $skill[Blessing of the War Snapper]);
 
 		print("Rollover Prep", "blue");
+		
+		//This prevents a warning popup in day 2 when folding
+		if (item_amount($item[January's Garbage Tote]) > 0)
+		{
+			cli_execute("fold tinsel tights");
+		}
+		
 		if (item_amount($item[pentagram bandana]) > 0)
 		{
 			equip($slot[hat], $item[pentagram bandana]);
@@ -1993,7 +2001,7 @@ void main(){
 			}
 			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
 			{
-				if (my_hp() < my_maxhp())
+				if (my_hp() < (my_maxhp()-15))
 				{
 					if (get_property("_hotTubSoaks").to_int() < 5)
 					{
@@ -2268,7 +2276,7 @@ void main(){
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
-		
+		cli_execute("flowers");
 		cli_execute("breakfast");
 
 		print("FINISHED.", "red");
