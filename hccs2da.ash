@@ -608,6 +608,7 @@ void main(){
 
 	if (my_daycount() == 1)
 	{
+		//comment out from this point to the location where script breaks if needed
 		
 		// Collect your consults if you can
 		try_consult();
@@ -716,7 +717,7 @@ void main(){
 		equip($item[saucepan]);
 		if (item_amount($item[astral statuette]) > 0) equip($item[astral statuette]);
 		equip($item[old sweatpants]);
-		if (item_amount($item[stylish swimsuit]) > 0) equip($item[stylish swimsuit]);
+
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
 			cli_execute("fold makeshift garbage shirt");
@@ -1137,6 +1138,8 @@ void main(){
 		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+			cli_execute("hottub");
+			//beaten up by sausage goblin with this
 		}
 		print("Farming fruits", "blue");
 		
