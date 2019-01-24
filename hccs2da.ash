@@ -574,7 +574,6 @@ void main(){
 	}
 	print("Touring familiar set to " + ToTour, "green");
 	boolean AddHotdog = true;
-	string wish = "init";
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
 
@@ -634,19 +633,21 @@ void main(){
 				cli_execute("Briefcase e spell adventures");
 			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
 		}
-		
-		print("Liqidating genie wishes.", "green");
-		wish = "for more wishes";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9529", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
 
-		wish = "for more wishes";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9529", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+		//dive in vip swimming pool
+		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=treasure&sumbit=Dive for Treasure",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=leave&sumbit=Get Out",true);
 
-		wish = "for more wishes";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9529", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+		//open skeleton store
+		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
+		run_choice(1);
+
+		// Get pocket wishes
+		cli_execute("genie item pocket");
+		cli_execute("genie item pocket");
+		cli_execute("genie item pocket");
 
 		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
@@ -1184,17 +1185,15 @@ void main(){
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 
-		wish = "to be Infernal Thirst";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+		cli_execute("genie effect Infernal Thirst");
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
 		//use up mp
 		burn_mp();
-		
+
 
 		complete_quest("MAKE MARGARITAS", 9);
-		
+
 		if (item_amount($item[astral statuette]) > 0)
 		{
 			equip($slot[off-hand], $item[astral statuette]);
@@ -1332,7 +1331,7 @@ void main(){
 				adv1_NEP();
 			}
 		}
-		
+
 		complete_quest("MAKE SAUSAGE", 7);
 		
 		print("PVP", "green");
@@ -1346,11 +1345,11 @@ void main(){
 		}
 
 		print("Task Prep (weapon dmg)", "blue");
-		
+
 		if (!force_skill(1, $skill[The Ode to Booze])) abort("Ode loop fail");
 
 		if (reach_meat(500)) ode_drink(1, $item[Sockdollager]);
-		
+
 		if (have_familiar($familiar[Stooper]))
 		{
 			use_familiar($familiar[Stooper]);
@@ -1464,6 +1463,11 @@ void main(){
 
 		// Try to Calculate the Universe
 		try_num();
+
+		// Get pocket wishes (just in case)
+		cli_execute("genie item pocket");
+		cli_execute("genie item pocket");
+		cli_execute("genie item pocket");
 
 		// Get brogues from Bastille Battalion if we can
 		print("Battalion Game", "green");
@@ -1580,10 +1584,8 @@ void main(){
 		//consider wish wep dmg
 		if(have_effect($effect[Bow-Legged Swagger]) > 0)
 		{
-			print("Bow Legged Wish, saves ~5 adv", "green");
-			wish = "to be Outer Wolf&trade;";
-			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+			print("Bow Legged Wish, saves ~5 adv", "blue");
+			cli_execute("genie effect Outer Wolf&trade;");
 		}
 
 		burn_mp();
@@ -1718,11 +1720,7 @@ void main(){
 			force_skill(1, $skill[Empathy of the Newt]);
 		}
 
-
-
-		wish = "to be Fireproof Lips";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+		cli_execute("genie effect Fireproof Lips");
 
 		if (item_amount($item[heat-resistant necktie]) > 0)
 		{
@@ -1734,7 +1732,7 @@ void main(){
 		}
 		if (item_amount(KGB) > 0) {
 			equip($slot[acc1], KGB);
-		} 
+		}
 		else if (item_amount($item[psychic's amulet]) > 0)
 		{
 			equip($slot[acc1], $item[psychic's amulet]);
@@ -1845,13 +1843,11 @@ void main(){
 		try_skill($skill[Reptilian Fortitude]);
 
 		//buffs
-		wish = "to be Preemptive Medicine";
-		visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-		visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+		cli_execute("genie effect Preemptive Medicine");
 
 		cli_execute("telescope high");
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
-		
+
 		//items
 		if ((have_effect($effect[Oily Flavor]) <= 0) && (item_amount($item[oily paste]) > 0))
 		{
@@ -1957,17 +1953,9 @@ void main(){
 		{
 			print("Mus Wish (You might want more skills)", "green");
 			print(60-((my_maxhp() - (my_buffedstat($stat[muscle])+3)) / 30) + " estimated adv", "blue");
-			//test if g-9 gives better results
-			//page = visit_url("desc_effect.php?whicheffect=af64d06351a3097af52def8ec6a83d9b, false);
-			//matcher match_g9 = create_matcher("Muscle +(\\d+)%" , page);
-			//if(match_g9.find())
-			//if (floor(my_basestat($stat[muscle])*(match_g9.group(1).to_float()*0.01)) > 100);
-			//wish = "to be Experimental Effect G-9";
-			wish = "to be 'Roids of the Rhinoceros";
-			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+			cli_execute("genie effect 'Roids of the Rhinoceros");
 		}
-		
+
 		//Cancel max mp buff
 		if (have_effect($effect[[1458]Blood Sugar Sauce Magic]) > 0)
 		{
@@ -2343,15 +2331,11 @@ void main(){
 		}
 		if(item_amount($item[pocket wish]) > 0)
 		{
-			string wish = "to be Disquiet Riot";
-			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+			cli_execute("genie effect Disquiet Riot");
 		}
 		if(item_amount($item[pocket wish]) > 0) //might want to save pocket wish if not needed
 		{
-			string wish = "to be Chocolatesphere";
-			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9537", false);
-			visit_url("choice.php?pwd=&whichchoice=1267&option=1&wish=" + wish);
+			cli_execute("genie effect Chocolatesphere");
 		}
 		//TODO: use stooper if barely not enough adv
 		complete_quest("BE A LIVING STATUE", 8);
