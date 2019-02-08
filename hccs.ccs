@@ -35,10 +35,12 @@ endif
 abort
 
 [ mariachi calavera ]
-if hasskill Disintegrate
-    skill disintegrate
+try to steal an item
+if hasskill shattering punch
+    skill shattering punch
 endif
-abort
+skill stuffed mortar shell
+skill curse of weaksauce
 
 [ novelty tropical skeleton ]
 if hasskill Disintegrate
