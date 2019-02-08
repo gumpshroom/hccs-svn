@@ -1155,14 +1155,8 @@ void main(){
 
 		print("Task Prep (+item)", "blue");
 		//+item%
-		if(have_skill($skill[Fat Leon's Phat Loot Lyric]) && (my_mp() >= mp_cost($skill[Fat Leon's Phat Loot Lyric])) && (have_effect($effect[Fat Leon's Phat Loot Lyric]) <= 0))
-		{
-			use_skill(1 ,$skill[Fat Leon's Phat Loot Lyric]);
-		}
-		if(have_skill($skill[Singer's Faithful Ocelot]) && (my_mp() >= mp_cost($skill[Singer's Faithful Ocelot])) && (have_effect($effect[Singer's Faithful Ocelot]) <= 0))
-		{
-			use_skill(1 ,$skill[Singer's Faithful Ocelot]);
-		}
+		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
+		force_skill(1, $skill[Singer's Faithful Ocelot]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
 			cli_execute("pool 3");
