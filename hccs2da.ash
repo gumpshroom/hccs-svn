@@ -2118,7 +2118,22 @@ void main(){
 
 		force_skill(1, $skill[The Moxious Madrigal]);
 		force_skill(1, $skill[Blubber Up]);
-		force_skill(1, $skill[Quiet Desperation]);
+		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
+		{
+		    if (my_basestat($stat[moxie])>40)
+		    {
+    		    force_skill(1, $skill[Quiet Desperation]);
+    		}
+    		else
+    		{
+    		    force_skill(1, $skill[Disco Smirk]);
+    		}
+		}
+		else
+		{
+		    force_skill(1, $skill[Quiet Desperation]);
+		    force_skill(1, $skill[Disco Smirk]);
+		}
 		force_skill(1, $skill[Get Big]);
 		force_skill(1, $skill[Disco Fever]);
 		force_skill(1, $skill[Disco Aerobics]);
