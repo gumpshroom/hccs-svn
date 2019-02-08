@@ -7,6 +7,8 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 hccs2da.ash: main automation script, run this after ascending/rollover. Optional: BAFH whitelist for auto consult.
 (You need to declare pvp clan for the season to prevent abort)
 
+hccs2datest.ash: automation script, for 2iotm! (IN ALPHA STATE)
+
 Required IOTM: 
 
 VIP key, genie bottle, Clip Art (TODO: make this optional)
