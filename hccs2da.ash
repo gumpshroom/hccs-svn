@@ -13,7 +13,7 @@ int make_sausage(int count_lim, int paste_lim)
 	}
 	int highestICanAfford = floor(paste_lim / 111) - get_property("_sausagesMade").to_int();
 	int amountToMake = min(count_lim, highestICanAfford);
-	cli_exeucte("make " + amountToMake + " magical sausage");
+	cli_execute("make " + amountToMake + " magical sausage");
 	return amountToMake;
 }
 
