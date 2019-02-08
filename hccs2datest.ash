@@ -503,6 +503,24 @@ familiar pick_familiar_to_tour()
 	return $familiar[none];
 }
 
+familiar pick_fairy_to_tour()
+{
+	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
+
+	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle]
+	{
+		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) {
+			if (getvar("bbb_famitems") != "")
+			{
+				cli_execute("zlib bbb_famitems = false");
+			}
+			return fam;
+		}
+	}
+
+	return $familiar[Peppermint Rhino];
+}
+
 boolean try_fax(string m)
 {
 	if ($item[photocopied monster].item_amount() > 0) return true;
@@ -559,10 +577,12 @@ void main(){
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
-		print("Clip art detected, running route 1", "green");
+		print("Clip art detected, running route 1", "blue");
+		set_property("hccs2da_route" ,1 );
 	}
 	else
 	{	print("Clip art not detected, running route 2 ALPHA STATE", "red");
+		set_property("hccs2da_route" ,2 );
 		if (have_familiar($familiar[Peppermint Rhino]))
 		{
 			ToTour = $familiar[Peppermint Rhino];
@@ -571,8 +591,13 @@ void main(){
 		{
 			abort("Needs Peppermint Rhino if without Clip Arts");
 		}
+		if (get_property("hccs2da_marzipanhard") >= 100.0)
+		{
+			ToTour = pick_fairy_to_tour();
+		}
 	}
 	print("Touring familiar set to " + ToTour, "green");
+	set_property("hccs2da_tourfam" ,ToTour );
 	boolean AddHotdog = true;
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
@@ -698,8 +723,8 @@ void main(){
 			use(1, $item[pork elf goodies sack]);
 		else print("You do not have a pork elf goodies sack.", "green");
 
-		foreach stone in $items[hamethyst,baconstone,porquoise]
-			autosell(item_amount(stone), stone);
+		foreach stuff in $items[hamethyst,baconstone,porquoise]
+			autosell(item_amount(stuff), stuff);
 
 		autosell(item_amount($item[Van der Graaf helmet]), $item[Van der Graaf helmet]);
 		
@@ -1235,6 +1260,25 @@ void main(){
 		//no clip art branch
 		if (!have_skill($skill[Summon Clip Art]))
 		{
+			force_skill(1, $skill[Leash of Linguini]);
+			force_skill(1, $skill[Empathy of the Newt]);
+			print("Item%: " + item_drop_modifier(), "green");
+			float candymod = item_drop_modifier();
+			int candyweight = 0;
+			float itemtest = 30.4*(1+item_drop_modifier()/100);
+			print("Drop rate of marzipan skull without candy boost is " + itemtest + "%", "green");
+			set_property("hccs2da_marzipaneasy" ,itemtest );
+			set_property("hccs2da_marzipanhard" ,itemtest );
+			if(my_familiar() == $familiar[Peppermint Rhino]) {
+				if (itemtest >= 100.0) {
+					print("You may use any fairy in place of peppermint rhino in the future for tour guided runs.", "blue");
+				}
+				candyweight = (familiar_weight($familiar[Peppermint Rhino]) + weight_adjustment());
+				candymod = candymod - (square_root(55*candyweight) + candyweight - 3);
+				candymod = candymod + (square_root(55*candyweight*2) + candyweight*2 - 3);
+				print("Drop rate of marzipan skull with candy boost is " + 30.4*(1+candymod/100) + "%", "green");
+				set_property("hccs2da_marzipaneasy" ,candymod );
+			}
 			cli_execute("genie monster mariachi calavera");
 			if (item_amount($item[marzipan skull]) > 0)
 			{
