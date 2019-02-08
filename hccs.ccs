@@ -34,6 +34,12 @@ if hasskill release the boots
 endif
 abort
 
+[ mariachi calavera ]
+if hasskill Disintegrate
+    skill disintegrate
+endif
+abort
+
 [ novelty tropical skeleton ]
 if hasskill Disintegrate
     skill disintegrate
@@ -48,8 +54,9 @@ endif
 abort
 
 [ sausage goblin ]
-try to steal an item
+if hasskill soul bubble
+    skill soul bubble
+endif
 skill stuffed mortar shell
 skill curse of weaksauce
-
 
