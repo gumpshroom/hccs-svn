@@ -11,7 +11,7 @@ hccs2datest.ash: alternative most recently updated experimental automation scrip
 
 Required IOTM: 
 
-VIP key, genie bottle, Clip Art (TODO: make this optional)
+VIP key, genie bottle, Clip Art (needed for stable version only)
 
 (Partially) Supported IOTM:
 
