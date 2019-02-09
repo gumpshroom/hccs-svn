@@ -34,6 +34,49 @@ if hasskill release the boots
 endif
 abort
 
+[ god lobster ]
+if hasskill Micrometeorite
+    skill micrometeorite
+endif
+if hasskill soul bubble
+    skill soul bubble
+endif
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ lov enforcer ]
+if hasskill Micrometeorite
+    skill micrometeorite
+endif
+if hasskill soul bubble
+    skill soul bubble
+endif
+skill stuffed mortar shell
+skill curse of weaksauce
+skill saucestorm
+
+[ lov engineer ]
+if hasskill Micrometeorite
+    skill micrometeorite
+endif
+if hasskill soul bubble
+    skill soul bubble
+endif
+skill stuffed mortar shell
+skill curse of weaksauce
+skill saucestorm
+
+[ lov equivocator ]
+if hasskill Micrometeorite
+    skill micrometeorite
+endif
+if hasskill soul bubble
+    skill soul bubble
+endif
+skill stuffed mortar shell
+skill curse of weaksauce
+skill saucestorm
+
 [ mariachi calavera ]
 try to steal an item
 if hasskill Otoscope
@@ -62,6 +105,9 @@ endif
 abort
 
 [ sausage goblin ]
+if hasskill Micrometeorite
+    skill micrometeorite
+endif
 if hasskill soul bubble
     skill soul bubble
 endif
