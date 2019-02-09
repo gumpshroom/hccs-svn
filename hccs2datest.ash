@@ -2339,7 +2339,7 @@ void main(){
 		force_skill(1, $skill[Blubber Up]);
 		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
 		{
-		    if (my_basestat($stat[moxie])>40)
+		    if (my_basestat($stat[mys])>40) //oil of expertise
 		    {
     		    force_skill(1, $skill[Quiet Desperation]);
     		}
