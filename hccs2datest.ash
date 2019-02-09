@@ -1977,11 +1977,15 @@ void main(){
 			equip($slot[acc2], $item[psychic's amulet]);
 		}
 		if (item_amount(KGB) > 0) {
-			equip($slot[acc1], KGB);
+			equip($slot[acc2], KGB);
 		}
-		else if (item_amount($item[psychic's amulet]) > 0)
+		if (item_amount($item[psychic's amulet]) > 0)
 		{
 			equip($slot[acc1], $item[psychic's amulet]);
+		}
+		if (item_amount($item[LOV Earrings]) > 0)
+		{
+			equip($slot[acc1], $item[LOV Earrings]);
 		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
@@ -2697,4 +2701,81 @@ void main(){
 	}
 }
 
+//WIP
+/*
 
+visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+run_choice(1); //Have a Boxing Daydream
+run_choice(2); //Boxing Day Spa
+run_choice(3); //Get a Cucumber Eye Treatment
+run_choice(3); //Enter the Boxing Daycare
+run_choice(2); //Scavenge for gym equipment
+run_choice(5); //Return to the Lobby
+run_choice(4); //Return to the Lobby
+
+
+
+
+
+
+//DAY 1
+use_familiar($familiar[God Lobster]); //optional?
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(1);//equip
+equip($slot[familiar], $item[God Lobster's Scepter]);
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(2);//buff
+
+//NEP
+
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(3); //exp
+
+//revert fam
+
+//DAY 2
+use_familiar($familiar[God Lobster]); //optional?
+equip($slot[familiar], $item[God Lobster's Scepter]);
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(2);//buff
+
+//NEP
+
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(3); //exp
+visit_url("main.php?fightgodlobster=1");
+run_combat(); //optional?
+run_choice(3); //exp
+
+//revert fam
+
+
+
+
+//DAY 1
+visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+run_choice(1); //Fight
+run_choice(2); //LOV Epaulettes
+run_choice(1); //Fight
+run_choice(3); //Wandering Eye Surgery
+run_choice(1); //Fight
+run_choice(3); //LOV Extraterrestrial Chocolate
+equip($slot[back], $item[LOV Epaulettes]);
+use(1 , $item[LOV Extraterrestrial Chocolate]);
+
+//DAY 2
+visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+run_choice(1); //Fight
+run_choice(3); //LOV Earrings
+run_choice(1); //Fight
+run_choice(2); //Open Heart Surgery
+run_choice(1); //Fight
+run_choice(3); //LOV Extraterrestrial Chocolate
+equip($slot[acc3], $item[LOV Earrings]);
+use(1 , $item[LOV Extraterrestrial Chocolate]);
+*/
