@@ -614,6 +614,17 @@ void main(){
 	set_property("choiceAdventure1060", 1);
 
 	set_property("manaBurningThreshold", -0.05);
+	
+	if (to_string(my_class()) == "Astral Spirit")
+	{
+		print("AFTERLIFE SPEEDRUN", "blue");
+		print("Grabbing booze", "green");
+		visit_url("afterlife.php?action=buydeli&whichitem=5046&submit=Purchase (1 Karma)",true);
+		print("Grabbing pet", "green");
+		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
+		print("Filling ascension form", "green");
+		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
+	}
 
 	cli_execute("refresh all");
 
@@ -622,7 +633,7 @@ void main(){
 	if (my_daycount() == 1)
 	{
 		//comment out from this point to the location where script breaks if needed
-		
+		print("BEGIN DAY 1", "blue");
 		// Collect your consults if you can
 		print("Consulting fortune.", "green");
 		try_consult();
@@ -640,6 +651,12 @@ void main(){
 
 		// Try Calculating the Universe
 		try_num();
+		
+		// Get pocket wishes
+		while (get_property("_genieWishesUsed") < 3)
+		{
+			cli_execute("genie item pocket");
+		}
 		
 		// Make meat from BoomBox if we can
 		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
@@ -669,10 +686,7 @@ void main(){
 		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
 		run_choice(1);
 
-		// Get pocket wishes
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
+
 
 		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
@@ -944,17 +958,12 @@ void main(){
 		cli_execute("hottub");
 
 
-
-
-		
 		//use kramco before farming
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
-		
-		
-		
+
 
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
@@ -987,7 +996,6 @@ void main(){
 		try_num();
 
 
-		
 		print("Farming until semirare", "blue");
 		while (get_counters("Fortune Cookie" ,0 ,0) == "")
 		{
@@ -1015,6 +1023,7 @@ void main(){
 					{
 						cli_execute("mcd 10");
 					}
+					reach_mp(20);
 				}
 				else abort("You do not have a photocopied monster.");
 			}
@@ -1248,7 +1257,8 @@ void main(){
 			cli_execute("fold wad of used tape");
 			equip($slot[hat], $item[wad of used tape]);
 		}
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		//use kramco before farming
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
@@ -1262,6 +1272,10 @@ void main(){
 		{
 			force_skill(1, $skill[Leash of Linguini]);
 			force_skill(1, $skill[Empathy of the Newt]);
+			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+			{
+				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			}
 			print("Item%: " + item_drop_modifier(), "green");
 			float candymod = item_drop_modifier();
 			int candyweight = 0;
@@ -1280,6 +1294,18 @@ void main(){
 				set_property("hccs2da_marzipaneasy" ,candymod );
 			}
 			cli_execute("genie monster mariachi calavera");
+			
+			//remove doc bag
+			if (equipped_item($slot[acc1]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc1], $item[none]);
+			}
+			if (equipped_item($slot[acc2]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc2], $item[none]);
+			}
+			if (equipped_item($slot[acc3]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc3], $item[none]);
+			}
+			
 			if (item_amount($item[marzipan skull]) > 0)
 			{
 				print("Dinner Prep", "blue");
@@ -1415,11 +1441,9 @@ void main(){
 		//y-ray fruit skeleton
 		
 		//use kramco before farming
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
-			cli_execute("hottub");
-			//beaten up by sausage goblin with this
 		}
 		print("Farming fruits", "blue");
 		
@@ -1442,7 +1466,7 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
 		craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
 		//Cook now if have skill
-		if (item_amount($item[scrumptious reagent]) > 0)
+		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
 			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
@@ -1512,7 +1536,7 @@ void main(){
 		}
 		if (item_amount(KGB) > 0)
 		{
-			equip($slot[acc3], KGB);
+			equip($slot[acc2], KGB);
 		}
 
 		//magic dragonfish does not seem to work here!
@@ -1663,24 +1687,27 @@ void main(){
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-	//do fortune and fax a factory overseer
 	if (my_daycount() >= 2)
 	{
+	
+		print("BEGIN DAY 2", "blue");
+		
 		use_familiar(ToTour);
 
 		// Collect your consults if you can
 		try_consult();
 
-		// Get the dairy goat fax and clanmate fortunes,
+		// Get the factory overseer/worker
 		try_fax("factory overseer");
 
 		// Try to Calculate the Universe
 		try_num();
 
 		// Get pocket wishes (just in case)
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
+		while (get_property("_genieWishesUsed") < 3)
+		{
+			cli_execute("genie item pocket");
+		}
 
 		// Get brogues from Bastille Battalion if we can
 		print("Battalion Game", "green");
@@ -1868,6 +1895,7 @@ void main(){
 
 		cli_execute("shower mp");
 
+		//TODO: fax female factory overseer/worker if mox>=35
 		print("Y-RAY FAX", "blue");
 		if(force_skill(1, $skill[Disintegrate], false))
 		{
@@ -1935,6 +1963,10 @@ void main(){
 
 		cli_execute("genie effect Fireproof Lips");
 
+		if ((item_amount($item[heat-resistant gloves]) > 0) && (my_basestat($stat[moxie])>=35))
+		{
+			equip($slot[acc3], $item[heat-resistant gloves]);
+		}
 		if (item_amount($item[heat-resistant necktie]) > 0)
 		{
 			equip($slot[acc3], $item[heat-resistant necktie]);
@@ -1954,6 +1986,10 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
+		if ((item_amount($item[lava-proof pants]) > 0) && (my_basestat($stat[moxie])>=35))
+		{
+			equip($slot[pants], $item[lava-proof pants]);
+		}
 
 		complete_quest("STEAM TUNNELS", 10);
 
@@ -1970,7 +2006,8 @@ void main(){
 		print("Base Booze Farming (if needed)", "blue");
 		cli_execute("try; fortune buff gunther");
 		
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		//use kramco before farming
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
@@ -2026,7 +2063,10 @@ void main(){
 		else abort("Ode loop fail.");
 
 		drink_to(12);
-		if (my_inebriety() < 9) ode_drink(1, $item[asbestos thermos]);
+		if (item_amount($item[asbestos thermos]) > 0)
+		{
+			if (my_inebriety() < 9) ode_drink(1, $item[asbestos thermos]);
+		}
 
 		print("Task Prep (hp/mus)", "blue");
 		
@@ -2152,6 +2192,10 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc1], $item[Lil' Doctor&trade; bag]);
+		}
 		if (item_amount($item[Brutal brogues]) > 0)
 		{
 			equip($slot[acc2], $item[Brutal brogues]);
@@ -2161,19 +2205,38 @@ void main(){
 			equip($slot[acc3], $item[ring of telling skeletons what to do]);
 		}
 
-
-		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
-		{
-			print("Mus Wish (You might want more skills)", "green");
-			print(60-((my_maxhp() - (my_buffedstat($stat[muscle])+3)) / 30) + " estimated adv", "blue");
-			cli_execute("genie effect 'Roids of the Rhinoceros");
-		}
-
 		//Cancel max mp buff
 		if (have_effect($effect[[1458]Blood Sugar Sauce Magic]) > 0)
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+
+		//check if wish required for donate blood
+		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
+		{
+			print("Mus Wish (You might want more skills)", "green");
+			print(60-((my_maxhp() - (my_buffedstat($stat[muscle])+3)) / 30) + " estimated adv", "blue");
+			
+			int gnine_stat = 0;
+			float gnine_add = 0.0;
+			matcher match_gnine_stat = create_matcher("Mysticality\\ \\+(\\d+)%" , visit_url("desc_effect.php?whicheffect=af64d06351a3097af52def8ec6a83d9b"));
+			if(match_gnine_stat.find()) {
+				gnine_stat = match_gnine_stat.group(1).to_int();
+				gnine_add = my_basestat($stat[mysticality])*(gnine_stat*0.01);
+				print("G9: "+gnine_stat+"%");
+				print("Buff: "+gnine_add);
+			}
+			if (gnine_add>100.0)
+			{
+				cli_execute("genie effect Experimental Effect G-9");
+			}
+			else
+			{
+				cli_execute("genie effect 'Roids of the Rhinoceros");
+			}
+		}
+
+
 
 		complete_quest("DONATE BLOOD", 1);
 		
@@ -2182,6 +2245,18 @@ void main(){
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+		
+		//remove doc bag
+		if (equipped_item($slot[acc1]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc1], $item[none]);
+		}
+		if (equipped_item($slot[acc2]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc2], $item[none]);
+		}
+		if (equipped_item($slot[acc3]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc3], $item[none]);
+		}
+		
 
 		complete_quest("FEED CHILDREN", 2);
 
@@ -2290,7 +2365,8 @@ void main(){
 				cli_execute("fold makeshift garbage shirt");
 				equip($slot[shirt], $item[makeshift garbage shirt]);
 			}
-			if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+			//use kramco before farming
+			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
 				equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 			}
@@ -2339,7 +2415,7 @@ void main(){
 		force_skill(1, $skill[Blubber Up]);
 		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
 		{
-		    if (my_basestat($stat[mys])>40) //oil of expertise
+		    if (my_basestat($stat[mysticality])>40) //oil of expertise
 		    {
     		    force_skill(1, $skill[Quiet Desperation]);
     		}
