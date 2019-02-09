@@ -36,6 +36,12 @@ abort
 
 [ mariachi calavera ]
 try to steal an item
+if hasskill Otoscope
+    skill otoscope
+endif
+if hasskill Chest X-Ray
+    skill chest x-ray
+endif
 if hasskill shattering punch
     skill shattering punch
 endif
