@@ -1294,6 +1294,7 @@ void main(){
 				set_property("hccs2da_marzipaneasy" ,candymod );
 			}
 			cli_execute("genie monster mariachi calavera");
+			run_combat();
 			
 			//remove doc bag
 			if (equipped_item($slot[acc1]) == $item[Lil' Doctor&trade; bag]) {
