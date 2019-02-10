@@ -1262,6 +1262,20 @@ void main(){
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
+		
+		//DAY 1 LOV
+		if ((get_property("loveTunnelAvailable")) && (!get_property("_loveTunnelUsed")))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			run_choice(1); //Fight
+			run_choice(2); //LOV Epaulettes
+			run_choice(1); //Fight
+			run_choice(3); //Wandering Eye Surgery
+			run_choice(1); //Fight
+			run_choice(3); //LOV Extraterrestrial Chocolate
+			equip($slot[back], $item[LOV Epaulettes]);
+			use(1 , $item[LOV Extraterrestrial Chocolate]);
+		}
 
 		cli_execute("genie effect Infernal Thirst");
 		force_skill(1, $skill[Steely-Eyed Squint]);
@@ -1424,19 +1438,6 @@ void main(){
 
 
 		//use up mp
-		burn_mp();
-		
-		
-		//DAY 1 LOV
-		visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-		run_choice(1); //Fight
-		run_choice(2); //LOV Epaulettes
-		run_choice(1); //Fight
-		run_choice(3); //Wandering Eye Surgery
-		run_choice(1); //Fight
-		run_choice(3); //LOV Extraterrestrial Chocolate
-		equip($slot[back], $item[LOV Epaulettes]);
-		use(1 , $item[LOV Extraterrestrial Chocolate]);
 		burn_mp();
 
 
@@ -1992,6 +1993,20 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
+		
+		//DAY 2 LOV
+		if ((get_property("loveTunnelAvailable")) && (!get_property("_loveTunnelUsed")))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			run_choice(1); //Fight
+			run_choice(3); //LOV Earrings
+			run_choice(1); //Fight
+			run_choice(2); //Open Heart Surgery
+			run_choice(1); //Fight
+			run_choice(3); //LOV Extraterrestrial Chocolate
+			equip($slot[acc3], $item[LOV Earrings]);
+			use(1 , $item[LOV Extraterrestrial Chocolate]);
+		}
 
 		if (have_familiar($familiar[Exotic Parrot])) {
 			use_familiar($familiar[Exotic Parrot]);
@@ -2660,20 +2675,6 @@ void main(){
 			print("Borrowing Time", "green");
 			use(1, $item[borrowed time]);
 		}
-		
-		
-		
-		//DAY 2
-		visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-		run_choice(1); //Fight
-		run_choice(3); //LOV Earrings
-		run_choice(1); //Fight
-		run_choice(2); //Open Heart Surgery
-		run_choice(1); //Fight
-		run_choice(3); //LOV Extraterrestrial Chocolate
-		equip($slot[acc3], $item[LOV Earrings]);
-		use(1 , $item[LOV Extraterrestrial Chocolate]);
-		burn_mp();
 
 		complete_quest("BREED MORE COLLIES", 5);
 
@@ -2811,43 +2812,60 @@ run_choice(4); //Return to the Lobby
 
 
 //DAY 1
-use_familiar($familiar[God Lobster]);
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(1);//equip
-equip($slot[familiar], $item[God Lobster's Scepter]);
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(2);//buff
-use_familiar(ToTour);
+//GOD LOB
+if(have_familiar($familiar[God Lobster]))
+{
+	use_familiar($familiar[God Lobster]);
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(1);//equip
+	equip($slot[familiar], $item[God Lobster's Scepter]);
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(2);//buff
+	use_familiar(ToTour);
+}
 
 //NEP
 
-use_familiar($familiar[God Lobster]);
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(3); //exp
-use_familiar(ToTour);
+//GOD LOB
+if(have_familiar($familiar[God Lobster]))
+{
+	use_familiar($familiar[God Lobster]);
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(3); //exp
+	use_familiar(ToTour);
+}
 
 
 //DAY 2
-use_familiar($familiar[God Lobster]); //optional?
-equip($slot[familiar], $item[God Lobster's Scepter]);
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(2);//buff
-use_familiar(ToTour);
+
+//GOD LOB
+if(have_familiar($familiar[God Lobster]))
+{
+	use_familiar($familiar[God Lobster]); //optional?
+	equip($slot[familiar], $item[God Lobster's Scepter]);
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(2);//buff
+	use_familiar(ToTour);
+}
 
 //NEP
 
-use_familiar($familiar[God Lobster]);
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(3); //exp
-visit_url("main.php?fightgodlobster=1");
-run_combat();
-run_choice(3); //exp
-use_familiar(ToTour);
+//GOD LOB
+if(have_familiar($familiar[God Lobster]))
+{
+	use_familiar($familiar[God Lobster]);
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(3); //exp
+	visit_url("main.php?fightgodlobster=1");
+	run_combat();
+	run_choice(3); //exp
+	use_familiar(ToTour);
+}
 
 
 
