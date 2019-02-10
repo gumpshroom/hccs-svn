@@ -201,6 +201,7 @@ void burn_mp()
 	try_skill($skill[Advanced Cocktailcrafting]);
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
+	try_skill($skill[Summon Crimbo Candy]);
 	try_skill($skill[Love Mixology]);
 	try_skill($skill[Lunch Break]);
 	try_skill($skill[Request Sandwich]);
@@ -573,11 +574,268 @@ void try_consult()
 	if (!returned) abort("Couldn't get back into original clan");
 }
 
+void voteInVotingBooth()
+{
+	//print_html("VotingBooth v" + __voting_version + ".");
+	buffer page_text = visit_url("place.php?whichplace=town_right&action=townright_vote");
+	
+	if (page_text.contains_text("Here is the impact of your local ballot initiatives"))
+	{
+		print("Already voted today.");
+		return;
+	}
+	/*
+	if (__voting_setting_use_absentee_ballots)
+	{
+	}
+	*/
+	
+	
+	
+	
+	//Here's where the script decides which initiatives are best.
+	//I spent like ten seconds on it, so feel free to change it.
+	//Larger numbers are the best initiatives.
+	float [string] initiative_priorities;
+	initiative_priorities["State-mandated bed time of 8PM."] = 100; //+1 Adventure(s) per day
+	initiative_priorities["Repeal leash laws."] = 75; //+2 Familiar Experience Per Combat
+	initiative_priorities["Institute GBLI (Guaranteed Basic Loot Income.)"] = 50; //+15% Item Drops from Monsters
+	initiative_priorities["Reduced taxes at all income levels."] = 45; //+30% Meat from Monsters
+	initiative_priorities["Mandatory morning calisthenics for all citizens."] = 42; //Muscle +25%
+	initiative_priorities["Compulsory dance lessons every weekend."] = 41; //Moxie +25%
+	initiative_priorities["Replace all street signs with instructions for arcane rituals."] = 40; //Mysticality +25%
+	initiative_priorities["Addition of 37 letters to end of alphabet so existing names are all earlier in queues."] = 35; //+25% Combat Initiative
+	initiative_priorities["Subsidies for health potion manufacturers."] = 32; //Maximum HP +30%
+	initiative_priorities["Open a local portal to a dimension of pure arcane power."] = 31; //Spell Damage +20%
+	initiative_priorities["Free civic weapon sharpening program."] = 31; //Weapon Damage +100%
+	initiative_priorities["Require all garments to be fleece-lined."] = 30; //Serious Cold Resistance (+3)
+	initiative_priorities["Make all new clothes out of asbestos."] = 30; //Serious Hot Resistance (+3)
+	initiative_priorities["Widespread distribution of \"CENSORED\" bars."] = 30; //Serious Sleaze Resistance (+3)
+	initiative_priorities["Outlaw black clothing and white makeup."] = 30; //Serious Spooky Resistance (+3)
+	initiative_priorities["Free public nose-plug dispensers."] = 30; //Serious Stench Resistance (+3)
+	initiative_priorities["A chicken in every pot!"] = 25; //+30% Food Drops from Monsters
+	initiative_priorities["Carbonate the water supply."] = 20; //Maximum MP +30%
+	initiative_priorities["Kingdomwide air-conditioning subsidies."] = 20; //+10 Cold Damage
+	initiative_priorities["Pocket flamethrowers issued to all citizens."] = 20; //+10 Hot Damage
+	initiative_priorities["Artificial butter flavoring dispensers on every street corner."] = 20; //+10 Sleaze Damage
+	initiative_priorities["All forms of deodorant are now illegal."] = 20; //+10 Stench Damage
+	initiative_priorities["Compulsory firearm and musical instrument safety training for all citizens."] = 20; //Ranged Damage +100%
+	initiative_priorities["Emergency eye make-up stations installed in all public places."] = 15; //+4 Moxie Stats Per Fight
+	initiative_priorities["Require boxing videos to be played on all bar televisions."] = 15; //+4 Muscle Stats Per Fight
+	initiative_priorities["Deployment of a network of aerial mana-enhancement drones."] = 15; //+4 Mysticality Stats Per Fight
+	initiative_priorities["Municipal journaling initiative."] = 15; //+3 Stats Per Fight
+	initiative_priorities["Happy Hour extended by 23 additional hours."] = 10; //+30% Booze Drops from Monsters
+	initiative_priorities["Subsidies for dentists."] = 10; //+30% Candy Drops from Monsters
+	initiative_priorities["Sales tax free weekend for back-to-school shopping."] = 10; //+30% Gear Drops from Monsters
+	initiative_priorities["Ban belts."] = 10; //+30% Pants Drops from Monsters
+	initiative_priorities["Mandatory martial arts classes for all citizens."] = 0; //+20 Damage to Unarmed Attacks
+	initiative_priorities["\"Song that Never Ends\" pumped throughout speakers in all of Kingdom."] = -100; //+10 to Monster Level
+	
+	
+	initiative_priorities["Add sedatives to the water supply."] = -100; // = "-10 to Monster Level";
+	initiative_priorities["Distracting noises broadcast through compulsory teeth-mounted radio receivers."] = -100; // = "-3 Stats Per Fight";
+	initiative_priorities["Emissions cap on all magic-based combustion."] = -100; // = "Spell Damage -50%";
+	initiative_priorities["Exercise ban."] = -100; // = "Muscle -20";
+	initiative_priorities["Mandatory 6pm curfew."] = -100; // = "+-2 Adventure(s) per day";
+	initiative_priorities["Requirement that all weapon handles be buttered."] = -100; // = "-10% chance of Critical Hit";
+	initiative_priorities["Safety features added to all melee weapons."] = -100; // = "Weapon Damage -50%";
+	initiative_priorities["Shut down all local dog parks."] = -100; // = "-2 Familiar Experience Per Combat";
+	initiative_priorities["State nudity initiative."] = -100; // = "-50% Gear Drops from Monsters";
+	initiative_priorities["Vaccination reversals for all citizens."] = -100; // = "Maximum HP -50%";
+	initiative_priorities["All bedsheets replaced with giant dryer sheets."] = -100; // = "Maximum MP -50%";
+	initiative_priorities["All citizens required to look <i>all four</i> ways before crossing the street."] = -100; // = "-30% Combat Initiative";
+	initiative_priorities["Ban on petroleum-based gels and pomades."] = -100; // = "Moxie -20";
+	initiative_priorities["Increased taxes at all income levels."] = -100; // = "-30% Meat from Monsters";
+	initiative_priorities["Mandatory item tithing."] = -100; // = "-20% Item Drops from Monsters";
+	initiative_priorities["Reduced public education spending."] = -100; // = "Mysticality -20";
+	
+	
+	//Alter priorities depending on state:
+	
+	initiative_priorities["Repeal leash laws."] = 1025; //+2 Familiar Experience Per Combat
+	initiative_priorities["Deployment of a network of aerial mana-enhancement drones."] = 1015; //+4 Mysticality Stats Per Fight
+	initiative_priorities["Municipal journaling initiative."] = 1014; //+3 Stats Per Fight
+	initiative_priorities["Require boxing videos to be played on all bar televisions."] = 1013; //+4 Muscle Stats Per Fight
+	initiative_priorities["Emergency eye make-up stations installed in all public places."] = 1012; //+4 Moxie Stats Per Fight
+	initiative_priorities["Subsidies for health potion manufacturers."] = 1009; //Maximum HP +30%
+	initiative_priorities["Carbonate the water supply."] = 1008; //Maximum MP +30%
+	initiative_priorities["Subsidies for dentists."] = 1004; //+30% Candy Drops from Monsters
+	
+	
+	if (my_daycount() == 1)
+	{
+		initiative_priorities["State-mandated bed time of 8PM."] = 1100; //+1 Adventure(s) per day
+		initiative_priorities["Happy Hour extended by 23 additional hours."] = 1100; //+30% Booze Drops from Monsters
+		initiative_priorities["Institute GBLI (Guaranteed Basic Loot Income.)"] = 1075; //+15% Item Drops from Monsters
+		initiative_priorities["Open a local portal to a dimension of pure arcane power."] = 1040; //Spell Damage +20%
+		initiative_priorities["Subsidies for dentists."] = 1020; //+30% Candy Drops from Monsters
+
+	}
+	else
+	{
+		initiative_priorities["Free civic weapon sharpening program."] = 1400; //Weapon Damage +100%
+		initiative_priorities["Make all new clothes out of asbestos."] = 1300; //Serious Hot Resistance (+3)
+		initiative_priorities["Replace all street signs with instructions for arcane rituals."] = 1035; //Mysticality +25%
+		initiative_priorities["Mandatory morning calisthenics for all citizens."] = 1033; //Muscle +25%
+		initiative_priorities["Compulsory dance lessons every weekend."] = 1032; //Moxie +25%
+	}
+
+
+
+
+
+	string [string] initiative_descriptions;
+	initiative_descriptions["State-mandated bed time of 8PM."] = "+1 Adventure(s) per day";
+	initiative_descriptions["Repeal leash laws."] = "+2 Familiar Experience Per Combat";
+	initiative_descriptions["Emergency eye make-up stations installed in all public places."] = "+4 Moxie Stats Per Fight";
+	initiative_descriptions["Require boxing videos to be played on all bar televisions."] = "+4 Muscle Stats Per Fight";
+	initiative_descriptions["Deployment of a network of aerial mana-enhancement drones."] = "+4 Mysticality Stats Per Fight";
+	initiative_descriptions["\"Song that Never Ends\" pumped throughout speakers in all of Kingdom."] = "+10 to Monster Level";
+	initiative_descriptions["Institute GBLI (Guaranteed Basic Loot Income.)"] = "+15% Item Drops from Monsters";
+	initiative_descriptions["Municipal journaling initiative."] = "+3 Stats Per Fight";
+	initiative_descriptions["Reduced taxes at all income levels."] = "+30% Meat from Monsters";
+	initiative_descriptions["Compulsory dance lessons every weekend."] = "Moxie +25%";
+	initiative_descriptions["Mandatory morning calisthenics for all citizens."] = "Muscle +25%";
+	initiative_descriptions["Replace all street signs with instructions for arcane rituals."] = "Mysticality +25%";
+	initiative_descriptions["Open a local portal to a dimension of pure arcane power."] = "Spell Damage +20%";
+	initiative_descriptions["Subsidies for health potion manufacturers."] = "Maximum HP +30%";
+	initiative_descriptions["Require all garments to be fleece-lined."] = "Serious Cold Resistance (+3)";
+	initiative_descriptions["Make all new clothes out of asbestos."] = "Serious Hot Resistance (+3)";
+	initiative_descriptions["Widespread distribution of \"CENSORED\" bars."] = "Serious Sleaze Resistance (+3)";
+	initiative_descriptions["Outlaw black clothing and white makeup."] = "Serious Spooky Resistance (+3)";
+	initiative_descriptions["Free public nose-plug dispensers."] = "Serious Stench Resistance (+3)";
+	initiative_descriptions["Free civic weapon sharpening program."] = "Weapon Damage +100%";
+	initiative_descriptions["Addition of 37 letters to end of alphabet so existing names are all earlier in queues."] = "+25% Combat Initiative";
+	initiative_descriptions["A chicken in every pot!"] = "+30% Food Drops from Monsters";
+	initiative_descriptions["Carbonate the water supply."] = "Maximum MP +30%";
+	initiative_descriptions["Kingdomwide air-conditioning subsidies."] = "+10 Cold Damage";
+	initiative_descriptions["Pocket flamethrowers issued to all citizens."] = "+10 Hot Damage";
+	initiative_descriptions["Artificial butter flavoring dispensers on every street corner."] = "+10 Sleaze Damage";
+	initiative_descriptions["All forms of deodorant are now illegal."] = "+10 Stench Damage";
+	initiative_descriptions["Compulsory firearm and musical instrument safety training for all citizens."] = "Ranged Damage +100%";
+	initiative_descriptions["Happy Hour extended by 23 additional hours."] = "+30% Booze Drops from Monsters";
+	initiative_descriptions["Subsidies for dentists."] = "+30% Candy Drops from Monsters";
+	initiative_descriptions["Sales tax free weekend for back-to-school shopping."] = "+30% Gear Drops from Monsters";
+	initiative_descriptions["Ban belts."] = "+30% Pants Drops from Monsters";
+	initiative_descriptions["Mandatory martial arts classes for all citizens."] = "+20 Damage to Unarmed Attacks";
+
+	initiative_descriptions["Add sedatives to the water supply."] = "-10 to Monster Level";
+	initiative_descriptions["Distracting noises broadcast through compulsory teeth-mounted radio receivers."] = "-3 Stats Per Fight";
+	initiative_descriptions["Emissions cap on all magic-based combustion."] = "Spell Damage -50%";
+	initiative_descriptions["Exercise ban."] = "Muscle -20";
+	initiative_descriptions["Mandatory 6pm curfew."] = "+-2 Adventure(s) per day";
+	initiative_descriptions["Requirement that all weapon handles be buttered."] = "-10% chance of Critical Hit";
+	initiative_descriptions["Safety features added to all melee weapons."] = "Weapon Damage -50%";
+	initiative_descriptions["Shut down all local dog parks."] = "-2 Familiar Experience Per Combat";
+	initiative_descriptions["State nudity initiative."] = "-50% Gear Drops from Monsters";
+	initiative_descriptions["Vaccination reversals for all citizens."] = "Maximum HP -50%";
+	initiative_descriptions["All bedsheets replaced with giant dryer sheets."] = "Maximum MP -50%";
+	initiative_descriptions["All citizens required to look <i>all four</i> ways before crossing the street."] = "-30% Combat Initiative";
+	initiative_descriptions["Ban on petroleum-based gels and pomades."] = "Moxie -20";
+	initiative_descriptions["Increased taxes at all income levels."] = "-30% Meat from Monsters";
+	initiative_descriptions["Mandatory item tithing."] = "-20% Item Drops from Monsters";
+	initiative_descriptions["Reduced public education spending."] = "Mysticality -20";
+	
+	string [int][int] platform_matches = page_text.group_string("<blockquote>(.*?)</blockquote>");
+	
+	int desired_g = random(2) + 1;
+	
+	//Bias the global votes towards ghosts:
+	if (platform_matches.count() == 2)
+	{
+		foreach key in platform_matches
+		{
+			string platform = platform_matches[key][1];
+			boolean zoinks = false;
+			//print_html(key + ": " + platform);
+			
+			foreach s in $strings[seance to summon their ancient spirits,you like to see your deceased loved ones again,don't think I need to tell you that graveyards are a terribly inefficient use of space,is possible that this might displace and anger your,How could you possibly vote against kindness energy] //'
+			{
+				if (platform.contains_text(s))
+				{
+					zoinks = true;
+					break;
+				}
+			}
+			
+			
+			if (zoinks)
+			{
+				print("Voting for ghosts.");
+				desired_g = key + 1;
+				break;
+			}
+		}
+	}
+
+	string [int][int] local_initiative_matches = page_text.group_string("<input type=\"checkbox\".*?value=\"([0-9])\".*?> (.*?)<br");
+	
+	string [int] initiative_names;
+	int [string] initiative_values;
+	string log_delimiter = "•";
+	
+	buffer log;
+	log.append("VOTING_BOOTH_LOG");
+	log.append(log_delimiter);
+	log.append(my_daycount());
+	log.append(log_delimiter);
+	log.append(my_class());
+	log.append(log_delimiter);
+	log.append(my_path());
+	print_html("<strong>Available initiatives:</strong>");
+	foreach key in local_initiative_matches
+	{
+		int initaitive_value = local_initiative_matches[key][1].to_int();
+		string initiative_name = local_initiative_matches[key][2];
+		
+		
+		log.append(log_delimiter);
+		log.append(initiative_name);
+		
+		//print_html("\"" + initiative_name + "\": " + initaitive_value + " (" + initiative_descriptions[initiative_name] + ")");
+		print_html("&nbsp;&nbsp;&nbsp;&nbsp;" + initiative_descriptions[initiative_name]);
+		//if (__voting_negative_effects contains initiative_name) continue;
+		
+		
+		initiative_names[initiative_names.count()] = initiative_name;
+		initiative_values[initiative_name] = initaitive_value;
+		
+		if (!(initiative_priorities contains initiative_name))
+			abort("Unknown initiative \"" + initiative_name + "\". Tell Ezandora about it, there's probably some one-character typo somewhere.");
+		float priority = initiative_priorities[initiative_name];
+		
+	}
+	print_html("");
+	logprint(log);
+	sort initiative_names by -initiative_priorities[value];
+	if (initiative_names.count() < 2)
+	{
+		print_html("Internal error: Not enough local initiatives.");
+		visit_url("choice.php?option=2&whichchoice=1331"); //cancel out
+		return;
+	}
+	print_html("<strong>Chosen initiatives:</strong>");
+	foreach key, name in initiative_names
+	{
+		if (key > 1) continue;
+		print_html("&nbsp;&nbsp;&nbsp;&nbsp;" + initiative_descriptions[name]);
+	}
+
+	//print_html("initiative_names = " + initiative_names.to_json());
+	visit_url("choice.php?option=1&whichchoice=1331&g=" + desired_g + "&local[]=" + initiative_values[initiative_names[0]] + "&local[]=" + initiative_values[initiative_names[1]]);
+	
+	//https://www.kingdomofloathing.com/choice.php?pwd&option=1&whichchoice=1331&g=1&local[]=0&local[]=2
+	//pwd&option=1&whichchoice=1331&g=1&local%5B%5D=0&local%5B%5D=2
+	//option=1&whichchoice=1331&g=
+	//g - 1 or 2, depending on the global vote
+}
+
 void main(){
 	//init
 	
 	//ADJUST SECTION
-	boolean force_tour = false; //if true will skip god lobster to retain 100% fam tour
+	boolean do_pvp = false; //if true will do pvp
+	boolean no_tour = false; //if true will fight god lobster and break 100% fam tour
 	
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
@@ -779,6 +1037,11 @@ void main(){
 		if (item_amount($item[astral statuette]) > 0) equip($item[astral statuette]);
 		equip($item[old sweatpants]);
 		try_item($item[Newbiesport&trade; tent]);
+		
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc2], KGB);
+		}
 
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
@@ -816,6 +1079,8 @@ void main(){
 		}
 		force_skill(1, $skill[The Magical Mojomuscular Melody]);
 		force_skill(1, $skill[Sauce Contemplation]);
+		
+		voteInVotingBooth();
 		
 
 		// pantogramming (+mox, res spooky, +mp, spell dmg, +combat)
@@ -936,6 +1201,26 @@ void main(){
 			ode_drink(5, $item[Astral Pilsner]);
 			//(9/15)drink
 		}
+		
+		//DAYCARE
+		print("Boxing Daycare", "green");
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=1&sumbit=Have a Boxing Daydream",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareSpa") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=2&sumbit=Visit the Boxing Day Spa",true);
+			visit_url("choice.php?whichchoice=1335&pwd=" + my_hash() + "&option=3&sumbit=Get a Cucumber Eye Treatment",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareGymScavenges").to_int() == 0))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
+			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
+		}
 
 
 		print("Farming meat via casino", "blue");
@@ -961,13 +1246,6 @@ void main(){
 			cli_execute("try; fortune buff hagnk");
 		}
 		cli_execute("hottub");
-
-
-		//use kramco before farming
-		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
-		{
-			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
-		}
 
 
 		print("Barrels (very slow)", "blue");
@@ -999,6 +1277,12 @@ void main(){
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
 		run_combat();
 		try_num();
+		
+		//use kramco before farming
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
+		{
+			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+		}
 
 
 		print("Farming until semirare", "blue");
@@ -1562,7 +1846,7 @@ void main(){
 		//magic dragonfish does not seem to work here!
 		
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (!force_tour))
+		if((have_familiar($familiar[God Lobster])) && (no_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -1603,7 +1887,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (!force_tour))
+		if((have_familiar($familiar[God Lobster])) && (no_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -1614,9 +1898,12 @@ void main(){
 
 		complete_quest("MAKE SAUSAGE", 7);
 		
-		print("PVP", "green");
-		// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
-		visit_url("peevpee.php?action=smashstone&pwd&confirm=on", true);
+		if (do_pvp) 
+		{
+			print("PVP", "green");
+			// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
+			visit_url("peevpee.php?action=smashstone&pwd&confirm=on", true);
+		}
 		
 		//DO THIS BEFORE BUFFING
 		if (hippy_stone_broken())
@@ -1764,6 +2051,8 @@ void main(){
 		// Get brogues from Bastille Battalion if we can
 		print("Battalion Game", "green");
 		use_bastille_battalion(0, 0, 2, random(3));
+		
+		voteInVotingBooth();
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
@@ -2185,6 +2474,10 @@ void main(){
 		{
 			use(1, $item[Ben-Gal&trade; Balm]);
 		}
+		if(item_amount($item[Crimbo peppermint bark]) > 0)
+		{
+			use(1, $item[Crimbo peppermint bark]);
+		}
 		if (item_amount($item[giant giant moth dust]) > 0)
 		{
 			use(1, $item[giant giant moth dust]);
@@ -2367,6 +2660,10 @@ void main(){
 		{
 			use(1, $item[glittery mascara]);
 		}
+		if(item_amount($item[Crimbo candied pecan]) > 0)
+		{
+			use(1, $item[Crimbo candied pecan]);
+		}
 		if(item_amount($item[bag of grain]) > 0)
 		{
 			use(1, $item[bag of grain]);
@@ -2429,8 +2726,28 @@ void main(){
 			equip($slot[weapon], $item[5-Alarm Saucepan]);
 		}
 		
+		//DAYCARE
+		print("Boxing Daycare", "green");
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=1&sumbit=Have a Boxing Daydream",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareSpa") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=2&sumbit=Visit the Boxing Day Spa",true);
+			visit_url("choice.php?whichchoice=1335&pwd=" + my_hash() + "&option=3&sumbit=Get a Cucumber Eye Treatment",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareGymScavenges").to_int() == 0))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
+			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
+		}
+		
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (!force_tour))
+		if((have_familiar($familiar[God Lobster])) && (no_tour))
 		{
 			use_familiar($familiar[God Lobster]); //optional?
 			equip($slot[familiar], $item[God Lobster's Scepter]);
@@ -2489,7 +2806,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (!force_tour))
+		if((have_familiar($familiar[God Lobster])) && (no_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -2550,6 +2867,10 @@ void main(){
 		if(item_amount($item[hair spray]) > 0)
 		{
 			use(1, $item[hair spray]);
+		}
+		if(item_amount($item[Crimbo fudge]) > 0)
+		{
+			use(1, $item[Crimbo fudge]);
 		}
 		if (item_amount($item[runproof mascara]) > 0)
 		{
@@ -2791,16 +3112,49 @@ void main(){
 		remove_property( "hccs2da_questrecord8" );
 		print(" ", "purple");
 		print("OTHER INFO", "purple");
-
-		print("FINISHED.", "red");
+		print("TURN COUNT: " + my_turncount(), "blue");
+		print("EXCESS ADV: " + my_adventures(), "blue");
 		print("MARZIPAN ITEM%: " + get_property( "hccs2da_marzipanhard" ), "blue");
 		print("MARZIPAN CANDY%: " + get_property( "hccs2da_marzipaneasy" ), "blue");
 		print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
+		
+		print("FINISHED.", "red");
 	}
 }
 
 //WIP
 /*
+
+daycareOpen=false
+_daycareGymScavenges=1
+_daycareNap=true
+_daycareRecruits=0
+_daycareSpa=true
+_daycareToday=true
+
+
+if (get_property("_universeCalculated").to_int() == 0)
+
+
+
+
+if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
+{
+	visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+	visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=1&sumbit=Have a Boxing Daydream",true);
+}
+if ((get_property("daycareOpen") == true) && (get_property("_daycareSpa") == false))
+{
+	visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+	visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=2&sumbit=Visit the Boxing Day Spa",true);
+	visit_url("choice.php?whichchoice=1335&pwd=" + my_hash() + "&option=3&sumbit=Get a Cucumber Eye Treatment",true);
+}
+if ((get_property("daycareOpen") == true) && (get_property("_daycareGymScavenges").to_int() == 0))
+{
+	visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+	visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
+	visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
+}
 
 visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
 run_choice(1); //Have a Boxing Daydream
