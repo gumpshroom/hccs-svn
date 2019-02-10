@@ -1,4 +1,4 @@
-//HCCS 2day 100% v0.8 by iloath
+//HCCS 2day 100% v0.9 by iloath
 script "hccs2da.ash";
 notify iloath;
 
@@ -503,6 +503,24 @@ familiar pick_familiar_to_tour()
 	return $familiar[none];
 }
 
+familiar pick_fairy_to_tour()
+{
+	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
+
+	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle]
+	{
+		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) {
+			if (getvar("bbb_famitems") != "")
+			{
+				cli_execute("zlib bbb_famitems = false");
+			}
+			return fam;
+		}
+	}
+
+	return $familiar[Peppermint Rhino];
+}
+
 boolean try_fax(string m)
 {
 	if ($item[photocopied monster].item_amount() > 0) return true;
@@ -559,10 +577,12 @@ void main(){
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
-		print("Clip art detected, running route 1", "green");
+		print("Clip art detected, running route 1", "blue");
+		set_property("hccs2da_route" ,1 );
 	}
 	else
-	{	print("Clip art not detected, running route 2", "red");
+	{	print("Clip art not detected, running route 2 ALPHA STATE", "red");
+		set_property("hccs2da_route" ,2 );
 		if (have_familiar($familiar[Peppermint Rhino]))
 		{
 			ToTour = $familiar[Peppermint Rhino];
@@ -571,8 +591,13 @@ void main(){
 		{
 			abort("Needs Peppermint Rhino if without Clip Arts");
 		}
+		if (get_property("hccs2da_marzipanhard") >= 100.0)
+		{
+			ToTour = pick_fairy_to_tour();
+		}
 	}
 	print("Touring familiar set to " + ToTour, "green");
+	set_property("hccs2da_tourfam" ,ToTour );
 	boolean AddHotdog = true;
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
@@ -589,6 +614,17 @@ void main(){
 	set_property("choiceAdventure1060", 1);
 
 	set_property("manaBurningThreshold", -0.05);
+	
+	if (to_string(my_class()) == "Astral Spirit")
+	{
+		print("AFTERLIFE SPEEDRUN", "blue");
+		print("Grabbing booze", "green");
+		visit_url("afterlife.php?action=buydeli&whichitem=5046&submit=Purchase (1 Karma)",true);
+		print("Grabbing pet", "green");
+		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
+		print("Filling ascension form", "green");
+		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
+	}
 
 	cli_execute("refresh all");
 
@@ -597,7 +633,7 @@ void main(){
 	if (my_daycount() == 1)
 	{
 		//comment out from this point to the location where script breaks if needed
-		
+		print("BEGIN DAY 1", "blue");
 		// Collect your consults if you can
 		print("Consulting fortune.", "green");
 		try_consult();
@@ -615,6 +651,12 @@ void main(){
 
 		// Try Calculating the Universe
 		try_num();
+		
+		// Get pocket wishes
+		while (get_property("_genieWishesUsed") < 3)
+		{
+			cli_execute("genie item pocket");
+		}
 		
 		// Make meat from BoomBox if we can
 		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
@@ -644,10 +686,7 @@ void main(){
 		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
 		run_choice(1);
 
-		// Get pocket wishes
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
+
 
 		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
@@ -698,8 +737,8 @@ void main(){
 			use(1, $item[pork elf goodies sack]);
 		else print("You do not have a pork elf goodies sack.", "green");
 
-		foreach stone in $items[hamethyst,baconstone,porquoise]
-			autosell(item_amount(stone), stone);
+		foreach stuff in $items[hamethyst,baconstone,porquoise]
+			autosell(item_amount(stuff), stuff);
 
 		autosell(item_amount($item[Van der Graaf helmet]), $item[Van der Graaf helmet]);
 		
@@ -808,14 +847,7 @@ void main(){
 			}
 			else abort("No Y-RAY.");
 			try_num();
-			if(canadia_available())
-			{
-				cli_execute("mcd 11");
-			}
-			else
-			{
-				cli_execute("mcd 10");
-			}
+			
 			
 			print("Breakfast Prep", "blue");
 
@@ -828,25 +860,33 @@ void main(){
 			print("Breakfast", "blue");
 			use(1 , $item[milk of magnesium]);
 			eat(1 , $item[cheezburger]);
-			//(3/15)
+			//(3/15)food
 			buy(1 , $item[fortune cookie], 40);
 			eat(1 , $item[fortune cookie]);
-			//(4/15)
+			//(4/15)food
 		}
 		else 
 		{
+			//no clip art
 			buy(1 , $item[fortune cookie], 40);
 			eat(1 , $item[fortune cookie]);
-			//(1/15)
+			//(1/15)food
 			cli_execute("shower mp");
 			ode_drink(1, $item[Bee's Knees]);
 			ode_drink(1, $item[Bee's Knees]);
-			//(4/15)
+			//(4/15)drink
 		}
 
 
 
-		
+		if(canadia_available())
+		{
+			cli_execute("mcd 11");
+		}
+		else
+		{
+			cli_execute("mcd 10");
+		}
 
 
 
@@ -869,19 +909,28 @@ void main(){
 		print("Battalion Game", "green");
 		use_bastille_battalion(0, 1, 2, random(3));
 
-		print("First Drink", "blue");
-		drink_to(5);
+		// clip art branch
+		if (have_skill($skill[Summon Clip Art]))
+		{
+			print("First Drink", "blue");
+			drink_to(5);
 
-		if(have_skill($skill[Summon Clip Art]) && (my_mp() >= mp_cost($skill[Summon Clip Art])) && (get_property("tomeSummons").to_int() < 3))
-		{
-			cli_execute("make ultrafondue");
+			if(have_skill($skill[Summon Clip Art]) && (my_mp() >= mp_cost($skill[Summon Clip Art])) && (get_property("tomeSummons").to_int() < 3))
+			{
+				cli_execute("make ultrafondue");
+			}
+			else abort("Clip art failure.");
+			if(have_skill($skill[Summon Clip Art]) && (my_mp() >= mp_cost($skill[Summon Clip Art])) && (get_property("tomeSummons").to_int() < 3))
+			{
+				cli_execute("make ultrafondue");
+			}
+			else abort("Clip art failure.");
 		}
-		else abort("Clip art failure.");
-		if(have_skill($skill[Summon Clip Art]) && (my_mp() >= mp_cost($skill[Summon Clip Art])) && (get_property("tomeSummons").to_int() < 3))
+		else
 		{
-			cli_execute("make ultrafondue");
+			ode_drink(5, $item[Astral Pilsner]);
+			//(9/15)drink
 		}
-		else abort("Clip art failure.");
 
 
 		print("Farming meat via casino", "blue");
@@ -909,50 +958,12 @@ void main(){
 		cli_execute("hottub");
 
 
-
-
-		
 		//use kramco before farming
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
-		
-		// clip art branch
-		if (have_skill($skill[Summon Clip Art]))
-		{
-			//nothing
-		}
-		else
-		{
-			if(force_skill(1, $skill[Disintegrate], false))
-			{
-				if (item_amount($item[photocopied monster]) > 0)
-				{
-					if (have_effect($effect[Lapdog]) <= 0)
-					{
-						cli_execute("swim laps");
-					}
-					if (have_effect($effect[Hustlin']) <= 0)
-					{
-						cli_execute("pool 3");
-					}
-					use(1, $item[photocopied monster]);
-				}
-				else abort("You do not have a photocopied monster.");
-			}
-			else abort("No Y-RAY.");
-			try_num();
-			if(canadia_available())
-			{
-				cli_execute("mcd 11");
-			}
-			else
-			{
-				cli_execute("mcd 10");
-			}
-		}
-		
+
 
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
@@ -985,15 +996,42 @@ void main(){
 		try_num();
 
 
-
 		print("Farming until semirare", "blue");
 		while (get_counters("Fortune Cookie" ,0 ,0) == "")
 		{
-			if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
+			if ((!have_skill($skill[Summon Clip Art])) && (item_amount($item[goat cheese]) <= 0) && (force_skill(1, $skill[Disintegrate], false)))
+			{
+				//no clip art branch
+				cli_execute("mcd 0");
+				if (item_amount($item[photocopied monster]) > 0)
+				{
+					if (have_effect($effect[Lapdog]) <= 0)
+					{
+						cli_execute("swim laps");
+					}
+					if (have_effect($effect[Hustlin']) <= 0)
+					{
+						cli_execute("pool 3");
+					}
+					use(1, $item[photocopied monster]);
+					try_num();
+					if(canadia_available())
+					{
+						cli_execute("mcd 11");
+					}
+					else
+					{
+						cli_execute("mcd 10");
+					}
+					reach_mp(20);
+				}
+				else abort("You do not have a photocopied monster.");
+			}
+			else if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
 			{
 				adventure(1, $location[Noob Cave]);
 			}
-			if ((item_amount($item[tomato]) <= 0) || (item_amount($item[Dolphin King's map]) <= 0) || (item_amount($item[exorcised sandwich]) <= 0))
+			else if ((item_amount($item[tomato]) <= 0) || (item_amount($item[Dolphin King's map]) <= 0) || ((item_amount($item[exorcised sandwich]) <= 0) && (!have_skill($skill[Simmer]))))
 			{
 				adventure(1, $location[The Haunted Pantry]);
 			}
@@ -1003,155 +1041,200 @@ void main(){
 			}
 			try_num();
 		}
+
+
+
 		
-		print("Hit semirare, main meal", "green");
-		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
+		// clip art branch
+		if (have_skill($skill[Summon Clip Art]))
 		{
-			while (item_amount($item[tasty tart]) == 0)
+			print("Hit semirare, main meal", "green");
+			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
+			{
+				while (item_amount($item[tasty tart]) == 0)
+				{
+					adventure(1, $location[The Haunted Pantry]);
+				}
+			}
+			else
+			{
+				abort("No semirare.");
+			}
+			use(1 , $item[milk of magnesium]);
+			eat(2 , $item[ultrafondue]);
+			eat(3 , $item[tasty tart]);
+			//(13/15)food
+
+			if (!eat_dog("optimal dog", AddHotdog))
+				abort("Cannot eat dog");
+			//(14/15)food
+
+			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
+			{
+				while (item_amount($item[Knob Goblin lunchbox]) == 0)
+				{
+					adventure(1, $location[The Outskirts of Cobb's Knob]);
+				}
+			}
+			else
+			{
+				abort("No optimal dog semirare.");
+			}
+			use(1,  $item[Knob Goblin lunchbox]);
+			eat(1 , $item[Knob pasty]);
+			//(15/15)food
+		}
+		else
+		{
+			print("Hit semirare, main meal", "green");
+			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
+			{
+				while (item_amount($item[distilled fortified wine]) == 0)
+				{
+					adventure(1, $location[The Sleazy Back Alley]);
+				}
+			}
+			else
+			{
+				abort("No semirare.");
+			}
+
+			if (!eat_dog("optimal dog", AddHotdog))
+				abort("Cannot eat dog");
+			//(2/15)food
+
+			if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
+			{
+				while (item_amount($item[Knob Goblin lunchbox]) == 0)
+				{
+					adventure(1, $location[The Outskirts of Cobb's Knob]);
+				}
+			}
+			else
+			{
+				abort("No optimal dog semirare.");
+			}
+		}
+
+		
+		
+		// clip art branch
+		if (have_skill($skill[Summon Clip Art]))
+		{
+			print("Checking Additional Farming Requirements", "blue");
+			while ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
+			{
+				adventure(1, $location[Noob Cave]);
+				try_num();
+			}
+			print("Sufficient Base Booze", "green");
+			while (item_amount($item[tomato]) <= 0)
 			{
 				adventure(1, $location[The Haunted Pantry]);
+				try_num();
 			}
-		}
-		else
-		{
-			abort("No semirare.");
-		}
-		use(1 , $item[milk of magnesium]);
-		eat(2 , $item[ultrafondue]);
-		eat(3 , $item[tasty tart]);
-
-		if (!eat_dog("optimal dog", AddHotdog))
-			abort("Cannot eat dog");
-
-		if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
-		{
-			while (item_amount($item[Knob Goblin lunchbox]) == 0)
+			print("Sufficient Tomato", "green");
+			while ((item_amount($item[exorcised sandwich]) <= 0) && (!have_skill($skill[Simmer])))
 			{
-				adventure(1, $location[The Outskirts of Cobb's Knob]);
+				adventure(1, $location[The Haunted Pantry]);
+				try_num();
 			}
-		}
-		else
-		{
-			abort("No optimal dog semirare.");
-		}
-		use(1,  $item[Knob Goblin lunchbox]);
-		eat(1 , $item[Knob pasty]);
-		
-		
-
-		print("Checking Additional Farming Requirements", "blue");
-		while ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
-		{
-			adventure(1, $location[Noob Cave]);
-			try_num();
-		}
-		print("Sufficient Base Booze", "green");
-		while (item_amount($item[tomato]) <= 0)
-		{
-			adventure(1, $location[The Haunted Pantry]);
-			try_num();
-		}
-		print("Sufficient Tomato", "green");
-		while ((item_amount($item[exorcised sandwich]) <= 0) || (!have_skill($skill[Simmer])))
-		{
-			adventure(1, $location[The Haunted Pantry]);
-			try_num();
-		}
-		print("Sufficient Sandwich (if any required)", "green");
-		
-		if (item_amount($item[astral statuette]) > 0)
-		{
-			equip($slot[off-hand], $item[astral statuette]);
-		}
-
-
-
-
-		if (item_amount($item[Dolphin King's map]) > 0)
-		{
-			print("Doing Dolphin Quest", "green");
-			buy(1 , $item[snorkel], 30);
-			equip($slot[hat], $item[snorkel]);
-			use(1 , $item[Dolphin King's map]);
-			equip($slot[hat], $item[Dolphin King's crown]);
-		}
-
-		//TODO auto change skele quest choices
-		if (item_amount($item[check to the Meatsmith]) > 0)
-		{
-			visit_url("shop.php?whichshop=meatsmith");
-			visit_url("choice.php?whichchoice=1059&pwd=" + my_hash() + "&option=2&sumbit=Here it is!",true);
-		}
-
-		foreach stone in $items[strongness elixir,magicalness-in-a-can,moxie weed,Doc Galaktik's Homeopathic Elixir, meat stack]
-			autosell(item_amount(stone), stone);
-
-		if (item_amount($item[exorcised sandwich]) > 0)
-		{
-			print("Talking to guildmates, may be slow", "green");
-			visit_url("guild.php?place=challenge");
-			visit_url("guild.php?place=scg");
-			visit_url("guild.php?place=ocg");
-			visit_url("guild.php?place=paco");
-			visit_url("guild.php?place=scg");
-			visit_url("guild.php?place=ocg");
-
-			if (!have_skill($skill[Simmer]))
+			print("Sufficient Sandwich (if any required)", "green");
+			
+			if (item_amount($item[astral statuette]) > 0)
 			{
-				if (reach_meat(125))
+				equip($slot[off-hand], $item[astral statuette]);
+			}
+
+
+
+
+			if (item_amount($item[Dolphin King's map]) > 0)
+			{
+				print("Doing Dolphin Quest", "green");
+				buy(1 , $item[snorkel], 30);
+				equip($slot[hat], $item[snorkel]);
+				use(1 , $item[Dolphin King's map]);
+				equip($slot[hat], $item[Dolphin King's crown]);
+			}
+
+			//TODO auto change skele quest choices
+			if (item_amount($item[check to the Meatsmith]) > 0)
+			{
+				visit_url("shop.php?whichshop=meatsmith");
+				visit_url("choice.php?whichchoice=1059&pwd=" + my_hash() + "&option=2&sumbit=Here it is!",true);
+			}
+
+			if (item_amount($item[exorcised sandwich]) > 0)
+			{
+				print("Talking to guildmates, may be slow", "green");
+				visit_url("guild.php?place=challenge");
+				visit_url("guild.php?place=scg");
+				visit_url("guild.php?place=ocg");
+				visit_url("guild.php?place=paco");
+				visit_url("guild.php?place=scg");
+				visit_url("guild.php?place=ocg");
+
+				if (!have_skill($skill[Simmer]))
 				{
-					visit_url("guild.php?action=buyskill&skillid=25");
+					if (reach_meat(125))
+					{
+						visit_url("guild.php?action=buyskill&skillid=25");
+					}
+					else
+					{
+						abort("Not enough meat for simmer.");
+					}
 				}
-				else
+				print("Finished talking to various cheeses", "green");
+			}
+
+			print("Perfect Drink", "green");
+
+			force_skill(1, $skill[Perfect Freeze]);
+
+			if ((reach_meat(250)) && force_skill(1, $skill[The Ode to Booze]))
+			{
+				//drink perfect drink here
+				//wine=rum>vodka=gin>whiskey=tequila
+				if (item_amount($item[boxed wine]) > 0)
 				{
-					abort("Not enough meat for simmer.");
+					craft("mix", 1, $item[boxed wine], $item[perfect ice cube]);
+					drink(1, $item[Perfect mimosa]);
 				}
-			}
-			print("Finished talking to various cheeses", "green");
+				else if (item_amount($item[bottle of rum]) > 0)
+				{
+					craft("mix", 1, $item[bottle of rum], $item[perfect ice cube]);
+					drink(1, $item[Perfect dark and stormy]);
+				}
+				else if (item_amount($item[bottle of vodka]) > 0)
+				{
+					craft("mix", 1, $item[bottle of vodka], $item[perfect ice cube]);
+					drink(1, $item[Perfect cosmopolitan]);
+				}
+				else if (item_amount($item[bottle of gin]) > 0)
+				{
+					craft("mix", 1, $item[bottle of gin], $item[perfect ice cube]);
+					drink(1, $item[Perfect negroni]);
+				}
+				else if (item_amount($item[bottle of whiskey]) > 0)
+				{
+					craft("mix", 1, $item[bottle of whiskey], $item[perfect ice cube]);
+					drink(1, $item[Perfect old-fashioned]);
+				}
+				else if (item_amount($item[bottle of tequila]) > 0)
+				{
+					craft("mix", 1, $item[bottle of tequila], $item[perfect ice cube]);
+					drink(1, $item[Perfect paloma]);
+				}
+				else abort("No perfect drink.");
+
+				drink_to(10);
+			} else abort("Ode loop fail.");
 		}
-
-		print("Perfect Drink", "green");
-
-		force_skill(1, $skill[Perfect Freeze]);
-
-		if ((reach_meat(250)) && force_skill(1, $skill[The Ode to Booze]))
-		{
-			//drink perfect drink here
-			//wine=rum>vodka=gin>whiskey=tequila
-			if (item_amount($item[boxed wine]) > 0)
-			{
-				craft("mix", 1, $item[boxed wine], $item[perfect ice cube]);
-				drink(1, $item[Perfect mimosa]);
-			}
-			else if (item_amount($item[bottle of rum]) > 0)
-			{
-				craft("mix", 1, $item[bottle of rum], $item[perfect ice cube]);
-				drink(1, $item[Perfect dark and stormy]);
-			}
-			else if (item_amount($item[bottle of vodka]) > 0)
-			{
-				craft("mix", 1, $item[bottle of vodka], $item[perfect ice cube]);
-				drink(1, $item[Perfect cosmopolitan]);
-			}
-			else if (item_amount($item[bottle of gin]) > 0)
-			{
-				craft("mix", 1, $item[bottle of gin], $item[perfect ice cube]);
-				drink(1, $item[Perfect negroni]);
-			}
-			else if (item_amount($item[bottle of whiskey]) > 0)
-			{
-				craft("mix", 1, $item[bottle of whiskey], $item[perfect ice cube]);
-				drink(1, $item[Perfect old-fashioned]);
-			}
-			else if (item_amount($item[bottle of tequila]) > 0)
-			{
-				craft("mix", 1, $item[bottle of tequila], $item[perfect ice cube]);
-				drink(1, $item[Perfect paloma]);
-			}
-			else abort("No perfect drink.");
-
-			drink_to(10);
-		} else abort("Ode loop fail.");
+		
+		
+		
 
 		print("Task Prep (+item)", "blue");
 		//+item%
@@ -1174,7 +1257,8 @@ void main(){
 			cli_execute("fold wad of used tape");
 			equip($slot[hat], $item[wad of used tape]);
 		}
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		//use kramco before farming
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
@@ -1182,7 +1266,177 @@ void main(){
 		cli_execute("genie effect Infernal Thirst");
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
+
+		//no clip art branch
+		if (!have_skill($skill[Summon Clip Art]))
+		{
+			force_skill(1, $skill[Leash of Linguini]);
+			force_skill(1, $skill[Empathy of the Newt]);
+			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+			{
+				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			}
+			print("Item%: " + item_drop_modifier(), "green");
+			float candymod = item_drop_modifier();
+			int candyweight = 0;
+			float itemtest = 30.4*(1+item_drop_modifier()/100);
+			print("Drop rate of marzipan skull without candy boost is " + itemtest + "%", "green");
+			set_property("hccs2da_marzipaneasy" ,itemtest );
+			set_property("hccs2da_marzipanhard" ,itemtest );
+			if(my_familiar() == $familiar[Peppermint Rhino]) {
+				if (itemtest >= 100.0) {
+					print("You may use any fairy in place of peppermint rhino in the future for tour guided runs.", "blue");
+				}
+				candyweight = (familiar_weight($familiar[Peppermint Rhino]) + weight_adjustment());
+				candymod = candymod - (square_root(55*candyweight) + candyweight - 3);
+				candymod = candymod + (square_root(55*candyweight*2) + candyweight*2 - 3);
+				print("Drop rate of marzipan skull with candy boost is " + 30.4*(1+candymod/100) + "%", "green");
+				set_property("hccs2da_marzipaneasy" ,candymod );
+			}
+			cli_execute("genie monster mariachi calavera");
+			run_combat();
+			
+			//remove doc bag
+			if (equipped_item($slot[acc1]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc1], $item[none]);
+			}
+			if (equipped_item($slot[acc2]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc2], $item[none]);
+			}
+			if (equipped_item($slot[acc3]) == $item[Lil' Doctor&trade; bag]) {
+				equip($slot[acc3], $item[none]);
+			}
+			
+			if (item_amount($item[marzipan skull]) > 0)
+			{
+				print("Dinner Prep", "blue");
+
+				force_skill(1, $skill[Pastamastery]);
+				force_skill(1, $skill[Advanced Saucecrafting]);
+
+				buy(1 , $item[Dramatic&trade; range], 1000);
+				use(1 , $item[Dramatic&trade; range]);
+				craft("cook", 1, $item[scrumptious reagent], $item[marzipan skull]);
+				craft("cook", 2, $item[Salsa de las Epocas], $item[dry noodles]);
+				craft("cook", 1, $item[scrumptious reagent], $item[glass of goat's milk]);
+
+				print("Dinner", "blue");
+				use(1 , $item[milk of magnesium]);
+				eat(2 , $item[spaghetti con calaveras]);
+				//(14/15)food
+				use(1,  $item[Knob Goblin lunchbox]);
+				eat(1 , $item[Knob pasty]);
+				//(15/15)food
+				
+				print("Perfect Drink", "green");
+
+				force_skill(1, $skill[Perfect Freeze]);
+
+				if ((reach_meat(250)) && force_skill(1, $skill[The Ode to Booze]))
+				{
+					//drink perfect drink here
+					//wine=rum>vodka=gin>whiskey=tequila
+					if (item_amount($item[boxed wine]) > 0)
+					{
+						craft("mix", 1, $item[boxed wine], $item[perfect ice cube]);
+						drink(1, $item[Perfect mimosa]);
+					}
+					else if (item_amount($item[bottle of rum]) > 0)
+					{
+						craft("mix", 1, $item[bottle of rum], $item[perfect ice cube]);
+						drink(1, $item[Perfect dark and stormy]);
+					}
+					else if (item_amount($item[bottle of vodka]) > 0)
+					{
+						craft("mix", 1, $item[bottle of vodka], $item[perfect ice cube]);
+						drink(1, $item[Perfect cosmopolitan]);
+					}
+					else if (item_amount($item[bottle of gin]) > 0)
+					{
+						craft("mix", 1, $item[bottle of gin], $item[perfect ice cube]);
+						drink(1, $item[Perfect negroni]);
+					}
+					else if (item_amount($item[bottle of whiskey]) > 0)
+					{
+						craft("mix", 1, $item[bottle of whiskey], $item[perfect ice cube]);
+						drink(1, $item[Perfect old-fashioned]);
+					}
+					else if (item_amount($item[bottle of tequila]) > 0)
+					{
+						craft("mix", 1, $item[bottle of tequila], $item[perfect ice cube]);
+						drink(1, $item[Perfect paloma]);
+					}
+					else abort("No perfect drink. Continue Manually");
+
+				} else abort("Ode loop fail.");
+				//(12/15)drink
+				
+				//do stuff that should have been done is clip art route
+				if (item_amount($item[Dolphin King's map]) > 0)
+				{
+					print("Doing Dolphin Quest", "green");
+					buy(1 , $item[snorkel], 30);
+					equip($slot[hat], $item[snorkel]);
+					use(1 , $item[Dolphin King's map]);
+					equip($slot[hat], $item[Dolphin King's crown]);
+				}
+
+				//TODO auto change skele quest choices
+				if (item_amount($item[check to the Meatsmith]) > 0)
+				{
+					visit_url("shop.php?whichshop=meatsmith");
+					visit_url("choice.php?whichchoice=1059&pwd=" + my_hash() + "&option=2&sumbit=Here it is!",true);
+				}
+
+				if (item_amount($item[exorcised sandwich]) > 0)
+				{
+					print("Talking to guildmates, may be slow", "green");
+					visit_url("guild.php?place=challenge");
+					visit_url("guild.php?place=scg");
+					visit_url("guild.php?place=ocg");
+					visit_url("guild.php?place=paco");
+					visit_url("guild.php?place=scg");
+					visit_url("guild.php?place=ocg");
+
+					if (!have_skill($skill[Simmer]))
+					{
+						if (reach_meat(125))
+						{
+							visit_url("guild.php?action=buyskill&skillid=25");
+						}
+						else
+						{
+							abort("Not enough meat for simmer.");
+						}
+					}
+					print("Finished talking to various cheeses", "green");
+				}
+			}
+			else
+			{
+				abort("marzipan skull failed to drop, failed run");
+			}
+		}
+
+
+
+
+
+
 		//use up mp
+		burn_mp();
+		
+		
+		//DAY 1 LOV
+		visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+		run_choice(1); //Fight
+		run_choice(2); //LOV Epaulettes
+		run_choice(1); //Fight
+		run_choice(3); //Wandering Eye Surgery
+		run_choice(1); //Fight
+		run_choice(3); //LOV Extraterrestrial Chocolate
+		equip($slot[back], $item[LOV Epaulettes]);
+		use(1 , $item[LOV Extraterrestrial Chocolate]);
 		burn_mp();
 
 
@@ -1201,11 +1455,9 @@ void main(){
 		//y-ray fruit skeleton
 		
 		//use kramco before farming
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
-			cli_execute("hottub");
-			//beaten up by sausage goblin with this
 		}
 		print("Farming fruits", "blue");
 		
@@ -1228,7 +1480,7 @@ void main(){
 		craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
 		craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
 		//Cook now if have skill
-		if (item_amount($item[scrumptious reagent]) > 0)
+		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
 			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
 			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
@@ -1236,7 +1488,12 @@ void main(){
 
 		print("Task Prep (spell dmg)", "blue");
 		
-		ode_drink(1, $item[Sockdollager]);
+		//clip art branch
+		if (have_skill($skill[Summon Clip Art]))
+		{
+			ode_drink(1, $item[Sockdollager]);
+			//(12/15) drink
+		}
 
 		if ((have_effect($effect[Indescribable Flavor]) <= 0) && (item_amount($item[indescribably horrible paste]) > 0))
 		{
@@ -1293,10 +1550,24 @@ void main(){
 		}
 		if (item_amount(KGB) > 0)
 		{
-			equip($slot[acc3], KGB);
+			equip($slot[acc2], KGB);
 		}
 
 		//magic dragonfish does not seem to work here!
+		
+		//GOD LOB
+		if(have_familiar($familiar[God Lobster]))
+		{
+			use_familiar($familiar[God Lobster]);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(1);//equip
+			equip($slot[familiar], $item[God Lobster's Scepter]);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(2);//buff
+			use_familiar(ToTour);
+		}
 
 		// NEP FIGHT
 		if (get_property("neverendingPartyAlways") == true)
@@ -1324,6 +1595,15 @@ void main(){
 				}
 				adv1_NEP();
 			}
+		}
+		//GOD LOB
+		if(have_familiar($familiar[God Lobster]))
+		{
+			use_familiar($familiar[God Lobster]);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(3); //exp
+			use_familiar(ToTour);
 		}
 
 		complete_quest("MAKE SAUSAGE", 7);
@@ -1444,24 +1724,36 @@ void main(){
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-	//do fortune and fax a factory overseer
 	if (my_daycount() >= 2)
 	{
+	
+		print("BEGIN DAY 2", "blue");
+		
 		use_familiar(ToTour);
 
 		// Collect your consults if you can
 		try_consult();
 
-		// Get the dairy goat fax and clanmate fortunes,
-		try_fax("factory overseer");
+		// Get the factory overseer/worker
+		if (get_property("hccs2da_factorymox") >= 35)
+		{
+			print("Sufficient mox in previous run: Faxing female worker", "green");
+			try_fax("factory worker"); //should be FEMALE
+		}
+		else
+		{
+			print("Default fax: Faxing male overseer", "green");
+			try_fax("factory overseer"); //should be MALE
+		}
 
 		// Try to Calculate the Universe
 		try_num();
 
 		// Get pocket wishes (just in case)
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
-		cli_execute("genie item pocket");
+		while (get_property("_genieWishesUsed") < 3)
+		{
+			cli_execute("genie item pocket");
+		}
 
 		// Get brogues from Bastille Battalion if we can
 		print("Battalion Game", "green");
@@ -1649,6 +1941,12 @@ void main(){
 
 		cli_execute("shower mp");
 
+		//TODO: fax female factory overseer/worker if mox>=35
+		set_property("hccs2da_factorymox",my_basestat($stat[moxie]));
+		if (my_basestat($stat[moxie])>=35)
+		{
+			print("FAX FEMALE WORKER NEXT TIME", "blue");
+		}
 		print("Y-RAY FAX", "blue");
 		if(force_skill(1, $skill[Disintegrate], false))
 		{
@@ -1664,8 +1962,8 @@ void main(){
 		{
 			use(1 , $item[milk of magnesium]);
 		}
-		//if (my_fullness() == 12) if not saving items
-		if (my_fullness() >= 0)
+
+		if (my_fullness() == 12)
 		{
 			if (!eat_dog("wet dog", AddHotdog))
 				abort("Cannot eat wet dog");
@@ -1716,6 +2014,10 @@ void main(){
 
 		cli_execute("genie effect Fireproof Lips");
 
+		if ((item_amount($item[heat-resistant gloves]) > 0) && (my_basestat($stat[moxie])>=35))
+		{
+			equip($slot[acc3], $item[heat-resistant gloves]);
+		}
 		if (item_amount($item[heat-resistant necktie]) > 0)
 		{
 			equip($slot[acc3], $item[heat-resistant necktie]);
@@ -1725,15 +2027,23 @@ void main(){
 			equip($slot[acc2], $item[psychic's amulet]);
 		}
 		if (item_amount(KGB) > 0) {
-			equip($slot[acc1], KGB);
+			equip($slot[acc2], KGB);
 		}
-		else if (item_amount($item[psychic's amulet]) > 0)
+		if (item_amount($item[psychic's amulet]) > 0)
 		{
 			equip($slot[acc1], $item[psychic's amulet]);
+		}
+		if (item_amount($item[LOV Earrings]) > 0)
+		{
+			equip($slot[acc1], $item[LOV Earrings]);
 		}
 		if (item_amount($item[pantogram pants]) > 0)
 		{
 			equip($slot[pants], $item[pantogram pants]);
+		}
+		if ((item_amount($item[lava-proof pants]) > 0) && (my_basestat($stat[moxie])>=35))
+		{
+			equip($slot[pants], $item[lava-proof pants]);
 		}
 
 		complete_quest("STEAM TUNNELS", 10);
@@ -1751,7 +2061,8 @@ void main(){
 		print("Base Booze Farming (if needed)", "blue");
 		cli_execute("try; fortune buff gunther");
 		
-		if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+		//use kramco before farming
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
@@ -1807,7 +2118,10 @@ void main(){
 		else abort("Ode loop fail.");
 
 		drink_to(12);
-		if (my_inebriety() < 9) ode_drink(1, $item[asbestos thermos]);
+		if (item_amount($item[asbestos thermos]) > 0)
+		{
+			if (my_inebriety() < 9) ode_drink(1, $item[asbestos thermos]);
+		}
 
 		print("Task Prep (hp/mus)", "blue");
 		
@@ -1933,6 +2247,10 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc1], $item[Lil' Doctor&trade; bag]);
+		}
 		if (item_amount($item[Brutal brogues]) > 0)
 		{
 			equip($slot[acc2], $item[Brutal brogues]);
@@ -1942,19 +2260,38 @@ void main(){
 			equip($slot[acc3], $item[ring of telling skeletons what to do]);
 		}
 
-
-		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
-		{
-			print("Mus Wish (You might want more skills)", "green");
-			print(60-((my_maxhp() - (my_buffedstat($stat[muscle])+3)) / 30) + " estimated adv", "blue");
-			cli_execute("genie effect 'Roids of the Rhinoceros");
-		}
-
 		//Cancel max mp buff
 		if (have_effect($effect[[1458]Blood Sugar Sauce Magic]) > 0)
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+
+		//check if wish required for donate blood
+		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
+		{
+			print("Mus Wish (You might want more skills)", "green");
+			print(60-((my_maxhp() - (my_buffedstat($stat[muscle])+3)) / 30) + " estimated adv", "blue");
+			
+			int gnine_stat = 0;
+			float gnine_add = 0.0;
+			matcher match_gnine_stat = create_matcher("Mysticality\\ \\+(\\d+)%" , visit_url("desc_effect.php?whicheffect=af64d06351a3097af52def8ec6a83d9b"));
+			if(match_gnine_stat.find()) {
+				gnine_stat = match_gnine_stat.group(1).to_int();
+				gnine_add = my_basestat($stat[mysticality])*(gnine_stat*0.01);
+				print("G9: "+gnine_stat+"%");
+				print("Buff: "+gnine_add);
+			}
+			if (gnine_add>100.0)
+			{
+				cli_execute("genie effect Experimental Effect G-9");
+			}
+			else
+			{
+				cli_execute("genie effect 'Roids of the Rhinoceros");
+			}
+		}
+
+
 
 		complete_quest("DONATE BLOOD", 1);
 		
@@ -1963,6 +2300,18 @@ void main(){
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+		
+		//remove doc bag
+		if (equipped_item($slot[acc1]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc1], $item[none]);
+		}
+		if (equipped_item($slot[acc2]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc2], $item[none]);
+		}
+		if (equipped_item($slot[acc3]) == $item[Lil' Doctor&trade; bag]) {
+			equip($slot[acc3], $item[none]);
+		}
+		
 
 		complete_quest("FEED CHILDREN", 2);
 
@@ -2060,6 +2409,16 @@ void main(){
 			equip($slot[weapon], $item[5-Alarm Saucepan]);
 		}
 		
+		//GOD LOB
+		if(have_familiar($familiar[God Lobster]))
+		{
+			use_familiar($familiar[God Lobster]); //optional?
+			equip($slot[familiar], $item[God Lobster's Scepter]);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(2);//buff
+			use_familiar(ToTour);
+		}
 		// NEP FIGHT
 		if (get_property("neverendingPartyAlways") == true)
 		{
@@ -2071,7 +2430,8 @@ void main(){
 				cli_execute("fold makeshift garbage shirt");
 				equip($slot[shirt], $item[makeshift garbage shirt]);
 			}
-			if (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0)
+			//use kramco before farming
+			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
 				equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 			}
@@ -2108,6 +2468,19 @@ void main(){
 				equip($slot[off-hand], $item[astral statuette]);
 			}
 		}
+		//GOD LOB
+		if(have_familiar($familiar[God Lobster]))
+		{
+			use_familiar($familiar[God Lobster]);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(3); //exp
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			run_choice(3); //exp
+			use_familiar(ToTour);
+		}
+
 
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
@@ -2120,7 +2493,7 @@ void main(){
 		force_skill(1, $skill[Blubber Up]);
 		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
 		{
-		    if (my_basestat($stat[moxie])>40)
+		    if (my_basestat($stat[mysticality])>40) //oil of expertise
 		    {
     		    force_skill(1, $skill[Quiet Desperation]);
     		}
@@ -2282,11 +2655,25 @@ void main(){
 		}
 
 		//borrow time here (TODO: borrow only if needed)
-		print("Borrowing Time", "green");
 		if (item_amount($item[borrowed time]) > 0)
 		{
+			print("Borrowing Time", "green");
 			use(1, $item[borrowed time]);
 		}
+		
+		
+		
+		//DAY 2
+		visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+		run_choice(1); //Fight
+		run_choice(3); //LOV Earrings
+		run_choice(1); //Fight
+		run_choice(2); //Open Heart Surgery
+		run_choice(1); //Fight
+		run_choice(3); //LOV Extraterrestrial Chocolate
+		equip($slot[acc3], $item[LOV Earrings]);
+		use(1 , $item[LOV Extraterrestrial Chocolate]);
+		burn_mp();
 
 		complete_quest("BREED MORE COLLIES", 5);
 
@@ -2396,9 +2783,338 @@ void main(){
 		remove_property( "hccs2da_questrecord5" );
 		print("BE A LIVING STATUE: " + get_property( "hccs2da_questrecord8" ), "blue");
 		remove_property( "hccs2da_questrecord8" );
+		print(" ", "purple");
+		print("OTHER INFO", "purple");
 
 		print("FINISHED.", "red");
+		print("MARZIPAN ITEM%: " + get_property( "hccs2da_marzipanhard" ), "blue");
+		print("MARZIPAN CANDY%: " + get_property( "hccs2da_marzipaneasy" ), "blue");
+		print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
 	}
 }
 
+//WIP
+/*
 
+visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+run_choice(1); //Have a Boxing Daydream
+run_choice(2); //Boxing Day Spa
+run_choice(3); //Get a Cucumber Eye Treatment
+run_choice(3); //Enter the Boxing Daycare
+run_choice(2); //Scavenge for gym equipment
+run_choice(5); //Return to the Lobby
+run_choice(4); //Return to the Lobby
+
+
+
+
+
+
+//DAY 1
+use_familiar($familiar[God Lobster]);
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(1);//equip
+equip($slot[familiar], $item[God Lobster's Scepter]);
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(2);//buff
+use_familiar(ToTour);
+
+//NEP
+
+use_familiar($familiar[God Lobster]);
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(3); //exp
+use_familiar(ToTour);
+
+
+//DAY 2
+use_familiar($familiar[God Lobster]); //optional?
+equip($slot[familiar], $item[God Lobster's Scepter]);
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(2);//buff
+use_familiar(ToTour);
+
+//NEP
+
+use_familiar($familiar[God Lobster]);
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(3); //exp
+visit_url("main.php?fightgodlobster=1");
+run_combat();
+run_choice(3); //exp
+use_familiar(ToTour);
+
+
+
+
+
+//DAY 1
+visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+run_choice(1); //Fight
+run_choice(2); //LOV Epaulettes
+run_choice(1); //Fight
+run_choice(3); //Wandering Eye Surgery
+run_choice(1); //Fight
+run_choice(3); //LOV Extraterrestrial Chocolate
+equip($slot[back], $item[LOV Epaulettes]);
+use(1 , $item[LOV Extraterrestrial Chocolate]);
+
+//DAY 2
+visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+run_choice(1); //Fight
+run_choice(3); //LOV Earrings
+run_choice(1); //Fight
+run_choice(2); //Open Heart Surgery
+run_choice(1); //Fight
+run_choice(3); //LOV Extraterrestrial Chocolate
+equip($slot[acc3], $item[LOV Earrings]);
+use(1 , $item[LOV Extraterrestrial Chocolate]);
+
+
+
+
+boolean [string] __voting_negative_effects = $strings[Add sedatives to the water supply.,Distracting noises broadcast through compulsory teeth-mounted radio receivers.,Emissions cap on all magic-based combustion.,Exercise ban.,Mandatory 6pm curfew.,Requirement that all weapon handles be buttered.,Safety features added to all melee weapons.,Shut down all local dog parks.,State nudity initiative.,Vaccination reversals for all citizens.,All bedsheets replaced with giant dryer sheets.,All citizens required to look <i>all four</i> ways before crossing the street.,Ban on petroleum-based gels and pomades.,Increased taxes at all income levels.,Mandatory item tithing.,Reduced public education spending.];
+
+//allow_interacting_with_user set to false disables a user_confirm, so the user cannot prevent a script from obtaining the voted badge
+void voteInVotingBooth()
+{
+	print_html("VotingBooth v" + __voting_version + ".");
+	buffer page_text = visit_url("place.php?whichplace=town_right&action=townright_vote");
+	
+	if (page_text.contains_text("Here is the impact of your local ballot initiatives"))
+	{
+		print("Already voted today.");
+		return;
+	}
+	if (__voting_setting_use_absentee_ballots)
+	{
+	}
+	
+	
+	
+	
+	
+	//Here's where the script decides which initiatives are best.
+	//I spent like ten seconds on it, so feel free to change it.
+	//Larger numbers are the best initiatives.
+	float [string] initiative_priorities;
+	initiative_priorities["State-mandated bed time of 8PM."] = 100; //+1 Adventure(s) per day
+	initiative_priorities["Repeal leash laws."] = 75; //+2 Familiar Experience Per Combat
+	initiative_priorities["Institute GBLI (Guaranteed Basic Loot Income.)"] = 50; //+15% Item Drops from Monsters
+	initiative_priorities["Reduced taxes at all income levels."] = 45; //+30% Meat from Monsters
+	initiative_priorities["Mandatory morning calisthenics for all citizens."] = 42; //Muscle +25%
+	initiative_priorities["Compulsory dance lessons every weekend."] = 41; //Moxie +25%
+	initiative_priorities["Replace all street signs with instructions for arcane rituals."] = 40; //Mysticality +25%
+	initiative_priorities["Addition of 37 letters to end of alphabet so existing names are all earlier in queues."] = 35; //+25% Combat Initiative
+	initiative_priorities["Subsidies for health potion manufacturers."] = 32; //Maximum HP +30%
+	initiative_priorities["Open a local portal to a dimension of pure arcane power."] = 31; //Spell Damage +20%
+	initiative_priorities["Free civic weapon sharpening program."] = 31; //Weapon Damage +100%
+	initiative_priorities["Require all garments to be fleece-lined."] = 30; //Serious Cold Resistance (+3)
+	initiative_priorities["Make all new clothes out of asbestos."] = 30; //Serious Hot Resistance (+3)
+	initiative_priorities["Widespread distribution of \"CENSORED\" bars."] = 30; //Serious Sleaze Resistance (+3)
+	initiative_priorities["Outlaw black clothing and white makeup."] = 30; //Serious Spooky Resistance (+3)
+	initiative_priorities["Free public nose-plug dispensers."] = 30; //Serious Stench Resistance (+3)
+	initiative_priorities["A chicken in every pot!"] = 25; //+30% Food Drops from Monsters
+	initiative_priorities["Carbonate the water supply."] = 20; //Maximum MP +30%
+	initiative_priorities["Kingdomwide air-conditioning subsidies."] = 20; //+10 Cold Damage
+	initiative_priorities["Pocket flamethrowers issued to all citizens."] = 20; //+10 Hot Damage
+	initiative_priorities["Artificial butter flavoring dispensers on every street corner."] = 20; //+10 Sleaze Damage
+	initiative_priorities["All forms of deodorant are now illegal."] = 20; //+10 Stench Damage
+	initiative_priorities["Compulsory firearm and musical instrument safety training for all citizens."] = 20; //Ranged Damage +100%
+	initiative_priorities["Emergency eye make-up stations installed in all public places."] = 15; //+4 Moxie Stats Per Fight
+	initiative_priorities["Require boxing videos to be played on all bar televisions."] = 15; //+4 Muscle Stats Per Fight
+	initiative_priorities["Deployment of a network of aerial mana-enhancement drones."] = 15; //+4 Mysticality Stats Per Fight
+	initiative_priorities["Municipal journaling initiative."] = 15; //+3 Stats Per Fight
+	initiative_priorities["Happy Hour extended by 23 additional hours."] = 10; //+30% Booze Drops from Monsters
+	initiative_priorities["Subsidies for dentists."] = 10; //+30% Candy Drops from Monsters
+	initiative_priorities["Sales tax free weekend for back-to-school shopping."] = 10; //+30% Gear Drops from Monsters
+	initiative_priorities["Ban belts."] = 10; //+30% Pants Drops from Monsters
+	initiative_priorities["Mandatory martial arts classes for all citizens."] = 0; //+20 Damage to Unarmed Attacks
+	initiative_priorities["\"Song that Never Ends\" pumped throughout speakers in all of Kingdom."] = -100; //+10 to Monster Level
+	//Alter priorities depending on state:
+	
+	initiative_priorities["Repeal leash laws."] = 1025; //+2 Familiar Experience Per Combat
+	initiative_priorities["Deployment of a network of aerial mana-enhancement drones."] = 1015; //+4 Mysticality Stats Per Fight
+	initiative_priorities["Municipal journaling initiative."] = 1014; //+3 Stats Per Fight
+	initiative_priorities["Require boxing videos to be played on all bar televisions."] = 1013; //+4 Muscle Stats Per Fight
+	initiative_priorities["Emergency eye make-up stations installed in all public places."] = 1012; //+4 Moxie Stats Per Fight
+	initiative_priorities["Subsidies for health potion manufacturers."] = 1009; //Maximum HP +30%
+	initiative_priorities["Carbonate the water supply."] = 1008; //Maximum MP +30%
+	initiative_priorities["Subsidies for dentists."] = 1004; //+30% Candy Drops from Monsters
+	
+	
+	if (my_daycount() == 1)
+	{
+		initiative_priorities["State-mandated bed time of 8PM."] = 1100; //+1 Adventure(s) per day
+		initiative_priorities["Happy Hour extended by 23 additional hours."] = 1100; //+30% Booze Drops from Monsters
+		initiative_priorities["Institute GBLI (Guaranteed Basic Loot Income.)"] = 1075; //+15% Item Drops from Monsters
+		initiative_priorities["Open a local portal to a dimension of pure arcane power."] = 1040; //Spell Damage +20%
+		initiative_priorities["Subsidies for dentists."] = 1020; //+30% Candy Drops from Monsters
+
+	}
+	else
+	{
+		initiative_priorities["Free civic weapon sharpening program."] = 1400; //Weapon Damage +100%
+		initiative_priorities["Make all new clothes out of asbestos."] = 1300; //Serious Hot Resistance (+3)
+		initiative_priorities["Replace all street signs with instructions for arcane rituals."] = 1035; //Mysticality +25%
+		initiative_priorities["Mandatory morning calisthenics for all citizens."] = 1033; //Muscle +25%
+		initiative_priorities["Compulsory dance lessons every weekend."] = 1032; //Moxie +25%
+	}
+
+
+
+
+
+	string [string] initiative_descriptions;
+	initiative_descriptions["State-mandated bed time of 8PM."] = "+1 Adventure(s) per day";
+	initiative_descriptions["Repeal leash laws."] = "+2 Familiar Experience Per Combat";
+	initiative_descriptions["Emergency eye make-up stations installed in all public places."] = "+4 Moxie Stats Per Fight";
+	initiative_descriptions["Require boxing videos to be played on all bar televisions."] = "+4 Muscle Stats Per Fight";
+	initiative_descriptions["Deployment of a network of aerial mana-enhancement drones."] = "+4 Mysticality Stats Per Fight";
+	initiative_descriptions["\"Song that Never Ends\" pumped throughout speakers in all of Kingdom."] = "+10 to Monster Level";
+	initiative_descriptions["Institute GBLI (Guaranteed Basic Loot Income.)"] = "+15% Item Drops from Monsters";
+	initiative_descriptions["Municipal journaling initiative."] = "+3 Stats Per Fight";
+	initiative_descriptions["Reduced taxes at all income levels."] = "+30% Meat from Monsters";
+	initiative_descriptions["Compulsory dance lessons every weekend."] = "Moxie +25%";
+	initiative_descriptions["Mandatory morning calisthenics for all citizens."] = "Muscle +25%";
+	initiative_descriptions["Replace all street signs with instructions for arcane rituals."] = "Mysticality +25%";
+	initiative_descriptions["Open a local portal to a dimension of pure arcane power."] = "Spell Damage +20%";
+	initiative_descriptions["Subsidies for health potion manufacturers."] = "Maximum HP +30%";
+	initiative_descriptions["Require all garments to be fleece-lined."] = "Serious Cold Resistance (+3)";
+	initiative_descriptions["Make all new clothes out of asbestos."] = "Serious Hot Resistance (+3)";
+	initiative_descriptions["Widespread distribution of \"CENSORED\" bars."] = "Serious Sleaze Resistance (+3)";
+	initiative_descriptions["Outlaw black clothing and white makeup."] = "Serious Spooky Resistance (+3)";
+	initiative_descriptions["Free public nose-plug dispensers."] = "Serious Stench Resistance (+3)";
+	initiative_descriptions["Free civic weapon sharpening program."] = "Weapon Damage +100%";
+	initiative_descriptions["Addition of 37 letters to end of alphabet so existing names are all earlier in queues."] = "+25% Combat Initiative";
+	initiative_descriptions["A chicken in every pot!"] = "+30% Food Drops from Monsters";
+	initiative_descriptions["Carbonate the water supply."] = "Maximum MP +30%";
+	initiative_descriptions["Kingdomwide air-conditioning subsidies."] = "+10 Cold Damage";
+	initiative_descriptions["Pocket flamethrowers issued to all citizens."] = "+10 Hot Damage";
+	initiative_descriptions["Artificial butter flavoring dispensers on every street corner."] = "+10 Sleaze Damage";
+	initiative_descriptions["All forms of deodorant are now illegal."] = "+10 Stench Damage";
+	initiative_descriptions["Compulsory firearm and musical instrument safety training for all citizens."] = "Ranged Damage +100%";
+	initiative_descriptions["Happy Hour extended by 23 additional hours."] = "+30% Booze Drops from Monsters";
+	initiative_descriptions["Subsidies for dentists."] = "+30% Candy Drops from Monsters";
+	initiative_descriptions["Sales tax free weekend for back-to-school shopping."] = "+30% Gear Drops from Monsters";
+	initiative_descriptions["Ban belts."] = "+30% Pants Drops from Monsters";
+	initiative_descriptions["Mandatory martial arts classes for all citizens."] = "+20 Damage to Unarmed Attacks";
+
+	initiative_descriptions["Add sedatives to the water supply."] = "-10 to Monster Level";
+	initiative_descriptions["Distracting noises broadcast through compulsory teeth-mounted radio receivers."] = "-3 Stats Per Fight";
+	initiative_descriptions["Emissions cap on all magic-based combustion."] = "Spell Damage -50%";
+	initiative_descriptions["Exercise ban."] = "Muscle -20";
+	initiative_descriptions["Mandatory 6pm curfew."] = "+-2 Adventure(s) per day";
+	initiative_descriptions["Requirement that all weapon handles be buttered."] = "-10% chance of Critical Hit";
+	initiative_descriptions["Safety features added to all melee weapons."] = "Weapon Damage -50%";
+	initiative_descriptions["Shut down all local dog parks."] = "-2 Familiar Experience Per Combat";
+	initiative_descriptions["State nudity initiative."] = "-50% Gear Drops from Monsters";
+	initiative_descriptions["Vaccination reversals for all citizens."] = "Maximum HP -50%";
+	initiative_descriptions["All bedsheets replaced with giant dryer sheets."] = "Maximum MP -50%";
+	initiative_descriptions["All citizens required to look <i>all four</i> ways before crossing the street."] = "-30% Combat Initiative";
+	initiative_descriptions["Ban on petroleum-based gels and pomades."] = "Moxie -20";
+	initiative_descriptions["Increased taxes at all income levels."] = "-30% Meat from Monsters";
+	initiative_descriptions["Mandatory item tithing."] = "-20% Item Drops from Monsters";
+	initiative_descriptions["Reduced public education spending."] = "Mysticality -20";
+	
+	string [int][int] platform_matches = page_text.group_string("<blockquote>(.*?)</blockquote>");
+	
+	int desired_g = random(2) + 1;
+	
+	//Bias the global votes towards ghosts:
+	if (platform_matches.count() == 2)
+	{
+		foreach key in platform_matches
+		{
+			string platform = platform_matches[key][1];
+			boolean zoinks = false;
+			//print_html(key + ": " + platform);
+			
+			foreach s in $strings[seance to summon their ancient spirits,you like to see your deceased loved ones again,don't think I need to tell you that graveyards are a terribly inefficient use of space,is possible that this might displace and anger your,How could you possibly vote against kindness energy] //'
+			{
+				if (platform.contains_text(s))
+				{
+					zoinks = true;
+					break;
+				}
+			}
+			
+			
+			if (zoinks)
+			{
+				print("Voting for ghosts.");
+				desired_g = key + 1;
+				break;
+			}
+		}
+	}
+
+	string [int][int] local_initiative_matches = page_text.group_string("<input type=\"checkbox\".*?value=\"([0-9])\".*?> (.*?)<br");
+	
+	string [int] initiative_names;
+	int [string] initiative_values;
+	string log_delimiter = "•";
+	
+	buffer log;
+	log.append("VOTING_BOOTH_LOG");
+	log.append(log_delimiter);
+	log.append(my_daycount());
+	log.append(log_delimiter);
+	log.append(my_class());
+	log.append(log_delimiter);
+	log.append(my_path());
+	print_html("<strong>Available initiatives:</strong>");
+	foreach key in local_initiative_matches
+	{
+		int initaitive_value = local_initiative_matches[key][1].to_int();
+		string initiative_name = local_initiative_matches[key][2];
+		
+		
+		log.append(log_delimiter);
+		log.append(initiative_name);
+		
+		//print_html("\"" + initiative_name + "\": " + initaitive_value + " (" + initiative_descriptions[initiative_name] + ")");
+		print_html("&nbsp;&nbsp;&nbsp;&nbsp;" + initiative_descriptions[initiative_name]);
+		if (__voting_negative_effects contains initiative_name) continue;
+		
+		
+		initiative_names[initiative_names.count()] = initiative_name;
+		initiative_values[initiative_name] = initaitive_value;
+		
+		if (!(initiative_priorities contains initiative_name))
+			abort("Unknown initiative \"" + initiative_name + "\". Tell Ezandora about it, there's probably some one-character typo somewhere.");
+		float priority = initiative_priorities[initiative_name];
+		
+	}
+	print_html("");
+	logprint(log);
+	sort initiative_names by -initiative_priorities[value];
+	if (initiative_names.count() < 2)
+	{
+		print_html("Internal error: Not enough local initiatives.");
+		visit_url("choice.php?option=2&whichchoice=1331"); //cancel out
+		return;
+	}
+	print_html("<strong>Chosen initiatives:</strong>");
+	foreach key, name in initiative_names
+	{
+		if (key > 1) continue;
+		print_html("&nbsp;&nbsp;&nbsp;&nbsp;" + initiative_descriptions[name]);
+	}
+
+	//print_html("initiative_names = " + initiative_names.to_json());
+	visit_url("choice.php?option=1&whichchoice=1331&g=" + desired_g + "&local[]=" + initiative_values[initiative_names[0]] + "&local[]=" + initiative_values[initiative_names[1]]);
+	
+	//https://www.kingdomofloathing.com/choice.php?pwd&option=1&whichchoice=1331&g=1&local[]=0&local[]=2
+	//pwd&option=1&whichchoice=1331&g=1&local%5B%5D=0&local%5B%5D=2
+	//option=1&whichchoice=1331&g=
+	//g - 1 or 2, depending on the global vote
+}
+
+
+*/
