@@ -105,7 +105,7 @@ boolean reach_mp(int value)
 	{
 		eat(1, $item[Magical sausage]);
 	}
-	while ((my_mp() < value) && ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) || (have_equipped($item[Kramco Sausage-o-Matic&trade;]))))
+	while ((my_mp() < value) && (item_amount($item[magical sausage casing]) > 0) && ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) || (have_equipped($item[Kramco Sausage-o-Matic&trade;]))))
 	{
 		if (make_sausage(1, my_meat() - 500) > 0)
 		{
@@ -116,6 +116,11 @@ boolean reach_mp(int value)
 	{
 		buy(1, $item[magical mystery juice], 100);
 		use(1, $item[magical mystery juice]);
+	}
+	while ((my_mp() < value) && (my_meat() >= 500))
+	{
+		buy(1, $item[Doc Galaktik's Invigorating Tonic], 90);
+		use(1, $item[Doc Galaktik's Invigorating Tonic]);
 	}
 	if (my_mp() < value)
 	{
