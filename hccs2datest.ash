@@ -576,6 +576,11 @@ void try_consult()
 
 void voteInVotingBooth()
 {
+	if (get_property("voteAlways") == false)
+	{
+		return;
+	}
+	
 	//print_html("VotingBooth v" + __voting_version + ".");
 	buffer page_text = visit_url("place.php?whichplace=town_right&action=townright_vote");
 	
@@ -837,6 +842,21 @@ void main(){
 	boolean do_pvp = false; //if true will do pvp
 	boolean no_tour = false; //if true will fight god lobster and break 100% fam tour
 	
+	if (to_string(my_class()) == "Astral Spirit")
+	{
+		print("AFTERLIFE SPEEDRUN", "blue");
+		print("Grabbing booze", "green");
+		visit_url("afterlife.php?action=buydeli&whichitem=5046&submit=Purchase (1 Karma)",true);
+		print("Grabbing pet", "green");
+		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
+		print("Filling ascension form", "green");
+		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
+	}
+	
+	cli_execute("refresh all");
+	
+	if(my_path() != "Community Service") abort("Not Community Service.");
+	
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
@@ -877,21 +897,8 @@ void main(){
 	set_property("choiceAdventure1060", 1);
 
 	set_property("manaBurningThreshold", -0.05);
-	
-	if (to_string(my_class()) == "Astral Spirit")
-	{
-		print("AFTERLIFE SPEEDRUN", "blue");
-		print("Grabbing booze", "green");
-		visit_url("afterlife.php?action=buydeli&whichitem=5046&submit=Purchase (1 Karma)",true);
-		print("Grabbing pet", "green");
-		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
-		print("Filling ascension form", "green");
-		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
-	}
 
-	cli_execute("refresh all");
 
-	if(my_path() != "Community Service") abort("Not Community Service.");
 
 	if (my_daycount() == 1)
 	{
