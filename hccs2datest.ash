@@ -570,6 +570,10 @@ void try_consult()
 
 void main(){
 	//init
+	
+	//ADJUST SECTION
+	boolean force_tour = false; //if true will skip god lobster to retain 100% fam tour
+	
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
@@ -1553,7 +1557,7 @@ void main(){
 		//magic dragonfish does not seem to work here!
 		
 		//GOD LOB
-		if(have_familiar($familiar[God Lobster]))
+		if((have_familiar($familiar[God Lobster])) && (!force_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -1594,7 +1598,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if(have_familiar($familiar[God Lobster]))
+		if((have_familiar($familiar[God Lobster])) && (!force_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -2421,7 +2425,7 @@ void main(){
 		}
 		
 		//GOD LOB
-		if(have_familiar($familiar[God Lobster]))
+		if((have_familiar($familiar[God Lobster])) && (!force_tour))
 		{
 			use_familiar($familiar[God Lobster]); //optional?
 			equip($slot[familiar], $item[God Lobster's Scepter]);
@@ -2480,7 +2484,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if(have_familiar($familiar[God Lobster]))
+		if((have_familiar($familiar[God Lobster])) && (!force_tour))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
