@@ -226,15 +226,24 @@ void drink_to(int inebriety)
 {
 	while (my_inebriety() < inebriety)
 	{
-		if (item_amount($item[splendid martini]) > 0) ode_drink(1, $item[splendid martini]);
-		else if (item_amount($item[meadeorite]) > 0) ode_drink(1, $item[meadeorite]);
-		else if (item_amount($item[thermos full of Knob coffee]) > 0) ode_drink(1, $item[thermos full of Knob coffee]);
-		else if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]);
-		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]);
-		else if (item_amount($item[Shot of grapefruit schnapps]) > 0) ode_drink(1, $item[Shot of grapefruit schnapps]);
-		else if (item_amount($item[Shot of tomato schnapps]) > 0) ode_drink(1, $item[Shot of tomato schnapps]);
-		else if (item_amount($item[Shot of orange schnapps]) > 0) ode_drink(1, $item[Shot of orange schnapps]);
-		else if (item_amount($item[Fine wine]) > 0) ode_drink(1, $item[Fine wine]);
+		if (item_amount($item[punch-drunk punch]) > 0) ode_drink(1, $item[punch-drunk punch]); //6.5adv
+		else if (item_amount($item[meadeorite]) > 0) ode_drink(1, $item[meadeorite]); //6.5adv
+		else if (item_amount($item[iced plum wine]) > 0) ode_drink(1, $item[iced plum wine]); //6.5adv
+		else if (item_amount($item[splendid martini]) > 0) ode_drink(1, $item[splendid martini]); //6adv
+		else if (item_amount($item[Ambitious Turkey]) > 0) ode_drink(1, $item[Ambitious Turkey]); //6adv
+		else if (item_amount($item[thermos full of Knob coffee]) > 0) ode_drink(1, $item[thermos full of Knob coffee]); //5.5adv
+		else if (item_amount($item[distilled fortified wine]) > 0) ode_drink(1, $item[distilled fortified wine]); //5.5adv
+		else if (item_amount($item[pumpkin beer]) > 0) ode_drink(1, $item[pumpkin beer]); //5.5adv
+		else if (item_amount($item[Sacramento wine]) > 1) ode_drink(1, $item[Sacramento wine]); //5.5adv
+		else if (item_amount($item[Agitated Turkey]) > 1) ode_drink(1, $item[Agitated Turkey]); //5.5adv
+		else if (item_amount($item[Friendly Turkey]) > 1) ode_drink(1, $item[Friendly Turkey]); //5/0adv
+		else if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]); //adv = level*0.5+0.5
+		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]); //adv = max(level,3.0)
+		else if (((my_inebriety()+2) <= inebriety)&&(item_amount($item[Middle of the Road&trade; brand whiskey]) > 0)) ode_drink(1, $item[Middle of the Road&trade; brand whiskey]); //2.0adv per drunk
+		else if (item_amount($item[Shot of grapefruit schnapps]) > 0) ode_drink(1, $item[Shot of grapefruit schnapps]); //2.0adv
+		else if (item_amount($item[Shot of tomato schnapps]) > 0) ode_drink(1, $item[Shot of tomato schnapps]); //2.0adv
+		else if (item_amount($item[Shot of orange schnapps]) > 0) ode_drink(1, $item[Shot of orange schnapps]); //2.0adv
+		else if (item_amount($item[Fine wine]) > 0) ode_drink(1, $item[Fine wine]); //2.0adv
 		else break;
 	}
 }
@@ -289,6 +298,7 @@ void complete_quest(string questname, int choicenumber)
 	visit_url("council.php");
 	visit_url("choice.php?pwd&whichchoice=1089&option="+choicenumber);
 	adv = adv - my_adventures();
+	//TODO: DOES THE FOLLOWING BLOCK EVEN WORKS?
 	if (adv == 0)
 	{
 		abort("Not enough adventures to complete quest");
@@ -837,10 +847,33 @@ void voteInVotingBooth()
 
 void main(){
 	//init
+	//START
 	
-	//ADJUST SECTION
-	boolean do_pvp = false; //if true will do pvp
-	boolean no_tour = false; //if true will fight god lobster and break 100% fam tour
+	//if true will do pvp
+	if (get_property("hccs2da_dopvp") == "")
+	{
+		if (user_confirm("Perform PVP?"))
+		{
+			set_property("hccs2da_dopvp" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_dopvp" ,false );
+		}
+	}
+	
+	//if true will fight god lobster and break 100% fam tour
+	if (get_property("hccs2da_notour") == "")
+	{
+		if (user_confirm("Abandon Automatic New 100% Familiar Run?"))
+		{
+			set_property("hccs2da_notour" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_notour" ,false );
+		}
+	}
 	
 	if (to_string(my_class()) == "Astral Spirit")
 	{
@@ -877,6 +910,13 @@ void main(){
 		if (get_property("hccs2da_marzipanhard") >= 100.0)
 		{
 			ToTour = pick_fairy_to_tour();
+		}
+	}
+	if (!(to_boolean(get_property("hccs2da_notour")))) 
+	{
+		if (!(my_familiar() == $familiar[none]))
+		{
+			ToTour = my_familiar();
 		}
 	}
 	print("Touring familiar set to " + ToTour, "green");
@@ -1563,6 +1603,7 @@ void main(){
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			run_choice(1); //Enter lov tunnel
 			run_choice(1); //Fight
 			run_choice(2); //LOV Epaulettes
 			run_choice(1); //Fight
@@ -1853,7 +1894,7 @@ void main(){
 		//magic dragonfish does not seem to work here!
 		
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (no_tour))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -1894,7 +1935,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (no_tour))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -1905,7 +1946,7 @@ void main(){
 
 		complete_quest("MAKE SAUSAGE", 7);
 		
-		if (do_pvp) 
+		if (to_boolean(get_property("hccs2da_dopvp")))
 		{
 			print("PVP", "green");
 			// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
@@ -2299,6 +2340,7 @@ void main(){
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			run_choice(1); //Enter lov tunnel
 			run_choice(1); //Fight
 			run_choice(3); //LOV Earrings
 			run_choice(1); //Fight
@@ -2754,7 +2796,7 @@ void main(){
 		}
 		
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (no_tour))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
 		{
 			use_familiar($familiar[God Lobster]); //optional?
 			equip($slot[familiar], $item[God Lobster's Scepter]);
@@ -2813,7 +2855,7 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (no_tour))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
 		{
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
@@ -3003,7 +3045,7 @@ void main(){
 		}
 
 		//borrow time here (TODO: borrow only if needed)
-		if (item_amount($item[borrowed time]) > 0)
+		if ((item_amount($item[borrowed time]) > 0) && (my_adventures() <= 60))
 		{
 			print("Borrowing Time", "green");
 			use(1, $item[borrowed time]);
@@ -3124,6 +3166,8 @@ void main(){
 		print("MARZIPAN ITEM%: " + get_property( "hccs2da_marzipanhard" ), "blue");
 		print("MARZIPAN CANDY%: " + get_property( "hccs2da_marzipaneasy" ), "blue");
 		print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
+		print("PVP ENABLED: " + get_property( "hccs2da_dopvp" ), "blue");
+		print("TOUR DISABLED: " + get_property( "hccs2da_notour" ), "blue");
 		
 		print("FINISHED.", "red");
 	}
