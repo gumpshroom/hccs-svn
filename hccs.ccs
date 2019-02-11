@@ -16,6 +16,12 @@ if hasskill Disintegrate
 endif
 abort
 
+[ factory worker ]
+if hasskill Disintegrate
+    skill disintegrate
+endif
+abort
+
 [ fluffy bunny ]
 if hasskill release the boots
     skill release the boots
