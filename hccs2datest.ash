@@ -956,8 +956,8 @@ void main(){
 
 		// Set CCS for the run
 		print("Set up CSS.", "green");
-		//set_property("hccs2da_backupCounterScript", get_property("counterScript"));
-		//set_property("counterScript", "scripts\\counterskip.ash");
+		set_property("hccs2da_backupdontStopForCounters", get_property("dontStopForCounters"));
+		set_property("dontStopForCounters", true);
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
@@ -3148,8 +3148,8 @@ void main(){
 		// Restore previous CCS
 		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
 		remove_property("hccs2da_backupCCS");
-		//set_property("counterScript", get_property("hccs2da_backupCounterScript"));
-		//remove_property("hccs2da_backupCounterScript");
+		set_property("dontStopForCounters", get_property("hccs2da_backupdontStopForCounters"));
+		remove_property("hccs2da_backupdontStopForCounters");
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
