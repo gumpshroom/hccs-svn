@@ -2356,11 +2356,11 @@ void main(){
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 			run_choice(1); //Enter lov tunnel
 			run_choice(1); //Fight
-			run_choice(3); //LOV Earrings
+			//run_choice(3); //LOV Earrings
 			run_choice(1); //Fight
-			run_choice(2); //Open Heart Surgery
+			//run_choice(2); //Open Heart Surgery
 			run_choice(1); //Fight
-			run_choice(3); //LOV Extraterrestrial Chocolate
+			//run_choice(3); //LOV Extraterrestrial Chocolate
 			equip($slot[acc3], $item[LOV Earrings]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
