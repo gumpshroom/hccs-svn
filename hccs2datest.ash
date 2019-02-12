@@ -239,6 +239,8 @@ void drink_to(int inebriety)
 		else if (item_amount($item[Friendly Turkey]) > 1) ode_drink(1, $item[Friendly Turkey]); //5/0adv
 		else if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]); //adv = level*0.5+0.5
 		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]); //adv = max(level,3.0)
+		//6.16adv per drunk perfect drink
+		//3.87adv per drunk asbestos thermos
 		else if (((my_inebriety()+2) <= inebriety)&&(item_amount($item[Middle of the Road&trade; brand whiskey]) > 0)) ode_drink(1, $item[Middle of the Road&trade; brand whiskey]); //2.0adv per drunk
 		else if (item_amount($item[Shot of grapefruit schnapps]) > 0) ode_drink(1, $item[Shot of grapefruit schnapps]); //2.0adv
 		else if (item_amount($item[Shot of tomato schnapps]) > 0) ode_drink(1, $item[Shot of tomato schnapps]); //2.0adv
@@ -954,8 +956,8 @@ void main(){
 
 		// Set CCS for the run
 		print("Set up CSS.", "green");
-		set_property("hccs2da_backupCounterScript", get_property("counterScript"));
-		set_property("counterScript", "scripts\\counterskip.ash");
+		//set_property("hccs2da_backupCounterScript", get_property("counterScript"));
+		//set_property("counterScript", "scripts\\counterskip.ash");
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
@@ -1602,14 +1604,20 @@ void main(){
 		//DAY 1 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			//equipment room
+			set_property("choiceAdventure1224", 2);
+			//emergency room
+			set_property("choiceAdventure1226", 3);
+			//emporium 
+			set_property("choiceAdventure1228", 3);
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 			run_choice(1); //Enter lov tunnel
 			run_choice(1); //Fight
-			run_choice(2); //LOV Epaulettes
+			//run_choice(2); //LOV Epaulettes
 			run_choice(1); //Fight
-			run_choice(3); //Wandering Eye Surgery
+			//run_choice(3); //Wandering Eye Surgery
 			run_choice(1); //Fight
-			run_choice(3); //LOV Extraterrestrial Chocolate
+			//run_choice(3); //LOV Extraterrestrial Chocolate
 			equip($slot[back], $item[LOV Epaulettes]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -1854,11 +1862,11 @@ void main(){
 		//try_skill(1, $skill[Deep Dark Visions]);
 
 		//hatter mariachi hat or powdered wig
-		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0))
+		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
 		{
 			cli_execute("hatter mariachi hat");
 		}
-		else if((get_property("_madTeaParty") == false) && (item_amount($item[powdered wig]) > 0))
+		else if((get_property("_madTeaParty") == false) && (item_amount($item[powdered wig]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
 		{
 			cli_execute("hatter powdered wig");
 		}
@@ -2339,6 +2347,12 @@ void main(){
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			//equipment room
+			set_property("choiceAdventure1224", 3);
+			//emergency room
+			set_property("choiceAdventure1226", 2);
+			//emporium 
+			set_property("choiceAdventure1228", 3);
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 			run_choice(1); //Enter lov tunnel
 			run_choice(1); //Fight
@@ -2717,7 +2731,7 @@ void main(){
 		{
 			use(1, $item[bag of grain]);
 		}
-		if((get_property("_madTeaParty") == false) && (item_amount($item[ravioli hat]) > 0))
+		if((get_property("_madTeaParty") == false) && (item_amount($item[ravioli hat]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
 		{
 			cli_execute("hatter ravioli hat");
 		}
@@ -2929,7 +2943,7 @@ void main(){
 		{
 			use(1, $item[pocket maze]);
 		}
-		if(get_property("_madTeaParty") == false)
+		if((get_property("_madTeaParty") == false) && (item_amount($item["DRINK ME" potion]) > 0))
 		{
 			if(item_amount($item[snorkel]) <= 0)
 			{
@@ -3124,8 +3138,8 @@ void main(){
 		// Restore previous CCS
 		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
 		remove_property("hccs2da_backupCCS");
-		set_property("counterScript", get_property("hccs2da_backupCounterScript"));
-		remove_property("hccs2da_backupCounterScript");
+		//set_property("counterScript", get_property("hccs2da_backupCounterScript"));
+		//remove_property("hccs2da_backupCounterScript");
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
@@ -3284,22 +3298,22 @@ if(have_familiar($familiar[God Lobster]))
 //DAY 1
 visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 run_choice(1); //Fight
-run_choice(2); //LOV Epaulettes
+//run_choice(2); //LOV Epaulettes
 run_choice(1); //Fight
-run_choice(3); //Wandering Eye Surgery
+//run_choice(3); //Wandering Eye Surgery
 run_choice(1); //Fight
-run_choice(3); //LOV Extraterrestrial Chocolate
+//run_choice(3); //LOV Extraterrestrial Chocolate
 equip($slot[back], $item[LOV Epaulettes]);
 use(1 , $item[LOV Extraterrestrial Chocolate]);
 
 //DAY 2
 visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 run_choice(1); //Fight
-run_choice(3); //LOV Earrings
+//run_choice(3); //LOV Earrings
 run_choice(1); //Fight
-run_choice(2); //Open Heart Surgery
+//run_choice(2); //Open Heart Surgery
 run_choice(1); //Fight
-run_choice(3); //LOV Extraterrestrial Chocolate
+//run_choice(3); //LOV Extraterrestrial Chocolate
 equip($slot[acc3], $item[LOV Earrings]);
 use(1 , $item[LOV Extraterrestrial Chocolate]);
 
