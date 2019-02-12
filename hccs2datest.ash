@@ -1604,6 +1604,9 @@ void main(){
 		//DAY 1 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			set_property("choiceAdventure1223", 1);
+			set_property("choiceAdventure1225", 1);
+			set_property("choiceAdventure1227", 1);
 			//equipment room
 			set_property("choiceAdventure1224", 2);
 			//emergency room
@@ -1652,7 +1655,11 @@ void main(){
 				print("Drop rate of marzipan skull with candy boost is " + 30.4*(1+candymod/100) + "%", "green");
 				set_property("hccs2da_marzipaneasy" ,candymod );
 			}
+			//visit_url("inv_use.php?whichitem=9537");
+			//visit_url("choice.php?whichchoice=1267&option=1&wish=to fight a mariachi calavera");
+			
 			cli_execute("genie monster mariachi calavera");
+			visit_url("main.php");
 			run_combat();
 			
 			//remove doc bag
@@ -2347,6 +2354,9 @@ void main(){
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			set_property("choiceAdventure1223", 1);
+			set_property("choiceAdventure1225", 1);
+			set_property("choiceAdventure1227", 1);
 			//equipment room
 			set_property("choiceAdventure1224", 3);
 			//emergency room
