@@ -1604,6 +1604,18 @@ void main(){
 		//DAY 1 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			visit_url("choice.php?whichchoice=1222&option=1&pwd");
+			visit_url("choice.php?whichchoice=1223&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1224&option=2&pwd");
+			visit_url("choice.php?whichchoice=1225&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1226&option=3&pwd");
+			visit_url("choice.php?whichchoice=1227&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1228&option=3&pwd");
+			/*
 			set_property("choiceAdventure1223", 1);
 			set_property("choiceAdventure1225", 1);
 			set_property("choiceAdventure1227", 1);
@@ -1621,6 +1633,7 @@ void main(){
 			//run_choice(3); //Wandering Eye Surgery
 			run_choice(1); //Fight
 			//run_choice(3); //LOV Extraterrestrial Chocolate
+			*/
 			equip($slot[back], $item[LOV Epaulettes]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -1869,11 +1882,11 @@ void main(){
 		//try_skill(1, $skill[Deep Dark Visions]);
 
 		//hatter mariachi hat or powdered wig
-		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
+		if((get_property("_madTeaParty") == false) && (item_amount($item[mariachi hat]) > 0) && (item_amount($item[&quot;DRINK ME&quot; potion]) > 0))
 		{
 			cli_execute("hatter mariachi hat");
 		}
-		else if((get_property("_madTeaParty") == false) && (item_amount($item[powdered wig]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
+		else if((get_property("_madTeaParty") == false) && (item_amount($item[powdered wig]) > 0) && (item_amount($item[&quot;DRINK ME&quot; potion]) > 0))
 		{
 			cli_execute("hatter powdered wig");
 		}
@@ -2354,6 +2367,18 @@ void main(){
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
 		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
+			visit_url("choice.php?whichchoice=1222&option=1&pwd");
+			visit_url("choice.php?whichchoice=1223&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1224&option=3&pwd");
+			visit_url("choice.php?whichchoice=1225&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1226&option=2&pwd");
+			visit_url("choice.php?whichchoice=1227&option=1&pwd");
+			run_combat();
+			visit_url("choice.php?whichchoice=1228&option=3&pwd");
+			/*
 			set_property("choiceAdventure1223", 1);
 			set_property("choiceAdventure1225", 1);
 			set_property("choiceAdventure1227", 1);
@@ -2371,6 +2396,7 @@ void main(){
 			//run_choice(2); //Open Heart Surgery
 			run_choice(1); //Fight
 			//run_choice(3); //LOV Extraterrestrial Chocolate
+			*/
 			equip($slot[acc3], $item[LOV Earrings]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -2741,7 +2767,7 @@ void main(){
 		{
 			use(1, $item[bag of grain]);
 		}
-		if((get_property("_madTeaParty") == false) && (item_amount($item[ravioli hat]) > 0) && (item_amount($item["DRINK ME" potion]) > 0))
+		if((get_property("_madTeaParty") == false) && (item_amount($item[ravioli hat]) > 0) && (item_amount($item[&quot;DRINK ME&quot; potion]) > 0))
 		{
 			cli_execute("hatter ravioli hat");
 		}
@@ -2953,7 +2979,7 @@ void main(){
 		{
 			use(1, $item[pocket maze]);
 		}
-		if((get_property("_madTeaParty") == false) && (item_amount($item["DRINK ME" potion]) > 0))
+		if((get_property("_madTeaParty") == false) && (item_amount($item[&quot;DRINK ME&quot; potion]) > 0))
 		{
 			if(item_amount($item[snorkel]) <= 0)
 			{
