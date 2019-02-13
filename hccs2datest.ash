@@ -383,6 +383,103 @@ void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff
 	run_choice(1); // Lock in your score
 }
 
+boolean lovepot(float thershold, stat test)
+{
+	if (item_amount($item[Love Potion #XYZ]) > 0)
+	{
+		//it is assumed that you do test in order of mus->mys->mox
+		//getting these value requires some of the most annoying math in kol scripting ever
+		//thersholds
+		//7 rerolls 132.8
+		//6 rerolls 129.8
+		//5 rerolls 126.1
+		//4 rerolls 121.4
+		//3 rerolls 114.9
+		//2 rerolls 105.2
+		//1 rerolls 86.5
+		//love potion stats
+		int lovepot_mus = 0;
+		int lovepot_mys = 0;
+		int lovepot_mox = 0;
+		float lovepot_value = 0.0;
+		string page = visit_url("desc_effect.php?whicheffect=75c1c2a807f9e12f6c9e3e9954586d08");
+		matcher match_lovepot_mus = create_matcher("Muscle\\ \\+?(\\-?\\d+)" , page);
+		if(match_lovepot_mus.find()) {
+			lovepot_mus = match_lovepot_mus.group(1).to_int();
+			print("LOVEPOT MUS: "+lovepot_mus,"green");
+		}
+		matcher match_lovepot_mys = create_matcher("Mysticality\\ \\+?(\\-?\\d+)" , page);
+		if(match_lovepot_mys.find()) {
+			lovepot_mys = match_lovepot_mys.group(1).to_int();
+			print("LOVEPOT MYS: "+lovepot_mys,"green");
+		}
+		matcher match_lovepot_mox = create_matcher("Moxie\\ \\+?(\\-?\\d+)" , page);
+		if(match_lovepot_mox.find()) {
+			lovepot_mox = match_lovepot_mox.group(1).to_int();
+			print("LOVEPOT MOX: "+lovepot_mox,"green");
+		}
+		
+		lovepot_value = max(max(to_float(lovepot_mus)+56.5,to_float(lovepot_mys)+27.5),max(to_float(lovepot_mox),0.0));
+		print("LOVEPOT VALUE: "+lovepot_value,"green");
+		print("LOVEPOT THERSHOLD: "+thershold,"green");
+		//love potion use logic
+		if (test == $stat[none])
+		{
+			if (lovepot_value < thershold)
+			{
+				print("Use up love potion here to reroll", "green");
+				return true; //use up potion to reroll
+			}
+			else
+			{
+				print("Your love potion is good enough, keep it", "green");
+				return false; //keep potion
+			}
+		}
+		else if (test == $stat[muscle])
+		{
+			if ((to_float(lovepot_mus)+56.4)==max(max(to_float(lovepot_mus)+56.5,to_float(lovepot_mys)+27.5),max(to_float(lovepot_mox),0.0)))
+			{
+				print("Use up love potion here", "green");
+				return true; //use up potion for test
+			}
+			else
+			{
+				print("Keep love potion for next tests", "green");
+				return false; //keep potion
+			}
+		}
+		else if (test == $stat[mysticality])
+		{
+			if ((to_float(lovepot_mys)+27.5)==max(to_float(lovepot_mys)+27.5,max(to_float(lovepot_mox),0.0)))
+			{
+				print("Use up love potion here", "green");
+				return true; //use up potion for test
+			}
+			else
+			{
+				print("Keep love potion for next test", "green");
+				return false; //keep potion
+			}
+		}
+		else if (test == $stat[moxie])
+		{
+			if ((to_float(lovepot_mox))==max(to_float(lovepot_mox),0.0))
+			{
+				print("Use up love potion here", "green");
+				return true; //use up potion for test
+			}
+			else
+			{
+				print("Skip love potion, too negative", "green");
+				return false; //keep potion
+			}
+		}
+		abort("error with love potion function, you should not reach this");
+	}
+	return false; //no potion
+}
+
 boolean eat_dog(string dog, boolean add)
 {
 	//credit cc, modifed from cc_ascend
@@ -1215,9 +1312,12 @@ void main(){
 			ode_drink(1, $item[cup of &quot;tea&quot;]);
 		}
 
-		//40 mp remain if fantasy mage hat
+		try_skill($skill[Love Mixology]);
+		if (lovepot(126.1,$stat[none]))
+		{
+			use(1, $item[Love Potion #XYZ]);
+		}
 		burn_mp();
-
 		complete_quest("COIL WIRE", 11);
 		force_skill(1, $skill[Inscrutable Gaze]);
 		if (item_amount($item[a ten-percent bonus]) > 0)
@@ -1802,10 +1902,12 @@ void main(){
 
 
 
-		//use up mp
+		try_skill($skill[Love Mixology]);
+		if (lovepot(121.4,$stat[none]))
+		{
+			use(1, $item[Love Potion #XYZ]);
+		}
 		burn_mp();
-
-
 		complete_quest("MAKE MARGARITAS", 9);
 
 		if (item_amount($item[astral statuette]) > 0)
@@ -1972,6 +2074,11 @@ void main(){
 			use_familiar(ToTour);
 		}
 
+		try_skill($skill[Love Mixology]);
+		if (lovepot(114.9,$stat[none]))
+		{
+			use(1, $item[Love Potion #XYZ]);
+		}
 		complete_quest("MAKE SAUSAGE", 7);
 		
 		if (to_boolean(get_property("hccs2da_dopvp")))
@@ -2238,6 +2345,11 @@ void main(){
 			cli_execute("pool 1");
 		}
 
+		if(have_effect($effect[Bow-Legged Swagger]) <= 0)
+		{
+			//just in case you lost it
+			force_skill(1, $skill[Bow-Legged Swagger]);
+		}
 		//consider wish wep dmg
 		if(have_effect($effect[Bow-Legged Swagger]) > 0)
 		{
@@ -2265,7 +2377,15 @@ void main(){
 			equip($slot[off-hand], $item[broken champagne bottle]);
 		}
 		
-
+		try_skill($skill[Love Mixology]);
+		if(have_effect($effect[Bow-Legged Swagger]) <= 0)
+		{
+			//only do if >20 adv quest
+			if (lovepot(105.2,$stat[none]))
+			{
+				use(1, $item[Love Potion #XYZ]);
+			}
+		}
 		complete_quest("REDUCE GAZELLE POPULATION", 6);
 		
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
@@ -2453,7 +2573,14 @@ void main(){
 		{
 			equip($slot[pants], $item[lava-proof pants]);
 		}
-
+		
+		try_skill($skill[Love Mixology]);
+		if(elemental_resistance($element[hot]) < 94.93) {
+			if (lovepot(86.5,$stat[none]))
+			{
+				use(1, $item[Love Potion #XYZ]);
+			}
+		}
 		complete_quest("STEAM TUNNELS", 10);
 
 		use_familiar(ToTour);
@@ -2724,6 +2851,12 @@ void main(){
 			equip($slot[acc3], $item[none]);
 		}
 		
+		
+		try_skill($skill[Love Mixology]);
+		if (lovepot(56.5,$stat[muscle]))
+		{
+			use(1, $item[Love Potion #XYZ]);
+		}
 
 		complete_quest("FEED CHILDREN", 2);
 
@@ -2917,7 +3050,11 @@ void main(){
 			use_familiar(ToTour);
 		}
 
-
+		try_skill($skill[Love Mixology]);
+		if (lovepot(27.5,$stat[mysticality]))
+		{
+			use(1, $item[Love Potion #XYZ]);
+		}
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
 		try_num();
@@ -3050,6 +3187,12 @@ void main(){
 		if (item_amount($item[psychic's crystal ball]) > 0)
 		{
 			equip($slot[off-hand], $item[psychic's crystal ball]);
+		}
+		
+		try_skill($skill[Love Mixology]);
+		if (lovepot(0.0,$stat[moxie]))
+		{
+			use(1, $item[Love Potion #XYZ]);
 		}
 
 		complete_quest("FEED CONSPIRATORS", 4);
