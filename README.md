@@ -14,8 +14,11 @@ Required other stuff:
 
 Read www.reddit.com/r/kol/wiki/guides/iloath_hccs if you have clip arts
 
+You just need some perm, but more increase your chances.
+
 Read www.reddit.com/r/kol/wiki/guides/iloath_hccs2 if you dont
-You need some perms to 2day, as well as oven(cheap), Peppermint Rhino(cheap) and Salsa de las Epocas recipe(you get it eventually with VIP)
+
+You need more perms, some item%, as well as oven(cheap), Peppermint Rhino(cheap) and Salsa de las Epocas recipe(you get it eventually with VIP)
 
 (Partially) Supported IOTM:
 
