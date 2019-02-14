@@ -996,7 +996,7 @@ void main(){
 		set_property("hccs2da_route" ,1 );
 	}
 	else
-	{	print("Clip art not detected, running route 2 ALPHA STATE", "red");
+	{	print("Clip art not detected, running route 2", "red");
 		set_property("hccs2da_route" ,2 );
 		if (have_familiar($familiar[Peppermint Rhino]))
 		{
