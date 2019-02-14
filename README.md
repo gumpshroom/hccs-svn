@@ -12,6 +12,8 @@ VIP key, Genie Bottle ONLY!!
 
 Required other stuff: 
 
+Stuffed mortar shell and Curse of weaksauce for CSS, but you can modify it easily.
+
 Read www.reddit.com/r/kol/wiki/guides/iloath_hccs if you have clip arts
 
 You just need some perm, but more increase your chances.
