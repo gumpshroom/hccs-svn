@@ -4,20 +4,15 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
-hccs2da.ash: main automation script, run this after ascending/rollover. Optional: BAFH whitelist for auto consult.
-(You need to declare pvp clan for the season to prevent abort)
-
-hccs2datest.ash: alternative most recently updated experimental automation script, (prob) works for 2IOTM without clip arts! (IN ALPHA STATE)
+hccs2da.ash: main automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult.
 
 Required IOTM: 
 
-VIP key, genie bottle, Clip Art (needed for stable version only)
+VIP key, Genie Bottle ONLY!!
 
 (Partially) Supported IOTM:
 
-Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, pen pal
-
-counterskip.ash: place this in your script folder, it prevent kolmafia from aborting upon hitting a semirare counter in CS runs (there is probably a better way of doing this)
+Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
 
 hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
 (You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification.)
