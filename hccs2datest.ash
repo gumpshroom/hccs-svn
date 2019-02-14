@@ -438,7 +438,7 @@ boolean lovepot(float thershold, stat test)
 		}
 		else if (test == $stat[muscle])
 		{
-			if ((to_float(lovepot_mus)+56.4)==max(max(to_float(lovepot_mus)+56.5,to_float(lovepot_mys)+27.5),max(to_float(lovepot_mox),0.0)))
+			if ((to_float(lovepot_mus)+56.5)==max(max(to_float(lovepot_mus)+56.5,to_float(lovepot_mys)+27.5),max(to_float(lovepot_mox),0.0)))
 			{
 				print("Use up love potion here", "green");
 				return true; //use up potion for test
