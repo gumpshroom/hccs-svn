@@ -18,3 +18,8 @@ hccs.ccs: custom combat script for main script, should be automatically used as 
 (You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification, soul saucery is recommmanded if you have scaling IotM monsters.)
 
 postCS.ash: in alpha state, run in CS aftercore to attempt finishing your aftercore, needs a lot of fixing before it is fit for the general public
+
+Bonus Credits:
+gausie - contributer
+shootgun47 - tester
+slaw, ezandora - borrowed snippets
