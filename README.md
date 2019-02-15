@@ -20,7 +20,7 @@ You just need some perm, but more increase your chances.
 
 Read www.reddit.com/r/kol/wiki/guides/iloath_hccs2 if you dont
 
-You need more perms, some item%, as well as oven(cheap), Peppermint Rhino(cheap) and Salsa de las Epocas recipe(you get it eventually with VIP)
+You need more perms, some item%, as well as oven(cheap), Peppermint Rhino(technically optional, but cheap and reduce fail chance) and Salsa de las Epocas recipe(you get it eventually with VIP)
 
 (Partially) Supported IOTM:
 
