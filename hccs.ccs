@@ -88,6 +88,9 @@ try to steal an item
 if hasskill Otoscope
     skill otoscope
 endif
+if hasskill Meteor Shower
+    skill meteor shower
+endif
 if hasskill Chest X-Ray
     skill chest x-ray
 endif
