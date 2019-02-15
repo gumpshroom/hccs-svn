@@ -2034,10 +2034,12 @@ void main(){
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(1);//equip
 			equip($slot[familiar], $item[God Lobster's Scepter]);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(2);//buff
 			use_familiar(ToTour);
 		}
@@ -2075,6 +2077,7 @@ void main(){
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			use_familiar(ToTour);
 		}
@@ -2990,6 +2993,7 @@ void main(){
 			equip($slot[familiar], $item[God Lobster's Scepter]);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(2);//buff
 			use_familiar(ToTour);
 		}
@@ -3048,9 +3052,11 @@ void main(){
 			use_familiar($familiar[God Lobster]);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			use_familiar(ToTour);
 		}
