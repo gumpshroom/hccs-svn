@@ -123,3 +123,9 @@ endif
 skill stuffed mortar shell
 skill curse of weaksauce
 
+[ spawn of wally ]
+if hasskill Meteor Shower
+    skill meteor shower
+endif
+abort
+
