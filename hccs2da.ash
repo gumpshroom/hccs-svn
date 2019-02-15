@@ -114,7 +114,7 @@ boolean reach_mp(int value)
 			eat(1, $item[Magical sausage]);
 		}
 	}
-	while ((my_mp() < value) && (guild_store_available()) && (my_meat() >= 500))
+	while ((my_mp() < value) && ((my_class() == $class[pastamancer]) || (my_class() == $class[sauceror])) && (guild_store_available()) && (my_meat() >= 500))
 	{
 		buy(1, $item[magical mystery juice], 100);
 		use(1, $item[magical mystery juice]);
@@ -156,6 +156,11 @@ boolean reach_hp(int value)
 	while ((my_hp() < value) && (have_skill($skill[Disco Nap])) && (my_mp() >= mp_cost($skill[Disco Nap])))
 	{
 		use_skill(1 ,$skill[Disco Nap]); //20
+	}
+	if ((my_hp() < value) && ((my_class() == $class[seal clubber]) || (my_class() == $class[turtle tamer])) && (guild_store_available()) && (my_meat() >= 500))
+	{
+		buy(1, $item[Medicinal Herb's medicinal herbs], 100);
+		chew(1, $item[Medicinal Herb's medicinal herbs]);
 	}
 	while ((my_hp() < value) && (get_property("timesRested").to_int() < total_free_rests()))
 	{
@@ -2831,6 +2836,17 @@ void main(){
 		if (item_amount($item[cold-filtered water]) > 0)
 		{
 			use(1, $item[cold-filtered water]);
+		}
+		if (((my_class() == $class[seal clubber]) || (my_class() == $class[turtle tamer])) && (guild_store_available()))
+		{
+			if ((item_amount($item[Blood of the Wereseal]) <= 0) && (my_meat() >= 1000))
+			{
+				buy(1, $item[Blood of the Wereseal], 500);
+			}
+		}
+		if (item_amount($item[Blood of the Wereseal]) > 0)
+		{
+			use(1, $item[Blood of the Wereseal]);
 		}
 
 		//equipments
