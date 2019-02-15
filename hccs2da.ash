@@ -1075,8 +1075,11 @@ void main(){
 		// Make meat from BoomBox if we can
 		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
 		{
-			print("Set BoomBox to meat.", "green");
-			cli_execute("boombox meat");
+			if (get_property("boomBoxSong") != "Total Eclipse of Your Meat")
+			{
+				print("Set BoomBox to meat.", "green");
+				cli_execute("boombox meat");
+			}
 		}
 
 		// unlock the briefcase
@@ -2237,6 +2240,16 @@ void main(){
 		while (get_property("_genieWishesUsed") < 3)
 		{
 			cli_execute("genie item pocket");
+		}
+		
+		// Make meat from BoomBox if we can
+		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
+		{
+			if (get_property("boomBoxSong") != "Total Eclipse of Your Meat")
+			{
+				print("Set BoomBox to meat.", "green");
+				cli_execute("boombox meat");
+			}
 		}
 
 		// Get brogues from Bastille Battalion if we can
