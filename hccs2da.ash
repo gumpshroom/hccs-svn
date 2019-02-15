@@ -289,6 +289,7 @@ void try_num()
 				cli_execute("numberology 69");
 			}
 		}
+		//TODO: get 3 adv in day 2 if no clip arts
 	}
 }
 
@@ -964,7 +965,7 @@ void main(){
 	//if true will fight god lobster and break 100% fam tour
 	if (get_property("hccs2da_notour") == "")
 	{
-		if (user_confirm("Abandon Automatic New 100% Familiar Run?"))
+		if (user_confirm("Abandon 100% Familiar Run for God Lobster Fights?"))
 		{
 			set_property("hccs2da_notour" ,true );
 		}
@@ -998,27 +999,31 @@ void main(){
 	else
 	{	print("Clip art not detected, running route 2", "red");
 		set_property("hccs2da_route" ,2 );
-		if (have_familiar($familiar[Peppermint Rhino]))
-		{
-			ToTour = $familiar[Peppermint Rhino];
-		}
-		else
-		{
-			abort("Needs Peppermint Rhino if without Clip Arts");
-		}
 		if (get_property("hccs2da_marzipanhard") >= 100.0)
 		{
 			ToTour = pick_fairy_to_tour();
 		}
-	}
-	if (!(to_boolean(get_property("hccs2da_notour")))) 
-	{
-		if (!(my_familiar() == $familiar[none]))
+		else
 		{
-			ToTour = my_familiar();
+			if (have_familiar($familiar[Peppermint Rhino]))
+			{
+				ToTour = $familiar[Peppermint Rhino];
+			}
+			else
+			{
+				print("Script have not detected marzipan skull being capped in previous run, getting Peppermint Rhino recommanded next run", "red");
+				ToTour = pick_fairy_to_tour();
+			}
 		}
 	}
+	if (!(my_familiar() == $familiar[none]))
+	{
+		ToTour = my_familiar();
+	}
 	print("Touring familiar set to " + ToTour, "green");
+	print("Script will generally try to find a new familiar to tour guide each time.", "green");
+	print("Exception: Peppermint Rhino is set without clip arts until you can cap marzipan skull", "green");
+	print("Set familiar before running script if you want a specific familiar", "green");
 	set_property("hccs2da_tourfam" ,ToTour );
 	boolean AddHotdog = true;
 	string clan = get_clan_name();
