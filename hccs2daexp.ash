@@ -2099,13 +2099,33 @@ void main(){
 		//make ointment of the occult
 		//make philter of phorce
 		//make tomato juice of powerful power
-		craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
-		craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
+		if (item_amount($item[cherry]) > 0)
+		{
+			craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
+		}
+		if (item_amount($item[lemon]) > 0)
+		{
+			craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
+		}
+		else
+		{
+			print("NO LEMON, lemon is fairly important to reduce blood test to  adv", "red");
+		}
 		//Cook now if have skill
 		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
-			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			if (item_amount($item[tomato]) > 0)
+			{
+				craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+			}
+			else
+			{
+				print("NO TOMATO, lemon is fairly important to reduce blood test to  adv", "red");
+			}
+			if (item_amount($item[grapefruit]) > 0)
+			{
+				craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			}
 		}
 
 		print("Task Prep (spell dmg)", "blue");
@@ -2802,13 +2822,30 @@ void main(){
 		print("Task Prep (hp/mus)", "blue");
 		
 		//Cook now if you cannot in day 1
-		if (item_amount($item[tomato juice of powerful power]) == 0)
+		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+			if (item_amount($item[tomato juice of powerful power]) == 0)
+			{
+				if (item_amount($item[tomato]) > 0)
+				{
+					craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+				}
+				else
+				{
+					print("NO TOMATO, lemon is fairly important to reduce blood test to 1 adv", "red");
+				}
+			}
+			if (item_amount($item[ointment of the occult]) == 0)
+			{
+				if (item_amount($item[grapefruit]) > 0)
+				{
+					craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+				}
+			}
 		}
-		if (item_amount($item[ointment of the occult]) == 0)
+		else
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			print("scrumptious reagent< 2, this should not happen", "red");
 		}
 		
 		//spells
