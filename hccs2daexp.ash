@@ -2000,6 +2000,14 @@ void main(){
 				} else abort("Ode loop fail.");
 				//(12/15)drink
 				
+				print("Farm for Tomato (if needed)", "green");
+				while (item_amount($item[tomato]) <= 0)
+				{
+					adventure(1, $location[The Haunted Pantry]);
+					try_num();
+				}
+				print("Sufficient Tomato", "green");
+				
 				//do stuff that should have been done is clip art route
 				if (item_amount($item[Dolphin King's map]) > 0)
 				{
