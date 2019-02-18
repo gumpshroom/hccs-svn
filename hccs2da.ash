@@ -432,6 +432,7 @@ boolean lovepot(float thershold, stat test)
 {
 	if (item_amount($item[Love Potion #XYZ]) > 0)
 	{
+		//https://pastebin.com/EyzeE8A2
 		//it is assumed that you do test in order of mus->mys->mox
 		//getting these value requires some of the most annoying math in kol scripting ever
 		//thersholds
@@ -1484,10 +1485,16 @@ void main(){
 		try_num();
 		
 		//use kramco before farming
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
+		
+
 
 
 		print("Farming until semirare", "blue");
@@ -1759,6 +1766,10 @@ void main(){
 			equip($slot[hat], $item[wad of used tape]);
 		}
 		//use kramco before farming
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
@@ -2005,6 +2016,10 @@ void main(){
 		//y-ray fruit skeleton
 		
 		//use kramco before farming
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
@@ -2027,13 +2042,33 @@ void main(){
 		//make ointment of the occult
 		//make philter of phorce
 		//make tomato juice of powerful power
-		craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
-		craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
+		if (item_amount($item[cherry]) > 0)
+		{
+			craft("cook", 1, $item[scrumptious reagent], $item[cherry]);
+		}
+		if (item_amount($item[lemon]) > 0)
+		{
+			craft("cook", 1, $item[scrumptious reagent], $item[lemon]);
+		}
+		else
+		{
+			print("NO LEMON, lemon is fairly important to reduce blood test to  adv", "red");
+		}
 		//Cook now if have skill
 		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
-			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			if (item_amount($item[tomato]) > 0)
+			{
+				craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+			}
+			else
+			{
+				print("NO TOMATO, lemon is fairly important to reduce blood test to 1 adv", "red");
+			}
+			if (item_amount($item[grapefruit]) > 0)
+			{
+				craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			}
 		}
 
 		print("Task Prep (spell dmg)", "blue");
@@ -2137,6 +2172,7 @@ void main(){
 			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
 			{
 				reach_hp(my_maxhp()-15);
+				reach_mp(20);
 				adv1_NEP();
 			}
 		}
@@ -2706,6 +2742,10 @@ void main(){
 		cli_execute("try; fortune buff gunther");
 		
 		//use kramco before farming
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
@@ -2770,13 +2810,30 @@ void main(){
 		print("Task Prep (hp/mus)", "blue");
 		
 		//Cook now if you cannot in day 1
-		if (item_amount($item[tomato juice of powerful power]) == 0)
+		if (item_amount($item[scrumptious reagent]) >= 2)
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+			if (item_amount($item[tomato juice of powerful power]) == 0)
+			{
+				if (item_amount($item[tomato]) > 0)
+				{
+					craft("cook", 1, $item[scrumptious reagent], $item[tomato]);
+				}
+				else
+				{
+					print("NO TOMATO, lemon is fairly important to reduce blood test to 1 adv", "red");
+				}
+			}
+			if (item_amount($item[ointment of the occult]) == 0)
+			{
+				if (item_amount($item[grapefruit]) > 0)
+				{
+					craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+				}
+			}
 		}
-		if (item_amount($item[ointment of the occult]) == 0)
+		else
 		{
-			craft("cook", 1, $item[scrumptious reagent], $item[grapefruit]);
+			print("scrumptious reagent< 2, this should not happen", "red");
 		}
 		
 		//spells
@@ -3122,6 +3179,10 @@ void main(){
 				equip($slot[shirt], $item[makeshift garbage shirt]);
 			}
 			//use kramco before farming
+			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+			{
+				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			}
 			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
 				equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
@@ -3129,6 +3190,7 @@ void main(){
 			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
 			{
 				reach_hp(my_maxhp()-15);
+				reach_mp(20);
 				adv1_NEP();
 			}
 			
