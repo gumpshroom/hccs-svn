@@ -1086,6 +1086,9 @@ void main(){
 	set_property("choiceAdventure117", 1);
 	//Temporarily Out of Skeletons
 	set_property("choiceAdventure1060", 1);
+	
+	//doc bag quest
+	set_property("choiceAdventure1340", 1);
 
 	set_property("manaBurningThreshold", -0.05);
 
