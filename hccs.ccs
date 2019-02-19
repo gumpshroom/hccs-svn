@@ -22,6 +22,30 @@ if hasskill Disintegrate
 endif
 abort
 
+[ factory-irregular skeleton ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ fiendish can of asparagus ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ flame-broiled meat blob ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
 [ fluffy bunny ]
 if hasskill release the boots
     skill release the boots
@@ -113,6 +137,22 @@ if hasskill release the boots
 endif
 abort
 
+[ overdone flame-broiled meat blob ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
+[ remaindered skeleton ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
+
 [ sausage goblin ]
 if hasskill Micrometeorite
     skill micrometeorite
@@ -128,4 +168,12 @@ if hasskill Meteor Shower
     skill meteor shower
 endif
 abort
+
+[ swarm of skulls ]
+if hasskill Macrometeorite
+    skill macrometeorite
+endif
+skill release the boots
+skill stuffed mortar shell
+skill curse of weaksauce
 
