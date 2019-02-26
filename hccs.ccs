@@ -1,4 +1,7 @@
 [ dairy goat ]
+if hasskill Duplicate && haseffect Glittering Eyelashes
+    skill duplicate
+endif
 if hasskill Disintegrate
     skill disintegrate
 endif
@@ -6,17 +9,20 @@ abort
 
 [ default ]
 try to steal an item
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
 
 [ factory overseer ]
+skill extract
 if hasskill Disintegrate
     skill disintegrate
 endif
 abort
 
 [ factory worker ]
+skill extract
 if hasskill Disintegrate
     skill disintegrate
 endif
@@ -26,6 +32,7 @@ abort
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -34,6 +41,7 @@ skill curse of weaksauce
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -42,23 +50,27 @@ skill curse of weaksauce
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
 
 [ fluffy bunny ]
+skill extract
 if hasskill release the boots
     skill release the boots
 endif
 abort
 
 [ gnollish bodybuilder ]
+skill extract
 if hasskill release the boots
     skill release the boots
 endif
 abort
 
 [ gnollish crossdresser ]
+skill extract
 if hasskill release the boots
     skill release the boots
 endif
@@ -71,6 +83,7 @@ endif
 if hasskill soul bubble
     skill soul bubble
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 
@@ -81,6 +94,7 @@ endif
 if hasskill soul bubble
     skill soul bubble
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 skill saucestorm
@@ -92,6 +106,7 @@ endif
 if hasskill soul bubble
     skill soul bubble
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 skill saucestorm
@@ -103,6 +118,7 @@ endif
 if hasskill soul bubble
     skill soul bubble
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 skill saucestorm
@@ -115,6 +131,7 @@ endif
 if hasskill Meteor Shower
     skill meteor shower
 endif
+skill extract
 if hasskill Chest X-Ray
     skill chest x-ray
 endif
@@ -128,10 +145,12 @@ skill curse of weaksauce
 if hasskill Disintegrate
     skill disintegrate
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 
 [ one-eyed gnoll ]
+skill extract
 if hasskill release the boots
     skill release the boots
 endif
@@ -141,6 +160,7 @@ abort
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -149,6 +169,7 @@ skill curse of weaksauce
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -160,6 +181,7 @@ endif
 if hasskill soul bubble
     skill soul bubble
 endif
+skill extract
 skill stuffed mortar shell
 skill curse of weaksauce
 
@@ -167,12 +189,14 @@ skill curse of weaksauce
 if hasskill Meteor Shower
     skill meteor shower
 endif
+skill extract
 abort
 
 [ swarm of skulls ]
 if hasskill Macrometeorite
     skill macrometeorite
 endif
+skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
