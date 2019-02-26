@@ -1116,10 +1116,28 @@ void main(){
 		// Try Calculating the Universe
 		try_num();
 		
+		//Source Terminal
+		if (true)
+		{
+			//cli_execute("terminal educate extract.edu");
+			//cli_execute("terminal educate duplicate.edu");
+			//cli_execute("terminal enhance items.enh");
+			//cli_execute("terminal enhance meat.enh");
+			//cli_execute("terminal enhance substats.enh");
+			//cli_execute("terminal enquiry stats.enq");
+			//cli_execute("terminal extrude booze gibson");
+		}
+		
 		// Get pocket wishes
 		while (get_property("_genieWishesUsed") < 3)
 		{
 			cli_execute("genie item pocket");
+		}
+		
+		//tea tree
+		if (teaTreeAvailable() && get_property_boolean("_pottedTeaTreeUsed") == false)
+		{
+			cli_execute("teatree cuppa serendipi tea");
 		}
 		
 		// Make meat from BoomBox if we can
@@ -1238,19 +1256,20 @@ void main(){
 		use_familiar(ToTour);
 		equip($item[Hollandaise helmet]);
 		equip($item[saucepan]);
-		if (item_amount($item[astral statuette]) > 0) equip($item[astral statuette]);
+		if (item_amount($item[astral statuette]) > 0)
+		{
+			equip($slot[off-hand], $item[astral statuette]);
+		}
 		equip($item[old sweatpants]);
 		try_item($item[Newbiesport&trade; tent]);
-		
-		if (item_amount(KGB) > 0)
-		{
-			equip($slot[acc2], KGB);
-		}
-
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
 			cli_execute("fold makeshift garbage shirt");
 			equip($slot[shirt], $item[makeshift garbage shirt]);
+		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc2], KGB);
 		}
 
 		//fantasyland only
@@ -1300,6 +1319,17 @@ void main(){
 			}
 
 			print("Y-RAY FAX", "blue");
+			
+			if (item_amount($item[January's Garbage Tote]) > 0)
+			{
+				//not sure enough mp to work
+				//cli_execute("fold deceased crimbo tree");
+				//equip($slot[off-hand], $item[deceased crimbo tree]);
+				//buff used in ccs
+				//buy(1 , $item[glittery mascara], 24);
+				//use(1 , $item[glittery mascara]);
+			}
+		
 			if (my_maxmp() < mp_cost($skill[Disintegrate]))
 				abort("mp cap too law for YRAY");
 			cli_execute("shower mp");
@@ -1321,6 +1351,13 @@ void main(){
 				else abort("You do not have a photocopied monster.");
 			}
 			else abort("No Y-RAY.");
+			
+			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
+			{
+				cli_execute("fold makeshift garbage shirt");
+				equip($slot[shirt], $item[makeshift garbage shirt]);
+			}
+			
 			try_num();
 			
 			
@@ -1428,12 +1465,14 @@ void main(){
 		{
 			use_familiar($familiar[God Lobster]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
 			run_choice(1);//equip
 			equip($slot[familiar], $item[God Lobster's Scepter]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
@@ -1464,6 +1503,7 @@ void main(){
 		{
 			use_familiar($familiar[God Lobster]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
@@ -1816,6 +1856,10 @@ void main(){
 		{
 			cli_execute("Briefcase b item");
 		}
+		if (item_amount($item[cuppa Serendipi Tea]) > 0)
+		{
+			use(1, $item[cuppa Serendipi Tea]);
+		}
 		if (item_amount($item[chef's hat]) > 0)
 		{
 			equip($slot[hat], $item[chef's hat]);
@@ -2157,6 +2201,11 @@ void main(){
 		{
 			cli_execute("pool 2");
 		}
+		
+		if (have_familiar($familiar[Grim Brother]))
+		{
+			cli_execute("grim damage");
+		}
 
 		
 		force_skill(1, $skill[Spirit of Peppermint]);
@@ -2382,6 +2431,11 @@ void main(){
 			cli_execute("genie item pocket");
 		}
 		
+		if (teaTreeAvailable() && get_property_boolean("_pottedTeaTreeUsed") == false)
+		{
+			cli_execute("teatree cuppa frost tea");
+		}
+		
 		// Make meat from BoomBox if we can
 		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
 		{
@@ -2511,6 +2565,10 @@ void main(){
 		if (have_effect($effect[Billiards Belligerence]) <= 0)
 		{
 			cli_execute("pool 1");
+		}
+		if (have_familiar($familiar[Grim Brother]))
+		{
+			cli_execute("grim damage");
 		}
 
 		if(have_effect($effect[Bow-Legged Swagger]) <= 0)
@@ -2709,7 +2767,10 @@ void main(){
 		}
 
 		cli_execute("genie effect Fireproof Lips");
-
+		if (item_amount($item[cuppa Frost Tea]) > 0)
+		{
+			use(1, $item[cuppa Frost Tea]);
+		}
 		if ((item_amount($item[heat-resistant gloves]) > 0) && (my_basestat($stat[moxie])>=35))
 		{
 			equip($slot[acc3], $item[heat-resistant gloves]);
@@ -3184,6 +3245,7 @@ void main(){
 			use_familiar($familiar[God Lobster]);
 			equip($slot[familiar], $item[God Lobster's Scepter]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
@@ -3239,11 +3301,13 @@ void main(){
 		{
 			use_familiar($familiar[God Lobster]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
