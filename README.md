@@ -31,7 +31,7 @@ You need more perms, some item%, as well as oven(cheap), Peppermint Rhino(techni
 
 (Partially) Supported IOTM:
 
-Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
+Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Tea Tree, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
 
 
 
