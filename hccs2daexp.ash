@@ -744,11 +744,6 @@ void voteInVotingBooth()
 		print("Already voted today.");
 		return;
 	}
-	/*
-	if (__voting_setting_use_absentee_ballots)
-	{
-	}
-	*/
 	
 	
 	
@@ -1116,16 +1111,18 @@ void main(){
 		// Try Calculating the Universe
 		try_num();
 		
-		//Source Terminal
-		if (true)
+		//Source Terminal Day 1 Init
+		if (get_property("sourceTerminalSpam") > 0)
 		{
-			//cli_execute("terminal educate extract.edu");
-			//cli_execute("terminal educate duplicate.edu");
+			cli_execute("terminal educate extract.edu");
+			cli_execute("terminal educate duplicate.edu");
 			//cli_execute("terminal enhance items.enh");
 			//cli_execute("terminal enhance meat.enh");
 			//cli_execute("terminal enhance substats.enh");
-			//cli_execute("terminal enquiry stats.enq");
+			cli_execute("terminal enquiry stats.enq");
 			//cli_execute("terminal extrude booze gibson");
+			//asdonmartin drive ####
+			//Asdonmartin drive observantly
 		}
 		
 		// Get pocket wishes
@@ -1134,8 +1131,8 @@ void main(){
 			cli_execute("genie item pocket");
 		}
 		
-		//tea tree
-		if (teaTreeAvailable() && get_property_boolean("_pottedTeaTreeUsed") == false)
+		//tea tree TODO
+		if (false &&  (to_boolean(get_property("_pottedTeaTreeUsed")) == false))
 		{
 			cli_execute("teatree cuppa serendipi tea");
 		}
@@ -1305,6 +1302,13 @@ void main(){
 		
 		voteInVotingBooth();
 		
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk mys", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=5",true); //Oliver Cromwell
+		}
+		
 
 		// pantogramming (+mox, res spooky, +mp, spell dmg, +combat)
 		summon_pants(3, 3, "-2%2C0", "-2%2C0", "-2%2C0");
@@ -1448,6 +1452,13 @@ void main(){
 		if (item_amount($item[Draftsman's driving gloves]) > 0)
 		{
 			equip($slot[acc1], $item[Draftsman's driving gloves]);
+		}
+		
+		//Source Terminal Day 1 Combat
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal enhance meat.enh");
+			cli_execute("terminal enhance substats.enh");
 		}
 		
 		//use kramco before farming
@@ -1856,6 +1867,11 @@ void main(){
 		{
 			cli_execute("Briefcase b item");
 		}
+		//Source Terminal Day 1 Item
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal enhance items.enh");
+		}
 		if (item_amount($item[cuppa Serendipi Tea]) > 0)
 		{
 			use(1, $item[cuppa Serendipi Tea]);
@@ -1868,6 +1884,12 @@ void main(){
 		{
 			cli_execute("fold wad of used tape");
 			equip($slot[hat], $item[wad of used tape]);
+		}
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk item", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=4",true); //Prince George
 		}
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
@@ -1893,25 +1915,6 @@ void main(){
 			visit_url("choice.php?whichchoice=1227&option=1&pwd");
 			run_combat();
 			visit_url("choice.php?whichchoice=1228&option=3&pwd");
-			/*
-			set_property("choiceAdventure1223", 1);
-			set_property("choiceAdventure1225", 1);
-			set_property("choiceAdventure1227", 1);
-			//equipment room
-			set_property("choiceAdventure1224", 2);
-			//emergency room
-			set_property("choiceAdventure1226", 3);
-			//emporium 
-			set_property("choiceAdventure1228", 3);
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-			run_choice(1); //Enter lov tunnel
-			run_choice(1); //Fight
-			//run_choice(2); //LOV Epaulettes
-			run_choice(1); //Fight
-			//run_choice(3); //Wandering Eye Surgery
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Extraterrestrial Chocolate
-			*/
 			equip($slot[back], $item[LOV Epaulettes]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -2431,7 +2434,15 @@ void main(){
 			cli_execute("genie item pocket");
 		}
 		
-		if (teaTreeAvailable() && get_property_boolean("_pottedTeaTreeUsed") == false)
+		//Source Terminal Day 2 Init
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal educate extract.edu");
+			cli_execute("terminal educate duplicate.edu");
+		}
+		
+		//tea tree TODO
+		if (false && (to_boolean(get_property("_pottedTeaTreeUsed")) == false))
 		{
 			cli_execute("teatree cuppa frost tea");
 		}
@@ -2451,6 +2462,13 @@ void main(){
 		use_bastille_battalion(0, 0, 2, random(3));
 		
 		voteInVotingBooth();
+		
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk mys", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=5",true); //Oliver Cromwell
+		}
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
@@ -2724,25 +2742,6 @@ void main(){
 			visit_url("choice.php?whichchoice=1227&option=1&pwd");
 			run_combat();
 			visit_url("choice.php?whichchoice=1228&option=3&pwd");
-			/*
-			set_property("choiceAdventure1223", 1);
-			set_property("choiceAdventure1225", 1);
-			set_property("choiceAdventure1227", 1);
-			//equipment room
-			set_property("choiceAdventure1224", 3);
-			//emergency room
-			set_property("choiceAdventure1226", 2);
-			//emporium 
-			set_property("choiceAdventure1228", 3);
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-			run_choice(1); //Enter lov tunnel
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Earrings
-			run_choice(1); //Fight
-			//run_choice(2); //Open Heart Surgery
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Extraterrestrial Chocolate
-			*/
 			equip($slot[acc3], $item[LOV Earrings]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -2801,6 +2800,10 @@ void main(){
 		if ((item_amount($item[lava-proof pants]) > 0) && (my_basestat($stat[moxie])>=35))
 		{
 			equip($slot[pants], $item[lava-proof pants]);
+		}
+		if (item_amount($item[Glass pie plate]) > 0)
+		{
+			equip($slot[off-hand], $item[Glass pie plate]);
 		}
 		
 		try_skill($skill[Love Mixology]);
@@ -3237,6 +3240,14 @@ void main(){
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
 			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
 			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
+		}
+		
+		//Source Terminal Day 2 Combat
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			//cli_execute("terminal enhance items.enh");
+			//cli_execute("terminal enhance meat.enh");
+			//cli_execute("terminal enhance substats.enh");
 		}
 		
 		//GOD LOB
