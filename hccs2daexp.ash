@@ -1471,6 +1471,16 @@ void main(){
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 		
+		if (my_adventures() <= 0)
+		{
+			print("Unlucky Zeroth Drink", "blue");
+			drink_to(1);
+			if (!have_skill($skill[Summon Clip Art]))
+			{
+				print("THIS SHOULD NOT HAPPEN WITHOUT CLIP ARTS (MIN ADV:62)", "red");
+			}
+		}
+		
 		//GOD LOB
 		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
 		{
