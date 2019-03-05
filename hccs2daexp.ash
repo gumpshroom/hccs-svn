@@ -24,7 +24,6 @@ int adv1_NEP()
 	}
 	if (have_effect($effect[Beaten Up]) > 0)
 	{
-		chat_clan("BEATEN UP","hobopolis");
 		abort("Beaten up");
 	}
 	string page = visit_url("adventure.php?snarfblat=528");
@@ -2283,6 +2282,7 @@ void main(){
 			print("PVP", "green");
 			// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
 			visit_url("peevpee.php?action=smashstone&pwd&confirm=on", true);
+			visit_url("peevpee.php?action=pledge&place=fight&pwd", true);
 		}
 		
 		//DO THIS BEFORE BUFFING
@@ -2586,6 +2586,10 @@ void main(){
 		}
 
 		print("Task Prep (weapon dmg)", "blue");
+		if(item_amount($item[Punching Potion]) > 0)
+		{
+			use(1, $item[Punching Potion]);
+		}
 		if ((have_effect($effect[Greasy Flavor]) <= 0) && (item_amount($item[greasy paste]) > 0))
 		{
 			chew(1, $item[greasy paste]);
@@ -2640,7 +2644,28 @@ void main(){
 				use(1, $item[Love Potion #XYZ]);
 			}
 		}
+		
+		// Not sure if works, notify me if you tested it
+		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
+		{
+			if (get_property("boomBoxSong") != "These Fists Were Made for Punchin")
+			{
+				print("Set BoomBox to fists.", "green");
+				cli_execute("boombox fists");
+			}
+		}
+		
 		complete_quest("REDUCE GAZELLE POPULATION", 6);
+		
+		// Make meat from BoomBox if we can (revert to normal behavior)
+		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
+		{
+			if (get_property("boomBoxSong") != "Total Eclipse of Your Meat")
+			{
+				print("Set BoomBox to meat.", "green");
+				cli_execute("boombox meat");
+			}
+		}
 		
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
