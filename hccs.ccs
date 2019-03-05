@@ -175,15 +175,15 @@ skill stuffed mortar shell
 skill curse of weaksauce
 
 [ sausage goblin ]
-if hasskill Micrometeorite
-    skill micrometeorite
-endif
+skill micrometeorite
 if hasskill soul bubble
     skill soul bubble
+    skill extract
+    skill stuffed mortar shell
 endif
-skill extract
-skill stuffed mortar shell
 skill curse of weaksauce
+skill saucegeyser
+skill saucestorm
 
 [ spawn of wally ]
 if hasskill Meteor Shower
@@ -200,4 +200,15 @@ skill extract
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+
+[ the neverending party ]
+skill micrometeorite
+if hasskill soul bubble
+    skill soul bubble
+    skill extract
+    skill stuffed mortar shell
+endif
+skill curse of weaksauce
+skill saucegeyser
+skill saucestorm
 
