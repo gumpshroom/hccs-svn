@@ -10,6 +10,7 @@ abort
 [ default ]
 try to steal an item
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -33,6 +34,7 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -42,6 +44,7 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -51,12 +54,14 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
 
 [ fluffy bunny ]
 skill extract
+skill sing along
 if hasskill release the boots
     skill release the boots
 endif
@@ -64,6 +69,7 @@ abort
 
 [ gnollish bodybuilder ]
 skill extract
+skill sing along
 if hasskill release the boots
     skill release the boots
 endif
@@ -71,56 +77,54 @@ abort
 
 [ gnollish crossdresser ]
 skill extract
+skill sing along
 if hasskill release the boots
     skill release the boots
 endif
 abort
 
 [ god lobster ]
-if hasskill Micrometeorite
-    skill micrometeorite
-endif
+skill micrometeorite
 if hasskill soul bubble
     skill soul bubble
+    skill extract
+    skill stuffed mortar shell
 endif
-skill extract
-skill stuffed mortar shell
 skill curse of weaksauce
+skill saucegeyser
+skill saucestorm
 
 [ lov enforcer ]
-if hasskill Micrometeorite
-    skill micrometeorite
-endif
+skill micrometeorite
 if hasskill soul bubble
     skill soul bubble
+    skill extract
+    skill stuffed mortar shell
 endif
-skill extract
-skill stuffed mortar shell
 skill curse of weaksauce
+skill saucegeyser
 skill saucestorm
 
 [ lov engineer ]
-if hasskill Micrometeorite
-    skill micrometeorite
-endif
+skill micrometeorite
 if hasskill soul bubble
     skill soul bubble
+    skill extract
+    skill stuffed mortar shell
 endif
-skill extract
-skill stuffed mortar shell
 skill curse of weaksauce
+skill saucegeyser
 skill saucestorm
 
 [ lov equivocator ]
-if hasskill Micrometeorite
-    skill micrometeorite
-endif
+skill micrometeorite
 if hasskill soul bubble
     skill soul bubble
+    skill extract
+    skill stuffed mortar shell
 endif
-skill extract
-skill stuffed mortar shell
 skill curse of weaksauce
+skill saucegeyser
 skill saucestorm
 
 [ mariachi calavera ]
@@ -132,6 +136,7 @@ if hasskill Meteor Shower
     skill meteor shower
 endif
 skill extract
+skill sing along
 if hasskill Chest X-Ray
     skill chest x-ray
 endif
@@ -146,11 +151,13 @@ if hasskill Disintegrate
     skill disintegrate
 endif
 skill extract
+skill sing along
 skill stuffed mortar shell
 skill curse of weaksauce
 
 [ one-eyed gnoll ]
 skill extract
+skill sing along
 if hasskill release the boots
     skill release the boots
 endif
@@ -161,6 +168,7 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -170,6 +178,7 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
@@ -190,6 +199,7 @@ if hasskill Meteor Shower
     skill meteor shower
 endif
 skill extract
+skill sing along
 abort
 
 [ swarm of skulls ]
@@ -197,6 +207,7 @@ if hasskill Macrometeorite
     skill macrometeorite
 endif
 skill extract
+skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
