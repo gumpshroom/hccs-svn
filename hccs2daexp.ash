@@ -2,6 +2,8 @@
 script "hccs2da.ash";
 notify iloath;
 
+//TODO: burning cape
+
 int make_sausage(int count_lim, int paste_lim)
 {
 	if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) <= 0) && !(have_equipped($item[Kramco Sausage-o-Matic&trade;])))
@@ -232,6 +234,28 @@ void try_item(item value)
 	if (item_amount(value) > 0)
 	{
 		use(1, value);
+	}
+}
+
+boolean try_effect(effect value)
+{
+	if (have_effect(value) > 0)
+	{
+		print("Confirmed: "+value.name, "green");
+		return true;
+	}
+	else
+	{
+		if (cli_execute(value.default))
+		{
+			print("Applied: "+value.name, "green"
+			return true;
+		}
+		else
+		{
+			print("Failure: "+value.name, "green");
+			return false;
+		}
 	}
 }
 
@@ -1873,7 +1897,7 @@ void main(){
 		//+item%
 		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
 		force_skill(1, $skill[Singer's Faithful Ocelot]);
-		force_skill(1, $skill[Become a Bat]);
+		//force_skill(1, $skill[Become a Bat]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
 			cli_execute("pool 3");
@@ -2777,7 +2801,7 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
-		force_skill(1, $skill[Become a Cloud of Mist]);
+		//force_skill(1, $skill[Become a Cloud of Mist]);
 		
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
@@ -2975,7 +2999,7 @@ void main(){
 		}
 		
 		//spells
-		force_skill(1, $skill[Become a Wolf]);
+		//force_skill(1, $skill[Become a Wolf]);
 		force_skill(1, $skill[The Power Ballad of the Arrowsmith]);
 		force_skill(1, $skill[Quiet Determination]);
 		force_skill(1, $skill[Rage of the Reindeer]);
