@@ -664,7 +664,7 @@ familiar pick_fairy_to_tour()
 {
 	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
 
-	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle,Bowlet]
+	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle,Bowlet,Cat Burglar]
 	{
 		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) {
 			if (svn_exists("zlib")) {
@@ -1267,6 +1267,11 @@ void main(){
 		{
 			equip($slot[acc2], KGB);
 		}
+		if (item_amount($item[vampyric cloake pattern]) > 0)
+		{
+			equip($slot[back], $item[vampyric cloake pattern]);
+		}
+		
 
 		//fantasyland only
 		if((get_property("frAlways") == True) && (item_amount($item[FantasyRealm G. E. M.]) < 1))
@@ -1868,6 +1873,7 @@ void main(){
 		//+item%
 		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
 		force_skill(1, $skill[Singer's Faithful Ocelot]);
+		force_skill(1, $skill[Become a Bat]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
 			cli_execute("pool 3");
@@ -2217,6 +2223,11 @@ void main(){
 		if (have_familiar($familiar[Grim Brother]))
 		{
 			cli_execute("grim damage");
+		}
+		
+		if ((have_effect($effect[The Magic of LOV]) <= 0) && (item_amount($item[LOV Elixir #6]) > 0))
+		{
+			use(1, $item[LOV Elixir #6]);
 		}
 
 		
@@ -2590,6 +2601,10 @@ void main(){
 		{
 			use(1, $item[Punching Potion]);
 		}
+		if ((have_effect($effect[The Power of LOV]) <= 0) && (item_amount($item[LOV Elixir #3]) > 0))
+		{
+			use(1, $item[LOV Elixir #3]);
+		}
 		if ((have_effect($effect[Greasy Flavor]) <= 0) && (item_amount($item[greasy paste]) > 0))
 		{
 			chew(1, $item[greasy paste]);
@@ -2762,6 +2777,7 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
+		force_skill(1, $skill[Become a Cloud of Mist]);
 		
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
@@ -2959,7 +2975,7 @@ void main(){
 		}
 		
 		//spells
-
+		force_skill(1, $skill[Become a Wolf]);
 		force_skill(1, $skill[The Power Ballad of the Arrowsmith]);
 		force_skill(1, $skill[Quiet Determination]);
 		force_skill(1, $skill[Rage of the Reindeer]);
@@ -2983,6 +2999,10 @@ void main(){
 		if ((have_effect($effect[Oily Flavor]) <= 0) && (item_amount($item[oily paste]) > 0))
 		{
 			chew(1, $item[oily paste]);
+		}
+		if ((have_effect($effect[The Power of LOV]) <= 0) && (item_amount($item[LOV Elixir #3]) > 0))
+		{
+			use(1, $item[LOV Elixir #3]);
 		}
 		if (item_amount($item[Ben-Gal&trade; Balm]) > 0)
 		{
@@ -3175,6 +3195,10 @@ void main(){
 		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//item
+		if ((have_effect($effect[The Magic of LOV]) <= 0) && (item_amount($item[LOV Elixir #6]) > 0))
+		{
+			use(1, $item[LOV Elixir #6]);
+		}
 		if (item_amount($item[tomato juice of powerful power]) > 0)
 		{
 			use(1, $item[tomato juice of powerful power]);
@@ -3399,6 +3423,10 @@ void main(){
 		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//item
+		if ((have_effect($effect[The Moxie of LOV]) <= 0) && (item_amount($item[LOV Elixir #9]) > 0))
+		{
+			use(1, $item[LOV Elixir #9]);
+		}
 		if (item_amount($item[oil of expertise]) > 0)
 		{
 			use(1, $item[oil of expertise]);
