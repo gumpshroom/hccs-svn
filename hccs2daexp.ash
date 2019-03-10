@@ -17,7 +17,7 @@ int make_sausage(int count_lim, int paste_lim)
 	return amountToMake;
 }
 
-int adv1_NEP()
+int adv1_NEP() 
 {
 	//return 10 if boss
 	if (my_adventures() == 0) abort("No adventures.");
@@ -1898,6 +1898,7 @@ void main(){
 		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
 		force_skill(1, $skill[Singer's Faithful Ocelot]);
 		//force_skill(1, $skill[Become a Bat]);
+		try_effect($effect[Synthesis: Collection]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
 			cli_execute("pool 3");
@@ -2802,6 +2803,7 @@ void main(){
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
 		//force_skill(1, $skill[Become a Cloud of Mist]);
+		try_effect($effect[Synthesis: Hot]);
 		
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
@@ -3020,6 +3022,7 @@ void main(){
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 
 		//items
+		try_effect($effect[Synthesis: Strong]);
 		if ((have_effect($effect[Oily Flavor]) <= 0) && (item_amount($item[oily paste]) > 0))
 		{
 			chew(1, $item[oily paste]);
@@ -3032,9 +3035,12 @@ void main(){
 		{
 			use(1, $item[Ben-Gal&trade; Balm]);
 		}
-		if(item_amount($item[Crimbo peppermint bark]) > 0)
+		if (!have_skill($skill[Sweet Synthesis]))
 		{
-			use(1, $item[Crimbo peppermint bark]);
+			if(item_amount($item[Crimbo peppermint bark]) > 0)
+			{
+				use(1, $item[Crimbo peppermint bark]);
+			}
 		}
 		if (item_amount($item[giant giant moth dust]) > 0)
 		{
@@ -3217,7 +3223,7 @@ void main(){
 		try_skill($skill[Blessing of She-Who-Was]);
 		try_skill($skill[Song of Bravado]);
 		try_skill($skill[Stevedave's Shanty of Superiority]);
-
+		try_effect($effect[Synthesis: Smart]);
 		//item
 		if ((have_effect($effect[The Magic of LOV]) <= 0) && (item_amount($item[LOV Elixir #6]) > 0))
 		{
@@ -3239,9 +3245,12 @@ void main(){
 		{
 			use(1, $item[glittery mascara]);
 		}
-		if(item_amount($item[Crimbo candied pecan]) > 0)
+		if (!have_skill($skill[Sweet Synthesis]))
 		{
-			use(1, $item[Crimbo candied pecan]);
+			if(item_amount($item[Crimbo candied pecan]) > 0)
+			{
+				use(1, $item[Crimbo candied pecan]);
+			}
 		}
 		if(item_amount($item[bag of grain]) > 0)
 		{
@@ -3420,7 +3429,7 @@ void main(){
 
 		print("Task Prep (mox)", "blue");
 		//spells
-
+		try_effect($effect[Synthesis: Cool]);
 		force_skill(1, $skill[The Moxious Madrigal]);
 		force_skill(1, $skill[Blubber Up]);
 		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
@@ -3467,6 +3476,7 @@ void main(){
 		{
 			use(1, $item[hair spray]);
 		}
+		//feel free to use crimbo candy here, since we are past all synthesis
 		if(item_amount($item[Crimbo fudge]) > 0)
 		{
 			use(1, $item[Crimbo fudge]);
