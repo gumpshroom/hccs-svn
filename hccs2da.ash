@@ -1487,7 +1487,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -1768,7 +1768,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -2018,7 +2018,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -2744,7 +2744,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -3181,7 +3181,7 @@ void main(){
 			//use kramco before farming
 			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 			{
-				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+				//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 			}
 			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
