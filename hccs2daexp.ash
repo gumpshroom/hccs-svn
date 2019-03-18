@@ -41,6 +41,55 @@ int adv1_NEP()
 	return -1;
 }
 
+int combat_buff(skill value)
+{
+	//Become a Bat (day1) 3.33 adv
+	//Become a Cloud of Mist (day2) 2adv
+	//Become a Wolf (day2) 0.67 adv
+	//Giant Growth x3 (day2) 4adv x 3
+	
+	if (my_adventures() == 0) abort("No adventures.");
+	if (get_counters("Fortune Cookie",0,0) != "") {
+		abort("Semirare! LastLoc: " + get_property("semirareLocation"));
+	}
+	if (have_effect($effect[Beaten Up]) > 0)
+	{
+		abort("Beaten up");
+	}
+	string page = visit_url("adventure.php?snarfblat=240");
+	if (page.contains_text("You're fighting")) {
+		use_skill(value);
+		if ((have_skill($skill[Reflex Hammer]))&&(get_property("_reflexHammerUsed").to_int() < 3))
+		{
+			use_skill($skill[Reflex Hammer]);
+			return 0;
+		}
+		else if ((have_skill($skill[Chest X-Ray]))&&(get_property("_chestXRayUsed").to_int() < 3))
+		{
+			use_skill($skill[Chest X-Ray]);
+			return 0;
+		}
+		else if ((have_skill($skill[Snokebomb]))&&(get_property("_snokebombUsed").to_int() < 3))
+		{
+			use_skill($skill[Snokebomb]);
+			return 0;
+		}
+		else if ((have_skill($skill[Shattering Punch]))&&(get_property("_shatteringPunchUsed").to_int() < 3))
+		{
+			use_skill($skill[Shattering Punch]);
+			return 0;
+		}
+		else
+		{
+			abort("No free kill/run");
+		}
+	}
+	else if (page.contains_text("Just Paused")) {
+		abort("NC");
+	}
+	return -1;
+}
+
 boolean reach_meat(int value)
 {
 	if (my_meat() >= value)
@@ -241,19 +290,19 @@ boolean try_effect(effect value)
 {
 	if (have_effect(value) > 0)
 	{
-		print("Confirmed: "+value.name, "green");
+		print("Confirmed: "+value, "green");
 		return true;
 	}
 	else
 	{
 		if (cli_execute(value.default))
 		{
-			print("Applied: "+value.name, "green"
+			print("Applied: "+value, "green");
 			return true;
 		}
 		else
 		{
-			print("Failure: "+value.name, "green");
+			print("Failure: "+value, "green");
 			return false;
 		}
 	}
@@ -1105,8 +1154,8 @@ void main(){
 	//Temporarily Out of Skeletons
 	set_property("choiceAdventure1060", 1);
 	
-	//doc bag quest
-	set_property("choiceAdventure1340", 1);
+	//doc bag quest (dont work)
+	//set_property("choiceAdventure1340", 1);
 
 	set_property("manaBurningThreshold", -0.05);
 
@@ -1291,9 +1340,9 @@ void main(){
 		{
 			equip($slot[acc2], KGB);
 		}
-		if (item_amount($item[vampyric cloake pattern]) > 0)
+		if (item_amount($item[vampyric cloake]) > 0)
 		{
-			equip($slot[back], $item[vampyric cloake pattern]);
+			equip($slot[back], $item[vampyric cloake]);
 		}
 		
 
@@ -1492,7 +1541,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -1614,30 +1663,39 @@ void main(){
 		print("Barrels (very slow)", "blue");
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=20");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=21");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=22");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=10");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=11");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=12");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=00");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=01");
+		wait(1);
 		run_combat();
 		visit_url("barrel.php");
 		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
+		wait(1);
 		run_combat();
 		try_num();
 		
@@ -1934,7 +1992,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -1960,6 +2018,12 @@ void main(){
 		}
 
 		cli_execute("genie effect Infernal Thirst");
+		if (equipped_item($slot[back]) == $item[Vampyric cloake])
+		{
+			//reach_mp(50);
+			//combat_buff($skill[Become a Bat]);
+			//kolmafia didn't implement skill yet
+		}
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
 
@@ -2150,6 +2214,7 @@ void main(){
 
 
 
+		
 		try_skill($skill[Love Mixology]);
 		if (lovepot(121.4,$stat[none]))
 		{
@@ -2173,7 +2238,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -2882,7 +2947,11 @@ void main(){
 		{
 			equip($slot[off-hand], $item[Glass pie plate]);
 		}
-		
+		if (equipped_item($slot[back]) == $item[Vampyric cloake])
+		{
+			//reach_mp(50);
+			//combat_buff($skill[Become a Cloud of Mist]);
+		}
 		try_skill($skill[Love Mixology]);
 		if(elemental_resistance($element[hot]) < 94.93) {
 			if (lovepot(86.5,$stat[none]))
@@ -2908,7 +2977,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -3153,6 +3222,12 @@ void main(){
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+		
+		if (equipped_item($slot[back]) == $item[Vampyric cloake])
+		{
+			//reach_mp(50);
+			//combat_buff($skill[Become a Wolf]);
+		}
 
 		//check if wish required for donate blood
 		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
@@ -3369,7 +3444,7 @@ void main(){
 			//use kramco before farming
 			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 			{
-				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+				//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 			}
 			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
