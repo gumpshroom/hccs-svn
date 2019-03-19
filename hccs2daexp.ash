@@ -1955,7 +1955,6 @@ void main(){
 		//+item%
 		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
 		force_skill(1, $skill[Singer's Faithful Ocelot]);
-		//force_skill(1, $skill[Become a Bat]);
 		try_effect($effect[Synthesis: Collection]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
@@ -2020,9 +2019,8 @@ void main(){
 		cli_execute("genie effect Infernal Thirst");
 		if (equipped_item($slot[back]) == $item[Vampyric cloake])
 		{
-			//reach_mp(50);
-			//combat_buff($skill[Become a Bat]);
-			//kolmafia didn't implement skill yet
+			reach_mp(50);
+			combat_buff($skill[Become a Bat]);
 		}
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
@@ -2867,7 +2865,6 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
-		//force_skill(1, $skill[Become a Cloud of Mist]);
 		try_effect($effect[Synthesis: Hot]);
 		
 		//DAY 2 LOV
@@ -2949,8 +2946,8 @@ void main(){
 		}
 		if (equipped_item($slot[back]) == $item[Vampyric cloake])
 		{
-			//reach_mp(50);
-			//combat_buff($skill[Become a Cloud of Mist]);
+			reach_mp(50);
+			combat_buff($skill[Become a Cloud of Mist]);
 		}
 		try_skill($skill[Love Mixology]);
 		if(elemental_resistance($element[hot]) < 94.93) {
@@ -3070,7 +3067,6 @@ void main(){
 		}
 		
 		//spells
-		//force_skill(1, $skill[Become a Wolf]);
 		force_skill(1, $skill[The Power Ballad of the Arrowsmith]);
 		force_skill(1, $skill[Quiet Determination]);
 		force_skill(1, $skill[Rage of the Reindeer]);
@@ -3225,8 +3221,8 @@ void main(){
 		
 		if (equipped_item($slot[back]) == $item[Vampyric cloake])
 		{
-			//reach_mp(50);
-			//combat_buff($skill[Become a Wolf]);
+			reach_mp(50);
+			combat_buff($skill[Become a Wolf]);
 		}
 
 		//check if wish required for donate blood
