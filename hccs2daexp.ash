@@ -2392,6 +2392,7 @@ void main(){
 		ode_drink(1, $item[emergency margarita]);
 		use_familiar(ToTour);
 		
+		try_effect($effect[Frenzied, Bloody]);
 		force_skill(1, $skill[Rage of the Reindeer]);
 		force_skill(1, $skill[Scowl of the Auk]);
 		force_skill(1, $skill[Carol of the Bulls]);
@@ -3636,12 +3637,17 @@ void main(){
 		
 		if(item_amount($item[beastly paste]) > 0)
 		{
-			chew(1, $item[beastly paste]);
+			//chew(1, $item[beastly paste]);
 		}
 		if (have_effect($effect[Billiards Belligerence]) <= 0)
 		{
-			cli_execute("pool 1");
+			//cli_execute("pool 1");
 		}
+		try_effect($effect[Leash of Linguini]);
+		try_effect($effect[Empathy]);
+		try_effect($effect[Beastly Flavor]);
+		try_effect($effect[Billiards Belligerence]);
+		try_effect($effect[Blood Bond]);
 
 		//equips
 		if (item_amount($item[fish hatchet]) > 0)
