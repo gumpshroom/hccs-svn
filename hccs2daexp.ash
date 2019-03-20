@@ -1231,18 +1231,6 @@ void main(){
 		}
 
 		//dive in vip swimming pool
-		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=treasure&sumbit=Dive for Treasure",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=leave&sumbit=Get Out",true);
-
-		//open skeleton store
-		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
-		run_choice(1);
-
-
-
-		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
 		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
 		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
