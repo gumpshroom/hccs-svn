@@ -1,5 +1,5 @@
 //HCCS 2day 100% v1.0 by iloath
-script "hccs2da.ash";
+script "hccs2daexp.ash";
 notify iloath;
 
 //TODO: burning cape
@@ -3626,6 +3626,11 @@ void main(){
 		if (lovepot(0.0,$stat[moxie]))
 		{
 			use(1, $item[Love Potion #XYZ]);
+		}
+		
+		if(item_amount($item[Rhinestone]) > 0)
+		{
+			use(item_amount($item[Rhinestone]), $item[Rhinestone]);
 		}
 
 		complete_quest("FEED CONSPIRATORS", 4);
