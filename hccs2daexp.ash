@@ -1057,6 +1057,16 @@ void voteInVotingBooth()
 	//g - 1 or 2, depending on the global vote
 }
 
+
+void use_telescope()
+{
+	if(get_property("telescopeUpgrades").to_int() > 0 && get_property("telescopeLookedHigh").to_boolean() == false)
+	{
+		cli_execute("telescope high");
+	}
+}
+
+
 void main(){
 	//init
 	//START
@@ -2460,7 +2470,7 @@ void main(){
 			equip($item[li'l unicorn costume]);
 		}
 		
-		cli_execute("telescope high");
+		use_telescope();
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 		while (((my_hp() < my_maxhp()) || (my_mp() < my_maxmp())) && (get_property("timesRested").to_int() < total_free_rests()))
 		{
@@ -3072,7 +3082,7 @@ void main(){
 		//buffs
 		cli_execute("genie effect Preemptive Medicine");
 
-		cli_execute("telescope high");
+		use_telescope();
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 
 		//items
