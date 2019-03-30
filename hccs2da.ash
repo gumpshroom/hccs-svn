@@ -15,6 +15,14 @@ int make_sausage(int count_lim, int paste_lim)
 	return amountToMake;
 }
 
+void use_telescope()
+{
+	if(get_property("telescopeUpgrades").to_int() > 0 && get_property("telescopeLookedHigh").to_boolean() == false)
+	{
+		cli_execute("telescope high");
+	}
+}
+
 int adv1_NEP()
 {
 	//return 10 if boss
@@ -1140,6 +1148,17 @@ void main(){
 			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
 		}
 
+		//dive in vip swimming pool
+		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=treasure&sumbit=Dive for Treasure",true);
+		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=leave&sumbit=Get Out",true);
+
+		//open skeleton store
+		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
+		run_choice(1);
+
+
 
 		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
@@ -1476,7 +1495,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -1757,7 +1776,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -2007,7 +2026,7 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
@@ -2276,7 +2295,7 @@ void main(){
 			equip($item[li'l unicorn costume]);
 		}
 		
-		cli_execute("telescope high");
+		use_telescope();
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 		while (((my_hp() < my_maxhp()) || (my_mp() < my_maxmp())) && (get_property("timesRested").to_int() < total_free_rests()))
 		{
@@ -2733,14 +2752,14 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
 		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 
-		while ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
+		if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
 		{
 			adventure(1, $location[Noob Cave]);
 		}
@@ -2843,7 +2862,7 @@ void main(){
 		//buffs
 		cli_execute("genie effect Preemptive Medicine");
 
-		cli_execute("telescope high");
+		use_telescope();
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 
 		//items
@@ -3170,7 +3189,7 @@ void main(){
 			//use kramco before farming
 			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 			{
-				//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 			}
 			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
