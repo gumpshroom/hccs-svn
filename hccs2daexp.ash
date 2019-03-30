@@ -17,6 +17,14 @@ int make_sausage(int count_lim, int paste_lim)
 	return amountToMake;
 }
 
+void use_telescope()
+{
+	if(get_property("telescopeUpgrades").to_int() > 0 && get_property("telescopeLookedHigh").to_boolean() == false)
+	{
+		cli_execute("telescope high");
+	}
+}
+
 int adv1_NEP() 
 {
 	//return 10 if boss
@@ -1056,16 +1064,6 @@ void voteInVotingBooth()
 	//option=1&whichchoice=1331&g=
 	//g - 1 or 2, depending on the global vote
 }
-
-
-void use_telescope()
-{
-	if(get_property("telescopeUpgrades").to_int() > 0 && get_property("telescopeLookedHigh").to_boolean() == false)
-	{
-		cli_execute("telescope high");
-	}
-}
-
 
 void main(){
 	//init
