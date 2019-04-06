@@ -1077,6 +1077,8 @@ void main(){
 	//init
 	//START
 	
+	cli_execute("refresh all");
+	
 	//if true will do pvp
 	if (get_property("hccs2da_dopvp") == "")
 	{
@@ -1103,6 +1105,19 @@ void main(){
 		}
 	}
 	
+	//if true will fight god lobster and break 100% fam tour
+	if (get_property("hccs2da_stingy") == "")
+	{
+		if (user_confirm("Be stingy and save 3 pocket wish per run?"))
+		{
+			set_property("hccs2da_stingy" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_stingy" ,false );
+		}
+	}
+	
 	if (to_string(my_class()) == "Astral Spirit")
 	{
 		print("AFTERLIFE SPEEDRUN", "blue");
@@ -1112,22 +1127,124 @@ void main(){
 		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
 		print("Filling ascension form", "green");
 		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
+		cli_execute("refresh all");
 	}
 	
-	cli_execute("refresh all");
+	//warnings
+	if (have_skill($skill[Summon Clip Art]))
+	{
+		print("Clip art detected, will run route 1", "blue");
+		if (item_amount($item[Clan VIP Lounge key]) <= 0)
+		{
+			print("WARNING: VIP Key not detected", "red");
+		}
+		if (item_amount($item[genie bottle]) <= 0)
+		{
+			print("WARNING: Genie bottle not detected", "red");
+		}
+		if (!have_familiar($familiar[Stooper]))
+		{
+			print("WARNING: Stooper not detected", "red");
+		}
+		if (!have_skill($skill[The Ode to Booze]))
+		{
+			print("WARNING: Ode to Booze not detected", "red");
+		}
+		if (!have_skill($skill[Advanced Saucecrafting]))
+		{
+			print("WARNING: Advanced Saucecrafting not detected", "red");
+		}
+		if (!have_skill($skill[Disintegrate]))
+		{
+			print("WARNING: Disintegrate not detected", "red");
+		}
+		if (!have_skill($skill[The Magical Mojomuscular Melody]))
+		{
+			print("WARNING: Magical Mojomuscular Melody not detected", "red");
+		}
+		if (!have_skill($skill[Wisdom of the Elder Tortoises]))
+		{
+			print("WARNING: Wisdom of the Elder Tortoises not detected", "red");
+		}
+		if (!have_skill($skill[Perfect Freeze]))
+		{
+			print("WARNING: Perfect Freeze not detected", "red");
+		}
+		if (!have_skill($skill[Inner Sauce]))
+		{
+			print("WARNING: Inner Sauce not detected", "red");
+		}
+	}
+	else
+	{
+		print("Clip art not detected, will run route 2", "red");
+		if (item_amount($item[Clan VIP Lounge key]) <= 0)
+		{
+			print("WARNING: VIP Key not detected", "red");
+		}
+		if (item_amount($item[genie bottle]) <= 0)
+		{
+			print("WARNING: Genie bottle not detected", "red");
+		}
+		if (!have_familiar($familiar[Stooper]))
+		{
+			print("WARNING: Stooper not detected", "red");
+		}
+		if (!have_skill($skill[The Ode to Booze]))
+		{
+			print("WARNING: Ode to Booze not detected", "red");
+		}
+		if (!have_skill($skill[Advanced Saucecrafting]))
+		{
+			print("WARNING: Advanced Saucecrafting not detected", "red");
+		}
+		if (!have_skill($skill[Pastamastery]))
+		{
+			print("WARNING: Pastamastery not detected", "red");
+		}
+		if (!have_skill($skill[Saucemaven]))
+		{
+			print("WARNING: Saucemaven not detected", "red");
+		}
+		if (!have_skill($skill[Bow-Legged Swagger]))
+		{
+			print("WARNING: Bow-Legged Swagger not detected", "red");
+		}
+		if (!have_skill($skill[Disintegrate]))
+		{
+			print("WARNING: Disintegrate not detected", "red");
+		}
+		if (!have_skill($skill[The Magical Mojomuscular Melody]))
+		{
+			print("WARNING: Magical Mojomuscular Melody not detected", "red");
+		}
+		if (!have_skill($skill[Wisdom of the Elder Tortoises]))
+		{
+			print("WARNING: Wisdom of the Elder Tortoises not detected", "red");
+		}
+		if (!have_skill($skill[Perfect Freeze]))
+		{
+			print("WARNING: Perfect Freeze not detected", "red");
+		}
+		if (!have_skill($skill[Inner Sauce]))
+		{
+			print("WARNING: Inner Sauce not detected", "red");
+		}
+	}
 	
 	if(my_path() != "Community Service") abort("Not Community Service.");
+	
+	if(!in_hardcore()) print("Not Hardcore, not recommanded!","red");
 	
 	if(my_class() != $class[Sauceror]) print("Not Sauceror, not recommanded!","red");
 	
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
-		print("Clip art detected, running route 1", "blue");
 		set_property("hccs2da_route" ,1 );
 	}
 	else
-	{	print("Clip art not detected, running route 2", "red");
+	{
 		set_property("hccs2da_route" ,2 );
 		if (get_property("hccs2da_marzipanhard") >= 100.0)
 		{
@@ -2905,7 +3022,10 @@ void main(){
 			force_skill(1, $skill[Empathy of the Newt]);
 		}
 
-		cli_execute("genie effect Fireproof Lips");
+		if((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
+		{
+			cli_execute("genie effect Fireproof Lips");
+		}
 		if (item_amount($item[cuppa Frost Tea]) > 0)
 		{
 			use(1, $item[cuppa Frost Tea]);
@@ -3233,13 +3353,16 @@ void main(){
 				print("G9: "+gnine_stat+"%");
 				print("Buff: "+gnine_add);
 			}
-			if (gnine_add>100.0)
+			if((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
 			{
-				cli_execute("genie effect Experimental Effect G-9");
-			}
-			else
-			{
-				cli_execute("genie effect 'Roids of the Rhinoceros");
+				if (gnine_add>100.0)
+				{
+					cli_execute("genie effect Experimental Effect G-9");
+				}
+				else
+				{
+					cli_execute("genie effect 'Roids of the Rhinoceros");
+				}
 			}
 		}
 
@@ -3745,7 +3868,7 @@ void main(){
 		{
 			cli_execute("genie effect Disquiet Riot");
 		}
-		if(item_amount($item[pocket wish]) > 0) //might want to save pocket wish if not needed
+		if((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy")))) //might want to save pocket wish if not needed
 		{
 			cli_execute("genie effect Chocolatesphere");
 		}
