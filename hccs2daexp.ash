@@ -49,7 +49,24 @@ int adv1_NEP()
 	return -1;
 }
 
-int combat_buff(skill value)
+skill get_free_run_skill() {
+	boolean [skill] free_run_skills;
+	free_run_skills[$skill[Reflex Hammer]] = have_skill($skill[Reflex Hammer]) && get_property("_reflexHammerUsed").to_int() < 3;
+	free_run_skills[$skill[Chest X-Ray]] = have_skill($skill[Chest X-Ray]) && get_property("_chestXRayUsed").to_int() < 3;
+	free_run_skills[$skill[Snokebomb]] = have_skill($skill[Snokebomb]) && get_property("_snokebombUsed").to_int() < 3;
+	free_run_skills[$skill[Shattering Punch]] = have_skill($skill[Shattering Punch]) && get_property("_shatteringPunchUsed").to_int() < 3;
+	foreach skill_name in free_run_skills
+	{
+		if (free_run_skills[skill_name] == true)
+		{
+			return skill_name;
+		}
+	}
+	print("No free run skill", "red");
+	return $skill[none];
+}
+
+int combat_buff(skill value, skill free_run_skill)
 {
 	//Become a Bat (day1) 3.33 adv
 	//Become a Cloud of Mist (day2) 2adv
@@ -67,30 +84,8 @@ int combat_buff(skill value)
 	string page = visit_url("adventure.php?snarfblat=240");
 	if (page.contains_text("You're fighting")) {
 		use_skill(value);
-		if ((have_skill($skill[Reflex Hammer]))&&(get_property("_reflexHammerUsed").to_int() < 3))
-		{
-			use_skill($skill[Reflex Hammer]);
-			return 0;
-		}
-		else if ((have_skill($skill[Chest X-Ray]))&&(get_property("_chestXRayUsed").to_int() < 3))
-		{
-			use_skill($skill[Chest X-Ray]);
-			return 0;
-		}
-		else if ((have_skill($skill[Snokebomb]))&&(get_property("_snokebombUsed").to_int() < 3))
-		{
-			use_skill($skill[Snokebomb]);
-			return 0;
-		}
-		else if ((have_skill($skill[Shattering Punch]))&&(get_property("_shatteringPunchUsed").to_int() < 3))
-		{
-			use_skill($skill[Shattering Punch]);
-			return 0;
-		}
-		else
-		{
-			abort("No free kill/run");
-		}
+		use_skill(free_run_skill);
+		return 0;
 	}
 	else if (page.contains_text("Just Paused")) {
 		abort("NC");
@@ -229,6 +224,19 @@ boolean reach_hp(int value)
 		return false;
 	}
 	return true;
+}
+
+boolean try_cloake_buff(skill buff_name)
+{
+	// Uses a Vampyric Cloake skill if available and we have a free kill/run skill
+	// Returns true if the buff was successful, false otherwise
+	skill free_run_skill = get_free_run_skill();
+	if (equipped_item($slot[back]) == $item[Vampyric cloake] && free_run_skill != $skill[none])
+	{
+		reach_mp(50);
+		return combat_buff(buff_name, free_run_skill) == 0;
+	}
+	return false;
 }
 
 boolean force_skill(int casts, skill value, boolean use)
@@ -2013,11 +2021,7 @@ void main(){
 		}
 
 		cli_execute("genie effect Infernal Thirst");
-		if (equipped_item($slot[back]) == $item[Vampyric cloake])
-		{
-			reach_mp(50);
-			combat_buff($skill[Become a Bat]);
-		}
+		try_cloake_buff($skill[Become a Bat]);
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
 
@@ -2941,11 +2945,7 @@ void main(){
 		{
 			equip($slot[off-hand], $item[Glass pie plate]);
 		}
-		if (equipped_item($slot[back]) == $item[Vampyric cloake])
-		{
-			reach_mp(50);
-			combat_buff($skill[Become a Cloud of Mist]);
-		}
+		try_cloake_buff($skill[Become a Cloud of Mist]);
 		try_skill($skill[Love Mixology]);
 		if(elemental_resistance($element[hot]) < 94.93) {
 			if (lovepot(86.5,$stat[none]))
@@ -3216,11 +3216,7 @@ void main(){
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
 		
-		if (equipped_item($slot[back]) == $item[Vampyric cloake])
-		{
-			reach_mp(50);
-			combat_buff($skill[Become a Wolf]);
-		}
+		try_cloake_buff($skill[Become a Wolf]);
 
 		//check if wish required for donate blood
 		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
