@@ -39,7 +39,7 @@ WARNING: This script does not pick up after abort in the middle of the day. Plea
 
 Bonus Credits:
 
-gausie - contributer
+gausie, tektx - contributer
 
 shootgun47 - tester
 
