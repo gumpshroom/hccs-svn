@@ -41,6 +41,6 @@ Bonus Credits:
 
 gausie, tektx - contributer
 
-shootgun47 - tester
+shootgun47, the predator - tester
 
 slaw, ezandora - borrowed snippets
