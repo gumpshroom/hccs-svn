@@ -333,6 +333,7 @@ void burn_mp()
 	try_skill($skill[Advanced Cocktailcrafting]);
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
+	try_skill($skill[Prevent Scurvy and Sobriety]);
 	try_skill($skill[Summon Crimbo Candy]);
 	try_skill($skill[Love Mixology]);
 	try_skill($skill[Lunch Break]);
