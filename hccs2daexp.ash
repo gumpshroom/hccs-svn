@@ -4,6 +4,11 @@ notify iloath;
 
 //TODO: burning cape
 
+//Find Menu
+//SETTINGS
+//DAY1
+//DAY2
+
 int make_sausage(int count_lim, int paste_lim)
 {
 	if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) <= 0) && !(have_equipped($item[Kramco Sausage-o-Matic&trade;])))
@@ -1079,7 +1084,7 @@ void main(){
 	//START
 	
 	cli_execute("refresh all");
-	
+	//SETTINGS
 	//if true will do pvp
 	if (get_property("hccs2da_dopvp") == "")
 	{
@@ -1116,6 +1121,32 @@ void main(){
 		else
 		{
 			set_property("hccs2da_stingy" ,false );
+		}
+	}
+	
+	//if true will do barrels
+	if (get_property("hccs2da_barrels") == "")
+	{
+		if (user_confirm("Do barrels for meat?"))
+		{
+			set_property("hccs2da_barrels" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_barrels" ,false );
+		}
+	}
+	
+	//if true will do fortune consults in BAFH
+	if (get_property("hccs2da_consults") == "")
+	{
+		if (user_confirm("Do fortune consults in BAFH?"))
+		{
+			set_property("hccs2da_consults" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_consults" ,false );
 		}
 	}
 	
@@ -1294,14 +1325,17 @@ void main(){
 	set_property("manaBurningThreshold", -0.05);
 
 
-
+//DAY1
 	if (my_daycount() == 1)
 	{
 		//comment out from this point to the location where script breaks if needed
 		print("BEGIN DAY 1", "blue");
 		// Collect your consults if you can
 		print("Consulting fortune.", "green");
-		try_consult();
+		if(to_boolean(get_property("hccs2da_consults")))
+		{
+			try_consult();
+		}
 
 		// Get the dairy goat fax and clanmate fortunes,
 		print("Faxing in goat.", "green");
@@ -1782,49 +1816,47 @@ void main(){
 		reach_hp(my_maxhp());
 
 
-		print("Barrels (very slow)", "blue");
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=20");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=21");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=22");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=10");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=11");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=12");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=00");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=01");
-		wait(1);
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
-		wait(1);
-		run_combat();
-		try_num();
-		
-
-		
-
-
+		if (to_boolean(get_property("hccs2da_barrels")))
+		{
+			print("Barrels (very slow)", "blue");
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=20");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=21");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=22");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=10");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=11");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=12");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=00");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=01");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
+			wait(1);
+			run_combat();
+			try_num();
+		}
 
 		print("Farming until semirare", "blue");
 		while (get_counters("Fortune Cookie" ,0 ,0) == "")
@@ -2630,7 +2662,7 @@ void main(){
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+//DAY2
 	if (my_daycount() >= 2)
 	{
 	
@@ -2639,7 +2671,10 @@ void main(){
 		use_familiar(ToTour);
 
 		// Collect your consults if you can
-		try_consult();
+		if(to_boolean(get_property("hccs2da_consults")))
+		{
+			try_consult();
+		}
 
 		// Get the factory overseer/worker
 		if (get_property("hccs2da_factorymox") >= 35)
@@ -3899,6 +3934,7 @@ void main(){
 		}
 		cli_execute("breakfast");
 		
+		//RECORDS
 		//Print quest completion speed
 		print("QUEST RECORDS", "purple");
 		print("COIL WIRE: " + get_property( "hccs2da_questrecord11" ), "blue");
@@ -3932,6 +3968,10 @@ void main(){
 		print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
 		print("PVP ENABLED: " + get_property( "hccs2da_dopvp" ), "blue");
 		print("TOUR DISABLED: " + get_property( "hccs2da_notour" ), "blue");
+		print("STINGY MODE: " + get_property( "hccs2da_stingy" ), "blue");
+		print("DO BARRELS: " + get_property( "hccs2da_barrels" ), "blue");
+		print("DO CONSULTS: " + get_property( "hccs2da_consults" ), "blue");
+		
 		
 		print("FINISHED.", "red");
 	}
