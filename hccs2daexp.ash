@@ -1351,6 +1351,15 @@ void main(){
 		// Try Calculating the Universe
 		try_num();
 		
+		// Pull Your Cowboy Boots from LT&T
+		// This is a day 1 (turn 0) activity to pull the "Your Cowboy Boots" from previous ascensions.
+		// This has a base enhancement of +25hp/+25mp, and can have spurs + skin added for extra enhancements
+		// see wiki: http://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots 
+		if (to_boolean(get_property("telegraphOfficeAvailable")))
+		{
+		visit_url("place.php?whichplace=town_right&action=townright_ltt");run_choice(13);
+		}
+		
 		//Source Terminal Day 1 Init
 		if (get_property("sourceTerminalSpam") > 0)
 		{
