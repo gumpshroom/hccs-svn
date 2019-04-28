@@ -5,67 +5,52 @@
 void main(){
 	//SETTINGS
 	//if true will do pvp
-	if (get_property("hccs2da_dopvp") == "")
+	if (user_confirm("Perform PVP?"))
 	{
-		if (user_confirm("Perform PVP?"))
-		{
-			set_property("hccs2da_dopvp" ,true );
-		}
-		else
-		{
-			set_property("hccs2da_dopvp" ,false );
-		}
+		set_property("hccs2da_dopvp" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_dopvp" ,false );
 	}
 	
 	//if true will fight god lobster and break 100% fam tour
-	if (get_property("hccs2da_notour") == "")
+	if (user_confirm("Abandon 100% Familiar Run for God Lobster Fights?"))
 	{
-		if (user_confirm("Abandon 100% Familiar Run for God Lobster Fights?"))
-		{
-			set_property("hccs2da_notour" ,true );
-		}
-		else
-		{
-			set_property("hccs2da_notour" ,false );
-		}
+		set_property("hccs2da_notour" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_notour" ,false );
 	}
 	
 	//if true will fight god lobster and break 100% fam tour
-	if (get_property("hccs2da_stingy") == "")
+	if (user_confirm("Be stingy and save 3 pocket wish per run?"))
 	{
-		if (user_confirm("Be stingy and save 3 pocket wish per run?"))
-		{
-			set_property("hccs2da_stingy" ,true );
-		}
-		else
-		{
-			set_property("hccs2da_stingy" ,false );
-		}
+		set_property("hccs2da_stingy" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_stingy" ,false );
 	}
 	
 	//if true will do barrels
-	if (get_property("hccs2da_barrels") == "")
+	if (user_confirm("Do barrels for meat?"))
 	{
-		if (user_confirm("Do barrels for meat?"))
-		{
-			set_property("hccs2da_barrels" ,true );
-		}
-		else
-		{
-			set_property("hccs2da_barrels" ,false );
-		}
+		set_property("hccs2da_barrels" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_barrels" ,false );
 	}
 	
 	//if true will do fortune consults in BAFH
-	if (get_property("hccs2da_consults") == "")
+	if (user_confirm("Do fortune consults in BAFH?"))
 	{
-		if (user_confirm("Do fortune consults in BAFH?"))
-		{
-			set_property("hccs2da_consults" ,true );
-		}
-		else
-		{
-			set_property("hccs2da_consults" ,false );
-		}
+		set_property("hccs2da_consults" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_consults" ,false );
 	}
 }
