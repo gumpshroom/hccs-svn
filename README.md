@@ -1,12 +1,14 @@
-Note: Download zip option is in the upper right.
+Note: Download zip option is in the upper right. Place .ash in kolmafia/scripts/ and .css in kolmafia/css/  
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
-hccs2da.ash: main automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult.
+hccs2da.ash: stable automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult.
 
-hccs2daexp.ash: alternative automation script, EXPERIMENTAL AND UNTESTED, supports more IOTM
+hccs2daconfig.ash: when you run main script for the first time you can set your configs, if you want to change them afterwards run this.
+
+hccs2daexp.ash: better but untested alternative automation script, EXPERIMENTAL AND UNTESTED, supports more IOTM.
 
 hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
 (You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification, soul saucery is recommmanded if you have scaling IotM monsters.)
