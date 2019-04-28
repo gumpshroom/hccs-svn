@@ -1348,6 +1348,16 @@ void main(){
 		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
 		set_property("customCombatScript", "hccs");
 
+		// unlock the Detective School
+		// This can be fun on day 1 to get the detective solver badge, which grants +hp/+mp/+item based on item level
+		if (to_boolean(get_property("hasDetectiveSchool")))
+		{
+			if (svn_exists("Ezandora-Detective-Solver-branches-Release")) {
+				print("Running Detective Solver Script", "green");
+				cli_execute("detective solver.ash");
+			} else print("If you install Ezandora's Detective Solver script, this script can use solve your mysteries!", "red");
+		}
+
 		// Try Calculating the Universe
 		try_num();
 		
@@ -2686,6 +2696,16 @@ void main(){
 		{
 			print("Default fax: Faxing male overseer", "green");
 			try_fax("factory overseer"); //should be MALE
+		}
+
+		// unlock the Detective School
+		// This can be fun on day 1 to get the detective solver badge, which grants +hp/+mp/+item based on item level
+		if (to_boolean(get_property("hasDetectiveSchool")))
+		{
+			if (svn_exists("Ezandora-Detective-Solver-branches-Release")) {
+				print("Running Detective Solver Script", "green");
+				cli_execute("detective solver.ash");
+			} else print("If you install Ezandora's Detective Solver script, this script can use solve your mysteries!", "red");
 		}
 
 		// Try to Calculate the Universe
