@@ -91,8 +91,10 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
 [ lov enforcer ]
 skill micrometeorite
@@ -102,8 +104,10 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
 [ lov engineer ]
 skill micrometeorite
@@ -113,8 +117,10 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
 [ lov equivocator ]
 skill micrometeorite
@@ -124,8 +130,10 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
 [ mariachi calavera ]
 try to steal an item
@@ -191,8 +199,10 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
 [ spawn of wally ]
 if hasskill Meteor Shower
@@ -220,6 +230,8 @@ if hasskill soul bubble
     skill stuffed mortar shell
 endif
 skill curse of weaksauce
-skill saucegeyser
 skill saucestorm
+attack with weapon
+skill saucegeyser
+attack with weapon
 
