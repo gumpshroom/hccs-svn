@@ -31,11 +31,15 @@ Read www.reddit.com/r/kol/wiki/guides/iloath_hccs2 if you dont
 
 You need more perms, some item%, as well as oven(cheap), Peppermint Rhino(technically optional, but cheap and reduce fail chance) and Salsa de las Epocas recipe(you get it eventually with VIP)
 
+If you have IoTM with scaling monsters, you might want more skills like itchy finger and either saucestorm or saucegeyser.
+
 (Partially) Supported IOTM:
 
 Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
 
 WARNING: This script does not pick up after abort in the middle of the day. Please either 1. finish the day manually or 2. comment out /* */ everything the script already done before rerun (and undo changes to script when done)
+
+WARNING: Make sure you have "Buy items from NPC stores whenever needed" and "Buy items with tokens at coin masters whenever needed" checked in kolmafia->General->Preferance->Item Acquisition.
 
 
 
