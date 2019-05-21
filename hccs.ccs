@@ -15,6 +15,12 @@ skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
 
+[ eldritch tentacle ]
+if hasskill Meteor Shower
+    skill meteor shower
+endif
+abort
+
 [ factory overseer ]
 skill extract
 if hasskill Disintegrate
