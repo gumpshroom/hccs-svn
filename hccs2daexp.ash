@@ -2039,6 +2039,22 @@ void main(string arguments){
 				use_familiar(ToTour);
 			}
 		}
+		
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+		}
 
 		// clip art branch
 		if (have_skill($skill[Summon Clip Art]))
@@ -3920,9 +3936,9 @@ void main(string arguments){
 		//Source Terminal Day 2 Combat
 		if (get_property("sourceTerminalSpam") > 0)
 		{
-			//cli_execute("terminal enhance items.enh");
-			//cli_execute("terminal enhance meat.enh");
-			//cli_execute("terminal enhance substats.enh");
+			cli_execute("terminal enhance items.enh");
+			cli_execute("terminal enhance meat.enh");
+			cli_execute("terminal enhance substats.enh");
 		}
 		
 		//GOD LOB
@@ -3999,6 +4015,22 @@ void main(string arguments){
 			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			use_familiar(ToTour);
+		}
+		
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
 		}
 
 		try_skill($skill[Love Mixology]);
