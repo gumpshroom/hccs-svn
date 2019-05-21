@@ -6,9 +6,7 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
 hccs2da.ash: stable automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult.
 
-hccs2daconfig.ash: when you run main script for the first time you can set your configs, if you want to change them afterwards run this.
-
-hccs2daexp.ash: better but untested alternative automation script, EXPERIMENTAL AND UNTESTED, supports more IOTM.
+hccs2daexp.ash: better but untested alternative automation script, EXPERIMENTAL AND UNTESTED, supports more IOTM. RUN "hccs2daexp help" IN CLI FOR INFO
 
 hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
 (You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification, soul saucery is recommmanded if you have scaling IotM monsters.)
@@ -35,7 +33,7 @@ If you have IoTM with scaling monsters, you might want more skills like itchy fi
 
 (Partially) Supported IOTM:
 
-Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
+Cosplay Saber, Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
 
 WARNING: This script does not pick up after abort in the middle of the day. Please either 1. finish the day manually or 2. comment out /* */ everything the script already done before rerun (and undo changes to script when done)
 
