@@ -98,9 +98,8 @@ if hasskill soul bubble
 endif
 skill curse of weaksauce
 skill saucestorm
-attack with weapon
 skill saucegeyser
-attack with weapon
+skill saucestorm
 
 [ lov enforcer ]
 skill micrometeorite
@@ -111,9 +110,8 @@ if hasskill soul bubble
 endif
 skill curse of weaksauce
 skill saucestorm
-attack with weapon
 skill saucegeyser
-attack with weapon
+skill saucestorm
 
 [ lov engineer ]
 skill micrometeorite
@@ -124,9 +122,8 @@ if hasskill soul bubble
 endif
 skill curse of weaksauce
 skill saucestorm
-attack with weapon
 skill saucegeyser
-attack with weapon
+skill saucestorm
 
 [ lov equivocator ]
 skill micrometeorite
@@ -206,9 +203,8 @@ if hasskill soul bubble
 endif
 skill curse of weaksauce
 skill saucestorm
-attack with weapon
 skill saucegeyser
-attack with weapon
+skill saucestorm
 
 [ spawn of wally ]
 if hasskill Meteor Shower
@@ -228,6 +224,30 @@ skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
 
+[ the haunted kitchen ]
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill macrometeorite
+skill extract
+skill stuffed mortar shell
+skill curse of weaksauce
+skill saucestorm
+
 [ the neverending party ]
 skill micrometeorite
 if hasskill soul bubble
@@ -237,7 +257,6 @@ if hasskill soul bubble
 endif
 skill curse of weaksauce
 skill saucestorm
-attack with weapon
 skill saucegeyser
-attack with weapon
+skill saucestorm
 
