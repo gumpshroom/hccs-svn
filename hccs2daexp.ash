@@ -697,6 +697,7 @@ void complete_quest(string questname, int choicenumber)
 	}
 	print("USED " + adv + " ADV", "purple");
 	set_property("hccs2da_questrecord" + choicenumber ,adv );
+	reach_hp(1);
 	try_num();
 }
 
@@ -1364,6 +1365,7 @@ void main(string arguments){
 		}
 		if (have_equipped($item[Fourth of May Cosplay Saber]))
 		{
+			visit_url("inventory.php?which=3",false);
 			visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
 			use_skill(to_skill(7311)); //use the force
 			visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
@@ -1654,7 +1656,7 @@ void main(string arguments){
 		}
 		
 		//Lightsaber 1(mp gen), 2(20ml),3(3res), 4(10fam wt)
-		if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+		if ((item_amount($item[Fourth of May Cosplay Saber]) > 0) || (have_equipped($item[Fourth of May Cosplay Saber])))
 		{
 			print("Lightsaber regen", "green");
 			visit_url("main.php?action=may4");
@@ -1846,6 +1848,7 @@ void main(string arguments){
 					}
 					if (have_equipped($item[Fourth of May Cosplay Saber]))
 					{
+						visit_url("inventory.php?which=3",false);
 						visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
 						use_skill(to_skill(7311)); //use the force
 						visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
@@ -2172,6 +2175,7 @@ void main(string arguments){
 					}
 					if (have_equipped($item[Fourth of May Cosplay Saber]))
 					{
+						visit_url("inventory.php?which=3",false);
 						visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
 						use_skill(to_skill(7311)); //use the force
 						visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
@@ -2474,8 +2478,10 @@ void main(string arguments){
 			equip($slot[back], $item[LOV Epaulettes]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
-
-		cli_execute("genie effect Infernal Thirst");
+		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
+		{
+			cli_execute("genie effect Infernal Thirst");
+		}
 		try_cloake_buff($skill[Become a Bat]);
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
@@ -3009,7 +3015,7 @@ void main(string arguments){
 	{
 	
 		print("BEGIN DAY 2", "blue");
-		
+
 		use_familiar(ToTour);
 
 		// Collect your consults if you can
@@ -3096,7 +3102,7 @@ void main(string arguments){
 		}
 		
 		//Lightsaber 1(mp gen), 2(20ml),3(3res), 4(10fam wt)
-		if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+		if ((item_amount($item[Fourth of May Cosplay Saber]) > 0) || (have_equipped($item[Fourth of May Cosplay Saber])))
 		{
 			print("Lightsaber res", "green");
 			visit_url("main.php?action=may4");
@@ -3323,7 +3329,6 @@ void main(string arguments){
 
 		cli_execute("shower mp");
 
-		//TODO: fax female factory overseer/worker if mox>=35
 		set_property("hccs2da_factorymox",my_basestat($stat[moxie]));
 		if (my_basestat($stat[moxie])>=35)
 		{
@@ -3340,6 +3345,7 @@ void main(string arguments){
 				}
 				if (have_equipped($item[Fourth of May Cosplay Saber]))
 				{
+					visit_url("inventory.php?which=3",false);
 					visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
 					use_skill(to_skill(7311)); //use the force
 					visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
