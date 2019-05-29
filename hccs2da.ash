@@ -2,6 +2,293 @@
 script "hccs2da.ash";
 notify iloath;
 
+//kmail iloath if you found any bugs
+
+//TODO: burning cape
+
+//Find Menu
+//SETTINGS
+//DAY1
+//DAY2
+
+//1DAY13QUEST1TASK000ADJUST
+
+void show_help()
+{
+	print_html("iloath's HCCS 2day");
+	print_html("Usage: hccs2da [argument].");
+	print_html("");
+	print_html("Configuration options:");
+	print_html("<b>help</b> - Show this help message.");
+	print_html("<b>settings</b> - Allow you to set your script configuration.");
+	print_html("<b>records</b> - Show this run's records and other statistics.");
+	print_html("<b>warnings</b> - Show warnings for missing IoTMs and perms.");
+	print_html("<b>revert</b> - Revert your setting to that before you ran script, used automatically when script donates your body, use this if you plan to finish run manually.");
+	print_html("<b>test</b> - FOR TESTERS ONLY. test an unknown code snippet");
+	print_html("<b>next</b> - NOT YET IMPLEMENTED. skip current step if script keep getting stuck on it");
+	print_html("<b>load</b> - NOT YET IMPLEMENTED. start from a certain step");
+	print_html("<b>resume</b> - NOT YET IMPLEMENTED. Resume script.");
+	print_html("<b>start</b> - Run script, starting from the beginning of a day.");
+	
+	print_html("");
+	print_html("Example commands, type into kolmafia's CLI:");
+	print_html("<b>\"hccs2da warnings\"</b> Show warnings for missing IoTMs and perms.");
+	print_html("<b>\"hccs2da start\"</b> Run script.");
+}
+
+void revert_settings()
+{
+	//doc bag quest (dont work)
+	//set_property("choiceAdventure1340", get_property("hccs2da_backup_choiceAdventure1340"));
+	//remove_property("hccs2da_backup_choiceAdventure1340");
+
+	//The Baker's Dilemma
+	set_property("choiceAdventure114", get_property("hccs2da_backup_choiceAdventure114"));
+	remove_property("hccs2da_backup_choiceAdventure114");
+	//Oh No, Hobo
+	set_property("choiceAdventure115", get_property("hccs2da_backup_choiceAdventure115"));
+	remove_property("hccs2da_backup_choiceAdventure115");
+	//The Singing Tree
+	set_property("choiceAdventure116", get_property("hccs2da_backup_choiceAdventure116"));
+	remove_property("hccs2da_backup_choiceAdventure116");
+	//Trespasser
+	set_property("choiceAdventure117", get_property("hccs2da_backup_choiceAdventure117"));
+	remove_property("hccs2da_backup_choiceAdventure117");
+	//Temporarily Out of Skeletons
+	set_property("choiceAdventure1060", get_property("hccs2da_backup_choiceAdventure1060"));
+	remove_property("hccs2da_backup_choiceAdventure1060");
+
+	//Mana burning
+	set_property("manaBurningThreshold", get_property("hccs2da_backup_manaBurningThreshold"));
+	remove_property("hccs2da_backup_manaBurningThreshold");
+
+	//Settings
+	set_property("autoSatisfyWithNPCs", get_property("hccs2da_backup_autoSatisfyWithNPCs"));
+	remove_property("hccs2da_backup_autoSatisfyWithNPCs");
+	set_property("autoSatisfyWithCoinmasters", get_property("hccs2da_backup_autoSatisfyWithCoinmasters"));
+	remove_property("hccs2da_backup_autoSatisfyWithCoinmasters");
+	set_property("dontStopForCounters", get_property("hccs2da_backup_dontStopForCounters"));
+	remove_property("hccs2da_backup_dontStopForCounters");
+
+	//CCS
+	set_property("customCombatScript", get_property("hccs2da_backup_customCombatScript"));
+	remove_property("hccs2da_backup_customCombatScript");
+	
+	//progress
+	set_property("hccs2da_progress" ,0 );
+	remove_property("hccs2da_progress");
+}
+
+void set_settings()
+{
+	//if true will do pvp
+	if (user_confirm("Perform PVP?"))
+	{
+		set_property("hccs2da_dopvp" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_dopvp" ,false );
+	}
+	
+	//if true will fight god lobster and break 100% fam tour
+	if (user_confirm("Abandon 100% Familiar Run for God Lobster Fights?"))
+	{
+		set_property("hccs2da_notour" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_notour" ,false );
+	}
+	
+	//if true will not fight scaling monsters
+	if (user_confirm("Avoid scaling monsters and the risk of being beaten up?"))
+	{
+		set_property("hccs2da_noscale" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_noscale" ,false );
+	}
+	
+	//if true save pocket wishes
+	if (user_confirm("Be stingy and save bunch of pocket wishes per run?"))
+	{
+		set_property("hccs2da_stingy" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_stingy" ,false );
+	}
+	
+	//if true will do barrels
+	if (user_confirm("Do barrels for meat?"))
+	{
+		set_property("hccs2da_barrels" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_barrels" ,false );
+	}
+	
+	//if true will do fortune consults in BAFH
+	if (user_confirm("Do fortune consults in BAFH?"))
+	{
+		set_property("hccs2da_consults" ,true );
+	}
+	else
+	{
+		set_property("hccs2da_consults" ,false );
+	}
+}
+
+void show_records()
+{
+	//RECORDS
+	//Print quest completion speed
+	print("QUEST RECORDS", "purple");
+	print("COIL WIRE: " + get_property( "hccs2da_questrecord11" ), "blue");
+	print("MAKE MARGARITAS: " + get_property( "hccs2da_questrecord9" ), "blue");
+	print("MAKE SAUSAGE: " + get_property( "hccs2da_questrecord7" ), "blue");
+	print("REDUCE GAZELLE POPULATION: " + get_property( "hccs2da_questrecord6" ), "blue");
+	print("STEAM TUNNELS: " + get_property( "hccs2da_questrecord10" ), "blue");
+	print("DONATE BLOOD: " + get_property( "hccs2da_questrecord1" ), "blue");
+	print("FEED CHILDREN: " + get_property( "hccs2da_questrecord2" ), "blue");
+	print("BUILD PLAYGROUND MAZES: " + get_property( "hccs2da_questrecord3" ), "blue");
+	print("FEED CONSPIRATORS: " + get_property( "hccs2da_questrecord4" ), "blue");
+	print("BREED MORE COLLIES: " + get_property( "hccs2da_questrecord5" ), "blue");
+	print("BE A LIVING STATUE: " + get_property( "hccs2da_questrecord8" ), "blue");
+	print(" ", "purple");
+	print("OTHER INFO", "purple");
+	print("TURN COUNT: " + my_turncount(), "blue");
+	print("REMAINING ADV: " + my_adventures(), "blue");
+	print("MARZIPAN ITEM%: " + get_property( "hccs2da_marzipanhard" ), "blue");
+	print("MARZIPAN CANDY%: " + get_property( "hccs2da_marzipaneasy" ), "blue");
+	print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
+	print("PVP ENABLED: " + get_property( "hccs2da_dopvp" ), "blue");
+	print("TOUR DISABLED: " + get_property( "hccs2da_notour" ), "blue");
+	print("SCALING MOBS DISABLED: " + get_property( "hccs2da_noscale" ), "blue");
+	print("STINGY MODE: " + get_property( "hccs2da_stingy" ), "blue");
+	print("DO BARRELS: " + get_property( "hccs2da_barrels" ), "blue");
+	print("DO CONSULTS: " + get_property( "hccs2da_consults" ), "blue");
+}
+
+void show_warnings()
+{
+	//WARNINGS
+	if (to_string(my_class()) == "Astral Spirit")
+	{
+		print("Cannot detect skills and items as Astral Spirit", "red");
+	}
+	else
+	{
+		if (have_skill($skill[Summon Clip Art]))
+		{
+			print("Clip art detected, will run route 1", "blue");
+			if (item_amount($item[Clan VIP Lounge key]) <= 0)
+			{
+				print("WARNING: VIP Key not detected", "red");
+			}
+			if (item_amount($item[genie bottle]) <= 0)
+			{
+				print("WARNING: Genie bottle not detected", "red");
+			}
+			if (!have_familiar($familiar[Stooper]))
+			{
+				print("WARNING: Stooper not detected", "red");
+			}
+			if (!have_skill($skill[The Ode to Booze]))
+			{
+				print("WARNING: Ode to Booze not detected", "red");
+			}
+			if (!have_skill($skill[Advanced Saucecrafting]))
+			{
+				print("WARNING: Advanced Saucecrafting not detected", "red");
+			}
+			if (!have_skill($skill[Disintegrate]))
+			{
+				print("WARNING: Disintegrate not detected", "red");
+			}
+			if (!have_skill($skill[The Magical Mojomuscular Melody]))
+			{
+				print("WARNING: Magical Mojomuscular Melody not detected", "red");
+			}
+			if (!have_skill($skill[Wisdom of the Elder Tortoises]))
+			{
+				print("WARNING: Wisdom of the Elder Tortoises not detected", "red");
+			}
+			if (!have_skill($skill[Perfect Freeze]))
+			{
+				print("WARNING: Perfect Freeze not detected", "red");
+			}
+			if (!have_skill($skill[Inner Sauce]))
+			{
+				print("WARNING: Inner Sauce not detected", "red");
+			}
+		}
+		else
+		{
+			print("Clip art not detected, will run route 2", "red");
+			if (item_amount($item[Clan VIP Lounge key]) <= 0)
+			{
+				print("WARNING: VIP Key not detected", "red");
+			}
+			if (item_amount($item[genie bottle]) <= 0)
+			{
+				print("WARNING: Genie bottle not detected", "red");
+			}
+			if (!have_familiar($familiar[Stooper]))
+			{
+				print("WARNING: Stooper not detected", "red");
+			}
+			if (!have_skill($skill[The Ode to Booze]))
+			{
+				print("WARNING: Ode to Booze not detected", "red");
+			}
+			if (!have_skill($skill[Advanced Saucecrafting]))
+			{
+				print("WARNING: Advanced Saucecrafting not detected", "red");
+			}
+			if (!have_skill($skill[Pastamastery]))
+			{
+				print("WARNING: Pastamastery not detected", "red");
+			}
+			if (!have_skill($skill[Saucemaven]))
+			{
+				print("WARNING: Saucemaven not detected", "red");
+			}
+			if (!have_skill($skill[Bow-Legged Swagger]))
+			{
+				print("WARNING: Bow-Legged Swagger not detected", "red");
+			}
+			if (!have_skill($skill[Disintegrate]))
+			{
+				print("WARNING: Disintegrate not detected", "red");
+			}
+			if (!have_skill($skill[The Magical Mojomuscular Melody]))
+			{
+				print("WARNING: Magical Mojomuscular Melody not detected", "red");
+			}
+			if (!have_skill($skill[Wisdom of the Elder Tortoises]))
+			{
+				print("WARNING: Wisdom of the Elder Tortoises not detected", "red");
+			}
+			if (!have_skill($skill[Perfect Freeze]))
+			{
+				print("WARNING: Perfect Freeze not detected", "red");
+			}
+			if (!have_skill($skill[Inner Sauce]))
+			{
+				print("WARNING: Inner Sauce not detected", "red");
+			}
+		}
+		
+		if(my_class() != $class[Sauceror]) print("Not Sauceror, not recommanded!","red");
+		if(!in_hardcore()) print("Not Hardcore, not recommanded!","red");
+		if(my_path() != "Community Service") abort("Not Community Service! Will abort!");
+	}
+}
+
 int make_sausage(int count_lim, int paste_lim)
 {
 	if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) <= 0) && !(have_equipped($item[Kramco Sausage-o-Matic&trade;])))
@@ -32,7 +319,6 @@ int adv1_NEP()
 	}
 	if (have_effect($effect[Beaten Up]) > 0)
 	{
-		chat_clan("BEATEN UP","hobopolis");
 		abort("Beaten up");
 	}
 	string page = visit_url("adventure.php?snarfblat=528");
@@ -44,6 +330,62 @@ int adv1_NEP()
 		run_choice(5);
 		run_combat();
 		return 0;
+	}
+	else if (page.contains_text("The Beginning of the Neverend")) {
+		if (page.contains_text("DJ")) {
+			print("Rejecting NEP DJ quest", "green");
+			run_choice(2); //reject DJ quest to get more meat from NEP
+		}
+		else
+		{
+			print("Getting NEP quest", "green");
+			run_choice(1); //accept
+		}
+		adv1_NEP();
+	} 
+	return -1;
+}
+
+skill get_free_run_skill() {
+	boolean [skill] free_run_skills;
+	free_run_skills[$skill[Reflex Hammer]] = have_skill($skill[Reflex Hammer]) && get_property("_reflexHammerUsed").to_int() < 3;
+	free_run_skills[$skill[Chest X-Ray]] = have_skill($skill[Chest X-Ray]) && get_property("_chestXRayUsed").to_int() < 3;
+	free_run_skills[$skill[Snokebomb]] = have_skill($skill[Snokebomb]) && get_property("_snokebombUsed").to_int() < 3;
+	free_run_skills[$skill[Shattering Punch]] = have_skill($skill[Shattering Punch]) && get_property("_shatteringPunchUsed").to_int() < 3;
+	foreach skill_name in free_run_skills
+	{
+		if (free_run_skills[skill_name] == true)
+		{
+			return skill_name;
+		}
+	}
+	print("No free run skill", "red");
+	return $skill[none];
+}
+
+int combat_buff(skill value, skill free_run_skill)
+{
+	//Become a Bat (day1) 3.33 adv
+	//Become a Cloud of Mist (day2) 2adv
+	//Become a Wolf (day2) 0.67 adv
+	//Giant Growth x3 (day2) 4adv x 3
+	
+	if (my_adventures() == 0) abort("No adventures.");
+	if (get_counters("Fortune Cookie",0,0) != "") {
+		abort("Semirare! LastLoc: " + get_property("semirareLocation"));
+	}
+	if (have_effect($effect[Beaten Up]) > 0)
+	{
+		abort("Beaten up");
+	}
+	string page = visit_url("adventure.php?snarfblat=240");
+	if (page.contains_text("You're fighting")) {
+		use_skill(value);
+		use_skill(free_run_skill);
+		return 0;
+	}
+	else if (page.contains_text("Just Paused")) {
+		abort("NC");
 	}
 	return -1;
 }
@@ -181,6 +523,19 @@ boolean reach_hp(int value)
 	return true;
 }
 
+boolean try_cloake_buff(skill buff_name)
+{
+	// Uses a Vampyric Cloake skill if available and we have a free kill/run skill
+	// Returns true if the buff was successful, false otherwise
+	skill free_run_skill = get_free_run_skill();
+	if (equipped_item($slot[back]) == $item[Vampyric cloake] && free_run_skill != $skill[none])
+	{
+		reach_mp(50);
+		return combat_buff(buff_name, free_run_skill) == 0;
+	}
+	return false;
+}
+
 boolean force_skill(int casts, skill value, boolean use)
 {
 	if(have_skill(value))
@@ -244,20 +599,43 @@ void try_item(item value)
 	}
 }
 
+boolean try_effect(effect value)
+{
+	if (have_effect(value) > 0)
+	{
+		print("Confirmed: "+value, "green");
+		return true;
+	}
+	else
+	{
+		if (cli_execute(value.default))
+		{
+			print("Applied: "+value, "green");
+			return true;
+		}
+		else
+		{
+			print("Failure: "+value, "green");
+			return false;
+		}
+	}
+}
+
 void burn_mp()
 {
 	print("Using up mp", "blue");
-	try_skill($skill[Grab a Cold One]);
-	try_skill($skill[Spaghetti Breakfast]);
 	try_skill($skill[Advanced Saucecrafting]);
 	try_skill($skill[Advanced Cocktailcrafting]);
 	try_skill($skill[Pastamastery]);
 	try_skill($skill[Perfect Freeze]);
+	try_skill($skill[Prevent Scurvy and Sobriety]);
+	try_skill($skill[Grab a Cold One]);
+	try_skill($skill[Spaghetti Breakfast]);
 	try_skill($skill[Summon Crimbo Candy]);
 	try_skill($skill[Love Mixology]);
+	try_skill($skill[Acquire Rhinestones]);
 	try_skill($skill[Lunch Break]);
 	try_skill($skill[Request Sandwich]);
-	try_skill($skill[Acquire Rhinestones]);
 }
 
 void ode_drink(int quantity, item booze)
@@ -360,6 +738,7 @@ void complete_quest(string questname, int choicenumber)
 	}
 	print("USED " + adv + " ADV", "purple");
 	set_property("hccs2da_questrecord" + choicenumber ,adv );
+	reach_hp(1);
 	try_num();
 }
 
@@ -438,7 +817,7 @@ void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff
 
 boolean lovepot(float thershold, stat test)
 {
-	if (item_amount($item[Love Potion #XYZ]) > 0)
+	if (item_amount(to_item(9745)) > 0)
 	{
 		//https://pastebin.com/EyzeE8A2
 		//it is assumed that you do test in order of mus->mys->mox
@@ -673,7 +1052,7 @@ familiar pick_fairy_to_tour()
 {
 	string ascensionsHtml = visit_url(" ascensionhistory.php?back=self&who=" +my_id(), false) + visit_url(" ascensionhistory.php?back=self&prens13=1&who=" +my_id(), false);
 
-	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle,Bowlet]
+	foreach fam in $familiars[Baby Gravy Fairy,Coffee Pixie,Crimbo Elf,Flaming Gravy Fairy,Frozen Gravy Fairy,Stinky Gravy Fairy,Spooky Gravy Fairy,Attention-Deficit Demon,Sleazy Gravy Fairy,Jitterbug,Dandy Lion,Jumpsuited Hound Dog,Green Pixie,Casagnova Gnome,Psychedelic Bear,Sugar Fruit Fairy,Syncopated Turtle,Slimeling,Grouper Groupie,Dancing Frog,Hippo Ballerina,Piano Cat,Obtuse Angel,Pair of Stomping Boots,Blavious Kloop,Peppermint Rhino,Steam-Powered Cheerleader,Reagnimated Gnome,Angry Jung Man,Gelatinous Cubeling,Mechanical Songbird,Grimstone Golem,Fist Turkey,Adventurous Spelunker,Rockin' Robin,Intergnat,Chocolate Lab,Optimistic Candle,Bowlet,Cat Burglar]
 	{
 		if(have_familiar(fam) && should_tour(ascensionsHtml, fam)) {
 			if (svn_exists("zlib")) {
@@ -752,11 +1131,6 @@ void voteInVotingBooth()
 		print("Already voted today.");
 		return;
 	}
-	/*
-	if (__voting_setting_use_absentee_ballots)
-	{
-	}
-	*/
 	
 	
 	
@@ -998,10 +1372,87 @@ void voteInVotingBooth()
 	//g - 1 or 2, depending on the global vote
 }
 
-void main(){
+void main(string arguments){
+	if (arguments == "" || arguments.to_lower_case() == "help")
+	{
+		print("Help message here", "blue");
+		show_help();
+		return;
+	}
+	else if (arguments.to_lower_case() == "settings")
+	{
+		print("Entering settings", "blue");
+		set_settings();
+		return;
+	}
+	else if (arguments.to_lower_case() == "records")
+	{
+		print("Showing records", "blue");
+		show_records();
+		return;
+	}
+	else if (arguments.to_lower_case() == "warnings")
+	{
+		print("Showing warnings", "blue");
+		show_warnings();
+		return;
+	}
+	else if (arguments.to_lower_case() == "revert")
+	{
+		print("Reverting settings", "blue");
+		revert_settings();
+		return;
+	}
+	else if (arguments.to_lower_case() == "next")
+	{
+		print("Skipping current step when resuming", "blue");
+		set_property("hccs2da_progress", to_int(get_property("hccs2da_progress"))+1);
+		return;
+	}
+	else if (arguments.to_lower_case() == "test")
+	{
+		print("Testing a code snippet here", "blue");
+		boolean done4 = false;
+		visit_url("clan_viplounge.php?action=hotdogstand", false);
+		while (!done4) {
+			string page = visit_url("clan_viplounge.php?preaction=eathotdog&whichdog=-92&sumbit=Eat",true);
+
+			if (page.contains_text("feel up to eating")) {
+				done4 = true;
+			}
+		}
+		print("Finished Hot Dogs", "blue");
+		return;
+	}
+	else if (arguments.to_lower_case() == "load" || arguments.to_lower_case() == "resume" || arguments.to_lower_case() != "start")
+	{
+		print("Unknown argument", "red");
+		print("Try refering to help page, type:", "red");
+		print("hccs2d help", "red");
+		print("into kolmafia's CLI", "red");
+		return;
+	}
+	
+	if (arguments.to_lower_case() == "load")
+	{
+		print("TODO: start from certain step number", "red");
+		set_property("hccs2da_progress" ,999999 );
+	}
+	else if (arguments.to_lower_case() == "resume")
+	{
+		print("TODO: Resuming run from aborted step", "blue");
+	}
+	else if (arguments.to_lower_case() == "start")
+	{
+		print("Starting from beginning of day", "blue");
+		set_property("hccs2da_progress" ,0 );
+	}
 	//init
 	//START
 	
+	int progresscheck = 0;
+	
+	//SETTINGS
 	//if true will do pvp
 	if (get_property("hccs2da_dopvp") == "")
 	{
@@ -1028,6 +1479,66 @@ void main(){
 		}
 	}
 	
+	//if true will not fight scaling monsters
+	if (get_property("hccs2da_noscale") == "")
+	{
+		if (user_confirm("Avoid scaling monsters and the risk of being beaten up?"))
+		{
+			set_property("hccs2da_noscale" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_noscale" ,false );
+		}
+	}
+	
+	//if true save pocket wishes
+	if (get_property("hccs2da_stingy") == "")
+	{
+		if (user_confirm("Be stingy and save bunch of pocket wishes per run?"))
+		{
+			set_property("hccs2da_stingy" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_stingy" ,false );
+		}
+	}
+	
+	//if true will do barrels
+	if (get_property("hccs2da_barrels") == "")
+	{
+		if (user_confirm("Do barrels for meat?"))
+		{
+			set_property("hccs2da_barrels" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_barrels" ,false );
+		}
+	}
+	
+	//if true will do fortune consults in BAFH
+	if (get_property("hccs2da_consults") == "")
+	{
+		if (user_confirm("Do fortune consults in BAFH?"))
+		{
+			set_property("hccs2da_consults" ,true );
+		}
+		else
+		{
+			set_property("hccs2da_consults" ,false );
+		}
+	}
+	
+	//reset progress
+	if (get_property("hccs2da_progress") == "")
+	{
+		set_property("hccs2da_progress" ,0 );
+	}
+	
+	cli_execute("refresh all");
+	
 	if (to_string(my_class()) == "Astral Spirit")
 	{
 		print("AFTERLIFE SPEEDRUN", "blue");
@@ -1037,22 +1548,18 @@ void main(){
 		visit_url("afterlife.php?action=buyarmory&whichitem=5037&submit=Purchase (10 Karma)",true);
 		print("Filling ascension form", "green");
 		visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=3&whichclass=4&gender=1&whichpath=25&whichsign=5&noskillsok=1&submit=Once More Unto the Breach",true);
+		cli_execute("refresh all");
 	}
-	
-	cli_execute("refresh all");
-	
-	if(my_path() != "Community Service") abort("Not Community Service.");
-	
-	if(my_class() != $class[Sauceror]) print("Not Sauceror, not recommanded!","red");
-	
+
+	show_warnings();
+
 	familiar ToTour = pick_familiar_to_tour();
 	if (have_skill($skill[Summon Clip Art]))
 	{
-		print("Clip art detected, running route 1", "blue");
 		set_property("hccs2da_route" ,1 );
 	}
 	else
-	{	print("Clip art not detected, running route 2", "red");
+	{
 		set_property("hccs2da_route" ,2 );
 		if (get_property("hccs2da_marzipanhard") >= 100.0)
 		{
@@ -1084,47 +1591,139 @@ void main(){
 	string clan = get_clan_name();
 	item KGB = $item[Kremlin's Greatest Briefcase];
 
-	//The Baker's Dilemma
-	set_property("choiceAdventure114", 2);
-	//Oh No, Hobo
-	set_property("choiceAdventure115", 1);
-	//The Singing Tree
-	set_property("choiceAdventure116", 4);
-	//Trespasser
-	set_property("choiceAdventure117", 1);
-	//Temporarily Out of Skeletons
-	set_property("choiceAdventure1060", 1);
+	//TODO: reset these when script ascends
+	
+	
+	//doc bag quest (dont work)
+	//set_property("choiceAdventure1340", 1);
 
 	set_property("manaBurningThreshold", -0.05);
 
 
-
+//DAY1
 	if (my_daycount() == 1)
 	{
 		//comment out from this point to the location where script breaks if needed
 		print("BEGIN DAY 1", "blue");
-		// Collect your consults if you can
-		print("Consulting fortune.", "green");
-		try_consult();
-
-		// Get the dairy goat fax and clanmate fortunes,
-		print("Faxing in goat.", "green");
-		try_fax("dairy goat");
-
+		
 		// Set CCS for the run
-		print("Set up CSS.", "green");
-		set_property("hccs2da_backupdontStopForCounters", get_property("dontStopForCounters"));
-		set_property("dontStopForCounters", true);
-		set_property("hccs2da_backupCCS", get_property("customCombatScript"));
-		set_property("customCombatScript", "hccs");
+		progresscheck = 100000;
+		//if (get_property("hccs2da_progress") < progresscheck)
+		{
+			set_property("hccs2da_progress" ,progresscheck );
+			print("hccs2da_progress: " + get_property("hccs2da_progress"), "green");
+			
+			print("Set up CSS and settings.", "green");
+			
+			//doc bag quest (dont work)
+			//set_property("hccs2da_backup_choiceAdventure1340", get_property("choiceAdventure1340"));
+			//set_property("choiceAdventure1340", 1);
+			
+			//The Baker's Dilemma
+			set_property("hccs2da_backup_choiceAdventure114", get_property("choiceAdventure114"));
+			set_property("choiceAdventure114", 2);
+			//Oh No, Hobo
+			set_property("hccs2da_backup_choiceAdventure115", get_property("choiceAdventure115"));
+			set_property("choiceAdventure115", 1);
+			//The Singing Tree
+			set_property("hccs2da_backup_choiceAdventure116", get_property("choiceAdventure116"));
+			set_property("choiceAdventure116", 4);
+			//Trespasser
+			set_property("hccs2da_backup_choiceAdventure117", get_property("choiceAdventure117"));
+			set_property("choiceAdventure117", 1);
+			//Temporarily Out of Skeletons
+			set_property("hccs2da_backup_choiceAdventure1060", get_property("choiceAdventure1060"));
+			set_property("choiceAdventure1060", 1);
+			
+			//Mana burning
+			set_property("hccs2da_backup_manaBurningThreshold", get_property("manaBurningThreshold"));
+			set_property("autoSatisfyWithNPCs", -0.05);
+			
+			//Settings
+			set_property("hccs2da_backup_autoSatisfyWithNPCs", get_property("autoSatisfyWithNPCs"));
+			set_property("autoSatisfyWithNPCs", true);
+			set_property("hccs2da_backup_autoSatisfyWithCoinmasters", get_property("autoSatisfyWithNPCs"));
+			set_property("autoSatisfyWithCoinmasters", true);
+			set_property("hccs2da_backup_dontStopForCounters", get_property("dontStopForCounters"));
+			set_property("dontStopForCounters", true);
+			
+			//CCS
+			set_property("hccs2da_backup_customCombatScript", get_property("customCombatScript"));
+			set_property("customCombatScript", "hccs");
+		}
+		
+		// Collect your consults if you can
+		progresscheck = 100010;
+		//if (get_property("hccs2da_progress") < progresscheck)
+		{
+			set_property("hccs2da_progress" ,progresscheck );
+			print("hccs2da_progress: " + get_property("hccs2da_progress"), "green");
+			
+			print("Consulting fortune.", "green");
+			if(to_boolean(get_property("hccs2da_consults")))
+			{
+				try_consult();
+			}
+		}
+
+
+		// Get the dairy goat fax
+		progresscheck = 100020;
+		//if (get_property("hccs2da_progress") < progresscheck)
+		{
+			set_property("hccs2da_progress" ,progresscheck );
+			print("Faxing in goat.", "green");
+			try_fax("dairy goat");
+		}
+
+
+
+		// unlock the Detective School
+		// This can be fun on day 1 to get the detective solver badge, which grants +hp/+mp/+item based on item level
+		if (to_boolean(get_property("hasDetectiveSchool")))
+		{
+			if (svn_exists("Ezandora-Detective-Solver-branches-Release")) {
+				print("Running Detective Solver Script", "green");
+				cli_execute("detective solver.ash");
+			} else print("If you install Ezandora's Detective Solver script, this script can use solve your mysteries!", "red");
+		}
 
 		// Try Calculating the Universe
 		try_num();
+		
+		// Pull Your Cowboy Boots from LT&T
+		// This is a day 1 (turn 0) activity to pull the "Your Cowboy Boots" from previous ascensions.
+		// This has a base enhancement of +25hp/+25mp, and can have spurs + skin added for extra enhancements
+		// see wiki: http://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots 
+		if (to_boolean(get_property("telegraphOfficeAvailable")))
+		{
+		visit_url("place.php?whichplace=town_right&action=townright_ltt");run_choice(13);
+		}
+		
+		//Source Terminal Day 1 Init
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal educate extract.edu");
+			cli_execute("terminal educate duplicate.edu");
+			//cli_execute("terminal enhance items.enh");
+			//cli_execute("terminal enhance meat.enh");
+			//cli_execute("terminal enhance substats.enh");
+			cli_execute("terminal enquiry stats.enq");
+			//cli_execute("terminal extrude booze gibson");
+			//asdonmartin drive ####
+			//Asdonmartin drive observantly
+		}
 		
 		// Get pocket wishes
 		while (get_property("_genieWishesUsed") < 3)
 		{
 			cli_execute("genie item pocket");
+		}
+		
+		//tea tree TODO
+		if (false &&  (to_boolean(get_property("_pottedTeaTreeUsed")) == false))
+		{
+			cli_execute("teatree cuppa serendipi tea");
 		}
 		
 		// Make meat from BoomBox if we can
@@ -1147,18 +1746,14 @@ void main(){
 				cli_execute("Briefcase e spell adventures");
 			} else print("If you install Ezandora's Briefcase script, this script can use your KGB!", "red");
 		}
-
-		//dive in vip swimming pool
-		visit_url("clan_viplounge.php?preaction=goswimming&subaction=screwaround&whichfloor=2&sumbit=Cannonball!",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=flip&sumbit=Handstand",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=treasure&sumbit=Dive for Treasure",true);
-		visit_url("choice.php?whichchoice=585&pwd=" + my_hash() + "&option=1&action=leave&sumbit=Get Out",true);
-
-		//open skeleton store
-		visit_url("shop.php?whichshop=meatsmith&action=talk&sumbit=What do you need?");
-		run_choice(1);
-
-
+		
+		//Lightsaber 1(mp gen), 2(20ml),3(3res), 4(10fam wt)
+		if ((item_amount($item[Fourth of May Cosplay Saber]) > 0) || (have_equipped($item[Fourth of May Cosplay Saber])))
+		{
+			print("Lightsaber regen", "green");
+			visit_url("main.php?action=may4");
+			visit_url("choice.php?whichchoice=1386&pwd=" + my_hash() + "&option=1",true);
+		}
 
 		//dive in vip swimming pool
 		print("Looting VIP room.", "green");
@@ -1243,19 +1838,28 @@ void main(){
 		use_familiar(ToTour);
 		equip($item[Hollandaise helmet]);
 		equip($item[saucepan]);
-		if (item_amount($item[astral statuette]) > 0) equip($item[astral statuette]);
+		if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+		{
+			equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+		}
+		if (item_amount($item[astral statuette]) > 0)
+		{
+			equip($slot[off-hand], $item[astral statuette]);
+		}
 		equip($item[old sweatpants]);
 		try_item($item[Newbiesport&trade; tent]);
-		
-		if (item_amount(KGB) > 0)
-		{
-			equip($slot[acc2], KGB);
-		}
-
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
 			cli_execute("fold makeshift garbage shirt");
 			equip($slot[shirt], $item[makeshift garbage shirt]);
+		}
+		if (item_amount(KGB) > 0)
+		{
+			equip($slot[acc2], KGB);
+		}
+		if (item_amount($item[vampyric cloake]) > 0)
+		{
+			equip($slot[back], $item[vampyric cloake]);
 		}
 
 		//fantasyland only
@@ -1269,15 +1873,6 @@ void main(){
 				equip($item[FantasyRealm Mage's Hat]);
 			}
 		}
-		
-		// NEP Quest
-		if (get_property("neverendingPartyAlways") == true)
-		{
-			print("Getting NEP quest", "green");
-			visit_url("adventure.php?snarfblat=528", false);
-			run_choice(1); //accept
-		}
-
 
 		print("Buffing.", "green");
 		try_skill($skill[Communism!]);
@@ -1290,6 +1885,13 @@ void main(){
 		force_skill(1, $skill[Sauce Contemplation]);
 		
 		voteInVotingBooth();
+		
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk mys", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=5",true); //Oliver Cromwell
+		}
 		
 
 		// pantogramming (+mox, res spooky, +mp, spell dmg, +combat)
@@ -1305,11 +1907,22 @@ void main(){
 			}
 
 			print("Y-RAY FAX", "blue");
+			
+			if (item_amount($item[January's Garbage Tote]) > 0)
+			{
+				//not sure enough mp to work
+				//cli_execute("fold deceased crimbo tree");
+				//equip($slot[off-hand], $item[deceased crimbo tree]);
+				//buff used in ccs
+				//buy(1 , $item[glittery mascara], 24);
+				//use(1 , $item[glittery mascara]);
+			}
+		
 			if (my_maxmp() < mp_cost($skill[Disintegrate]))
 				abort("mp cap too law for YRAY");
 			cli_execute("shower mp");
 
-			if(force_skill(1, $skill[Disintegrate], false))
+			if((force_skill(1, $skill[Disintegrate], false))||(item_amount($item[Fourth of May Cosplay Saber]) > 0)||(have_equipped($item[Fourth of May Cosplay Saber])))
 			{
 				if (item_amount($item[photocopied monster]) > 0)
 				{
@@ -1321,11 +1934,33 @@ void main(){
 					{
 						cli_execute("pool 3");
 					}
-					use(1, $item[photocopied monster]);
+					if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+					{
+						equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+					}
+					if (have_equipped($item[Fourth of May Cosplay Saber]))
+					{
+						visit_url("inventory.php?which=3",false);
+						visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
+						use_skill(to_skill(7311)); //use the force
+						visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
+						visit_url("main.php"); //refresh, not sure if needed
+					}
+					else
+					{
+						use(1, $item[photocopied monster]);
+					}
 				}
 				else abort("You do not have a photocopied monster.");
 			}
 			else abort("No Y-RAY.");
+			
+			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
+			{
+				cli_execute("fold makeshift garbage shirt");
+				equip($slot[shirt], $item[makeshift garbage shirt]);
+			}
+			
 			try_num();
 			
 			
@@ -1379,7 +2014,7 @@ void main(){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(126.1,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		burn_mp();
 		complete_quest("COIL WIRE", 11);
@@ -1387,10 +2022,134 @@ void main(){
 		if (item_amount($item[a ten-percent bonus]) > 0)
 			use(1, $item[a ten-percent bonus]);
 		else abort("You do not have a ten-percent bonus.");
+		
+		//DAYCARE
+		print("Boxing Daycare", "green");
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=1&sumbit=Have a Boxing Daydream",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareSpa") == false))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=2&sumbit=Visit the Boxing Day Spa",true);
+			visit_url("choice.php?whichchoice=1335&pwd=" + my_hash() + "&option=3&sumbit=Get a Cucumber Eye Treatment",true);
+		}
+		if ((get_property("daycareOpen") == true) && (get_property("_daycareGymScavenges").to_int() == 0))
+		{
+			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
+			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
+		}
+
 
 		// Get driving gloves from Bastille Battalion if we can (now that we've wasted 60 adventures)
 		print("Battalion Game", "green");
 		use_bastille_battalion(0, 1, 2, random(3));
+		
+		if (item_amount($item[Draftsman's driving gloves]) > 0)
+		{
+			equip($slot[acc1], $item[Draftsman's driving gloves]);
+		}
+		
+		//Source Terminal Day 1 Combat
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal enhance meat.enh");
+			cli_execute("terminal enhance substats.enh");
+		}
+		
+		//use kramco before farming
+		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		{
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+		}
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5) && !(to_boolean(get_property("hccs2da_noscale"))))
+		{
+			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+		}
+		
+		if (my_adventures() <= 0)
+		{
+			print("Unlucky Zeroth Drink", "blue");
+			drink_to(1);
+			if (!have_skill($skill[Summon Clip Art]))
+			{
+				print("THIS SHOULD NOT HAPPEN WITHOUT CLIP ARTS (MIN ADV:62)", "red");
+			}
+		}
+		
+		//GOD LOB
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
+		{
+			use_familiar($familiar[God Lobster]);
+			reach_hp(my_maxhp()-15);
+			reach_mp(20);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
+			run_choice(1);//equip
+			equip($slot[familiar], $item[God Lobster's Scepter]);
+			reach_hp(my_maxhp()-15);
+			reach_mp(20);
+			visit_url("main.php?fightgodlobster=1");
+			run_combat();
+			visit_url("main.php"); //refresh, i heard this works
+			run_choice(2);//buff
+			use_familiar(ToTour);
+		}
+
+		// NEP FIGHT
+		if ((get_property("neverendingPartyAlways") == true) && !(to_boolean(get_property("hccs2da_noscale"))))
+		{
+			print("NEP fights", "green");
+			reach_mp(50);
+			try_skill($skill[Carol of the Thrills]);
+			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
+			{
+				cli_execute("fold makeshift garbage shirt");
+				equip($slot[shirt], $item[makeshift garbage shirt]);
+			}
+			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
+			{
+				reach_hp(my_maxhp()-15);
+				reach_mp(20);
+				adv1_NEP();
+			}
+		}
+		//SKIP IF HAVE METEOR LORE
+		//GOD LOB
+		if ((!have_skill($skill[Meteor Lore])) || (guild_store_available() && knoll_available()))
+		{
+			if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
+			{
+				use_familiar($familiar[God Lobster]);
+				reach_hp(my_maxhp()-15);
+				reach_mp(20);
+				visit_url("main.php?fightgodlobster=1");
+				run_combat();
+				visit_url("main.php"); //refresh, i heard this works
+				run_choice(3); //exp
+				use_familiar(ToTour);
+			}
+		}
+		
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+		}
 
 		// clip art branch
 		if (have_skill($skill[Summon Clip Art]))
@@ -1416,25 +2175,6 @@ void main(){
 			//(9/15)drink
 		}
 		
-		//DAYCARE
-		print("Boxing Daycare", "green");
-		if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
-		{
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=1&sumbit=Have a Boxing Daydream",true);
-		}
-		if ((get_property("daycareOpen") == true) && (get_property("_daycareSpa") == false))
-		{
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=2&sumbit=Visit the Boxing Day Spa",true);
-			visit_url("choice.php?whichchoice=1335&pwd=" + my_hash() + "&option=3&sumbit=Get a Cucumber Eye Treatment",true);
-		}
-		if ((get_property("daycareOpen") == true) && (get_property("_daycareGymScavenges").to_int() == 0))
-		{
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-			visit_url("choice.php?whichchoice=1334&pwd=" + my_hash() + "&option=3&sumbit=Enter the Boxing Daycare",true);
-			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
-		}
 
 
 		print("Farming meat via casino", "blue");
@@ -1462,53 +2202,52 @@ void main(){
 		reach_hp(my_maxhp());
 
 
-		print("Barrels (very slow)", "blue");
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=20");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=21");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=22");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=10");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=11");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=12");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=00");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=01");
-		run_combat();
-		visit_url("barrel.php");
-		visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
-		run_combat();
-		try_num();
-		
-		//use kramco before farming
-		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
+		if (to_boolean(get_property("hccs2da_barrels")))
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			print("Barrels (very slow)", "blue");
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=20");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=21");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=22");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=10");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=11");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=12");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=00");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=01");
+			wait(1);
+			run_combat();
+			visit_url("barrel.php");
+			visit_url("choice.php?whichchoice=1099&pwd=" + my_hash() + "&option=1&slot=02");
+			wait(1);
+			run_combat();
+			try_num();
 		}
-		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
-		{
-			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
-		}
-		
-
-
 
 		print("Farming until semirare", "blue");
 		while (get_counters("Fortune Cookie" ,0 ,0) == "")
 		{
-			if ((!have_skill($skill[Summon Clip Art])) && (item_amount($item[goat cheese]) <= 0) && (force_skill(1, $skill[Disintegrate], false)))
+			if ((!have_skill($skill[Summon Clip Art])) && (item_amount($item[goat cheese]) <= 0) && ((force_skill(1, $skill[Disintegrate], false))||(item_amount($item[Fourth of May Cosplay Saber]) > 0)||(have_equipped($item[Fourth of May Cosplay Saber]))))
 			{
 				//no clip art branch
 				cli_execute("mcd 0");
@@ -1522,7 +2261,22 @@ void main(){
 					{
 						cli_execute("pool 3");
 					}
-					use(1, $item[photocopied monster]);
+					if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+					{
+						equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+					}
+					if (have_equipped($item[Fourth of May Cosplay Saber]))
+					{
+						visit_url("inventory.php?which=3",false);
+						visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
+						use_skill(to_skill(7311)); //use the force
+						visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
+						visit_url("main.php"); //refresh, not sure if needed
+					}
+					else
+					{
+						use(1, $item[photocopied monster]);
+					}
 					try_num();
 					if(canadia_available())
 					{
@@ -1756,6 +2510,7 @@ void main(){
 		//+item%
 		force_skill(1, $skill[Fat Leon's Phat Loot Lyric]);
 		force_skill(1, $skill[Singer's Faithful Ocelot]);
+		try_effect($effect[Synthesis: Collection]);
 		if (have_effect($effect[Hustlin']) <= 0)
 		{
 			cli_execute("pool 3");
@@ -1763,6 +2518,15 @@ void main(){
 		if ((item_amount(KGB) + equipped_amount(KGB)) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
 		{
 			cli_execute("Briefcase b item");
+		}
+		//Source Terminal Day 1 Item
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal enhance items.enh");
+		}
+		if (item_amount($item[cuppa Serendipi Tea]) > 0)
+		{
+			use(1, $item[cuppa Serendipi Tea]);
 		}
 		if (item_amount($item[chef's hat]) > 0)
 		{
@@ -1773,18 +2537,24 @@ void main(){
 			cli_execute("fold wad of used tape");
 			equip($slot[hat], $item[wad of used tape]);
 		}
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk item", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=4",true); //Prince George
+		}
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
-		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 		
 		//DAY 1 LOV
-		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
+		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 			visit_url("choice.php?whichchoice=1222&option=1&pwd");
@@ -1797,30 +2567,14 @@ void main(){
 			visit_url("choice.php?whichchoice=1227&option=1&pwd");
 			run_combat();
 			visit_url("choice.php?whichchoice=1228&option=3&pwd");
-			/*
-			set_property("choiceAdventure1223", 1);
-			set_property("choiceAdventure1225", 1);
-			set_property("choiceAdventure1227", 1);
-			//equipment room
-			set_property("choiceAdventure1224", 2);
-			//emergency room
-			set_property("choiceAdventure1226", 3);
-			//emporium 
-			set_property("choiceAdventure1228", 3);
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-			run_choice(1); //Enter lov tunnel
-			run_choice(1); //Fight
-			//run_choice(2); //LOV Epaulettes
-			run_choice(1); //Fight
-			//run_choice(3); //Wandering Eye Surgery
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Extraterrestrial Chocolate
-			*/
 			equip($slot[back], $item[LOV Epaulettes]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
-
-		cli_execute("genie effect Infernal Thirst");
+		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
+		{
+			cli_execute("genie effect Infernal Thirst");
+		}
+		try_cloake_buff($skill[Become a Bat]);
 		force_skill(1, $skill[Steely-Eyed Squint]);
 
 
@@ -1951,6 +2705,14 @@ void main(){
 				} else abort("Ode loop fail.");
 				//(12/15)drink
 				
+				print("Farm for Tomato (if needed)", "green");
+				while (item_amount($item[tomato]) <= 0)
+				{
+					adventure(1, $location[The Haunted Pantry]);
+					try_num();
+				}
+				print("Sufficient Tomato", "green");
+				
 				//do stuff that should have been done is clip art route
 				if (item_amount($item[Dolphin King's map]) > 0)
 				{
@@ -2003,10 +2765,11 @@ void main(){
 
 
 
+		
 		try_skill($skill[Love Mixology]);
 		if (lovepot(121.4,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		burn_mp();
 		complete_quest("MAKE MARGARITAS", 9);
@@ -2026,9 +2789,9 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
-		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
@@ -2071,7 +2834,7 @@ void main(){
 			}
 			else
 			{
-				print("NO TOMATO, lemon is fairly important to reduce blood test to 1 adv", "red");
+				print("NO TOMATO, lemon is fairly important to reduce blood test to  adv", "red");
 			}
 			if (item_amount($item[grapefruit]) > 0)
 			{
@@ -2096,6 +2859,16 @@ void main(){
 		if (have_effect($effect[Mental A-cue-ity]) <= 0)
 		{
 			cli_execute("pool 2");
+		}
+		
+		if (have_familiar($familiar[Grim Brother]))
+		{
+			cli_execute("grim damage");
+		}
+		
+		if ((have_effect($effect[The Magic of LOV]) <= 0) && (item_amount($item[LOV Elixir #6]) > 0))
+		{
+			use(1, $item[LOV Elixir #6]);
 		}
 
 		
@@ -2148,58 +2921,11 @@ void main(){
 
 		//magic dragonfish does not seem to work here!
 		
-		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
-		{
-			use_familiar($familiar[God Lobster]);
-			reach_hp(my_maxhp()-15);
-			visit_url("main.php?fightgodlobster=1");
-			run_combat();
-			visit_url("main.php"); //refresh, i heard this works
-			run_choice(1);//equip
-			equip($slot[familiar], $item[God Lobster's Scepter]);
-			reach_hp(my_maxhp()-15);
-			visit_url("main.php?fightgodlobster=1");
-			run_combat();
-			visit_url("main.php"); //refresh, i heard this works
-			run_choice(2);//buff
-			use_familiar(ToTour);
-		}
-
-		// NEP FIGHT
-		if (get_property("neverendingPartyAlways") == true)
-		{
-			print("NEP fights", "green");
-			reach_mp(50);
-			try_skill($skill[Carol of the Thrills]);
-			if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
-			{
-				cli_execute("fold makeshift garbage shirt");
-				equip($slot[shirt], $item[makeshift garbage shirt]);
-			}
-			while (get_property("_neverendingPartyFreeTurns").to_int() < 10)
-			{
-				reach_hp(my_maxhp()-15);
-				reach_mp(20);
-				adv1_NEP();
-			}
-		}
-		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
-		{
-			use_familiar($familiar[God Lobster]);
-			reach_hp(my_maxhp()-15);
-			visit_url("main.php?fightgodlobster=1");
-			run_combat();
-			visit_url("main.php"); //refresh, i heard this works
-			run_choice(3); //exp
-			use_familiar(ToTour);
-		}
 
 		try_skill($skill[Love Mixology]);
 		if (lovepot(114.9,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		complete_quest("MAKE SAUSAGE", 7);
 		
@@ -2208,6 +2934,7 @@ void main(){
 			print("PVP", "green");
 			// Enable PVP (this is hardcore so why not do it on the first day and get 10 extra fights
 			visit_url("peevpee.php?action=smashstone&pwd&confirm=on", true);
+			visit_url("peevpee.php?action=pledge&place=fight&pwd", true);
 		}
 		
 		//DO THIS BEFORE BUFFING
@@ -2230,6 +2957,7 @@ void main(){
 		ode_drink(1, $item[emergency margarita]);
 		use_familiar(ToTour);
 		
+		try_effect($effect[Frenzied, Bloody]);
 		force_skill(1, $skill[Rage of the Reindeer]);
 		force_skill(1, $skill[Scowl of the Auk]);
 		force_skill(1, $skill[Carol of the Bulls]);
@@ -2263,19 +2991,21 @@ void main(){
 			equip($slot[off-hand], $item[astral statuette]);
 		}
 
-		if (item_amount($item[metal meteoroid]) > 0) create(1, $item[meteorthopedic shoes]);
-		if (item_amount($item[meteorthopedic shoes]) > 0)
-		{
-			equip($slot[acc1], $item[meteorthopedic shoes]);
-		}
-		else if (item_amount($item[dead guy's watch]) > 0)
-		{
-			equip($slot[acc1], $item[dead guy's watch]);
-		}
+
 
 		if (item_amount($item[Draftsman's driving gloves]) > 0)
 		{
-			equip($slot[acc2], $item[Draftsman's driving gloves]);
+			equip($slot[acc1], $item[Draftsman's driving gloves]);
+		}
+		
+		if (item_amount($item[metal meteoroid]) > 0) create(1, $item[meteorthopedic shoes]);
+		if (item_amount($item[meteorthopedic shoes]) > 0)
+		{
+			equip($slot[acc2], $item[meteorthopedic shoes]);
+		}
+		else if (item_amount($item[dead guy's watch]) > 0)
+		{
+			equip($slot[acc2], $item[dead guy's watch]);
 		}
 		
 		if (item_amount($item[codpiece]) > 0)
@@ -2313,6 +3043,9 @@ void main(){
 		{
 			eat(1, $item[Magical sausage]);
 		}
+		
+		
+		
 		if((my_class() == $class[seal clubber]) && (have_skill($skill[Meteor Shower])) && (get_property("_sealsSummoned").to_int() < 10))
 		{
 			print("Experimental turn saving for seal clubber with meteor lore","blue");
@@ -2327,6 +3060,40 @@ void main(){
 			else abort("Not enough meat.");
 		}
 		
+
+		//GOD LOB meteor lore trick
+		if ((have_skill($skill[Meteor Shower])) || (knoll_available()))
+		{
+			if (guild_store_available() && knoll_available())
+			{
+				//make meatcar
+				print("Experimental turn saving for knoll sign with meteor lore","blue");
+				print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
+				print("Run script again after rollover, combat should end without costing an adventure","blue");
+				cli_execute("make bitchin' meatcar");
+				visit_url("guild.php?place=paco"); //turn in meatcar quest
+				visit_url("guild.php?place=paco"); //ask for white castle quest
+				visit_url("choice.php?whichchoice=930&pwd=" + my_hash() + "&option=1",true); //accept white castle quest
+				visit_url("place.php?whichplace=forestvillage&action=fv_scientist",false);
+				visit_url("choice.php?whichchoice=1201&pwd=" + my_hash() + "&option=1",true); //fight tentacle
+				use_skill($skill[Meteor Shower]); //meteor shower, not sure if auto or needed
+			}
+			else
+			{
+				if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
+				{
+					print("Experimental turn saving for god lobster with meteor lore","blue");
+					print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
+					print("Run script again after rollover, combat should end without costing an adventure","blue");
+					use_familiar($familiar[God Lobster]);
+					reach_hp(my_maxhp()-15);
+					reach_mp(20);
+					visit_url("main.php?fightgodlobster=1");
+					use_skill($skill[Meteor Shower]); //meteor shower
+				}
+			}
+		}
+		
 		abort("END DAY 1.");
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2335,16 +3102,19 @@ void main(){
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+//DAY2
 	if (my_daycount() >= 2)
 	{
 	
 		print("BEGIN DAY 2", "blue");
-		
+
 		use_familiar(ToTour);
 
 		// Collect your consults if you can
-		try_consult();
+		if(to_boolean(get_property("hccs2da_consults")))
+		{
+			try_consult();
+		}
 
 		// Get the factory overseer/worker
 		if (get_property("hccs2da_factorymox") >= 35)
@@ -2358,6 +3128,16 @@ void main(){
 			try_fax("factory overseer"); //should be MALE
 		}
 
+		// unlock the Detective School
+		// This can be fun on day 1 to get the detective solver badge, which grants +hp/+mp/+item based on item level
+		if (to_boolean(get_property("hasDetectiveSchool")))
+		{
+			if (svn_exists("Ezandora-Detective-Solver-branches-Release")) {
+				print("Running Detective Solver Script", "green");
+				cli_execute("detective solver.ash");
+			} else print("If you install Ezandora's Detective Solver script, this script can use solve your mysteries!", "red");
+		}
+
 		// Try to Calculate the Universe
 		try_num();
 
@@ -2365,6 +3145,19 @@ void main(){
 		while (get_property("_genieWishesUsed") < 3)
 		{
 			cli_execute("genie item pocket");
+		}
+		
+		//Source Terminal Day 2 Init
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal educate extract.edu");
+			cli_execute("terminal educate duplicate.edu");
+		}
+		
+		//tea tree TODO
+		if (false && (to_boolean(get_property("_pottedTeaTreeUsed")) == false))
+		{
+			cli_execute("teatree cuppa frost tea");
 		}
 		
 		// Make meat from BoomBox if we can
@@ -2382,6 +3175,13 @@ void main(){
 		use_bastille_battalion(0, 0, 2, random(3));
 		
 		voteInVotingBooth();
+		
+		if (item_amount($item[mumming trunk]) > 0)
+		{
+			print("mumming trunk mys", "green");
+			visit_url("inv_use.php?pwd=" + my_hash() + "&which=3&whichitem=9592");
+			visit_url("choice.php?pwd=" + my_hash() + "&whichchoice=1271&option=5",true); //Oliver Cromwell
+		}
 
 		// pantogramming (+mus, res hot, +hp, weapon dmg, -combat)
 		summon_pants(1, 1, "-1%2C0", "-1%2C0", "-1%2C0");
@@ -2392,6 +3192,14 @@ void main(){
 			cli_execute("Briefcase booze");
 			cli_execute("Briefcase e weapon hot -combat");
 		}
+		
+		//Lightsaber 1(mp gen), 2(20ml),3(3res), 4(10fam wt)
+		if ((item_amount($item[Fourth of May Cosplay Saber]) > 0) || (have_equipped($item[Fourth of May Cosplay Saber])))
+		{
+			print("Lightsaber res", "green");
+			visit_url("main.php?action=may4");
+			visit_url("choice.php?whichchoice=1386&pwd=" + my_hash() + "&option=3",true);
+		}
 
 		//fantasyland only
 		if((get_property("frAlways") == True)&&(item_amount($item[FantasyRealm G. E. M.]) < 1))
@@ -2399,14 +3207,6 @@ void main(){
 			print("Getting fantasy hat", "green");
 			visit_url("place.php?whichplace=realm_fantasy&action=fr_initcenter", false);
 			run_choice(1); //warrior
-		}
-		
-		// NEP Quest
-		if (get_property("neverendingPartyAlways") == true)
-		{
-			print("Getting NEP quest", "green");
-			visit_url("adventure.php?snarfblat=528", false);
-			run_choice(1); //accept
 		}
 
 		// autosell pen pal gift
@@ -2489,6 +3289,14 @@ void main(){
 		}
 
 		print("Task Prep (weapon dmg)", "blue");
+		if(item_amount($item[Punching Potion]) > 0)
+		{
+			use(1, $item[Punching Potion]);
+		}
+		if ((have_effect($effect[The Power of LOV]) <= 0) && (item_amount($item[LOV Elixir #3]) > 0))
+		{
+			use(1, $item[LOV Elixir #3]);
+		}
 		if ((have_effect($effect[Greasy Flavor]) <= 0) && (item_amount($item[greasy paste]) > 0))
 		{
 			chew(1, $item[greasy paste]);
@@ -2496,6 +3304,10 @@ void main(){
 		if (have_effect($effect[Billiards Belligerence]) <= 0)
 		{
 			cli_execute("pool 1");
+		}
+		if (have_familiar($familiar[Grim Brother]))
+		{
+			cli_execute("grim damage");
 		}
 
 		if(have_effect($effect[Bow-Legged Swagger]) <= 0)
@@ -2506,8 +3318,11 @@ void main(){
 		//consider wish wep dmg
 		if(have_effect($effect[Bow-Legged Swagger]) > 0)
 		{
-			print("Bow Legged Wish, saves ~5 adv", "blue");
-			cli_execute("genie effect Outer Wolf&trade;");
+			if((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
+			{
+				print("Bow Legged Wish, saves ~5 adv", "blue");
+				cli_execute("genie effect Outer Wolf&trade;");
+			}
 		}
 
 		burn_mp();
@@ -2536,10 +3351,31 @@ void main(){
 			//only do if >20 adv quest
 			if (lovepot(105.2,$stat[none]))
 			{
-				use(1, $item[Love Potion #XYZ]);
+				use(1, to_item(9745));
 			}
 		}
+		
+		// Not sure if works, notify me if you tested it
+		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
+		{
+			if (get_property("boomBoxSong") != "These Fists Were Made for Punchin")
+			{
+				print("Set BoomBox to fists.", "green");
+				cli_execute("boombox fists");
+			}
+		}
+		
 		complete_quest("REDUCE GAZELLE POPULATION", 6);
+		
+		// Make meat from BoomBox if we can (revert to normal behavior)
+		if (item_amount($item[SongBoom&trade; BoomBox]) > 0)
+		{
+			if (get_property("boomBoxSong") != "Total Eclipse of Your Meat")
+			{
+				print("Set BoomBox to meat.", "green");
+				cli_execute("boombox meat");
+			}
+		}
 		
 		if ((have_skill($skill[Torso Awaregness])) && (item_amount($item[January's Garbage Tote]) > 0))
 		{
@@ -2585,7 +3421,6 @@ void main(){
 
 		cli_execute("shower mp");
 
-		//TODO: fax female factory overseer/worker if mox>=35
 		set_property("hccs2da_factorymox",my_basestat($stat[moxie]));
 		if (my_basestat($stat[moxie])>=35)
 		{
@@ -2595,7 +3430,24 @@ void main(){
 		if(force_skill(1, $skill[Disintegrate], false))
 		{
 			if (item_amount($item[photocopied monster]) > 0)
-				use(1, $item[photocopied monster]);
+			{
+				if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+				{
+					equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+				}
+				if (have_equipped($item[Fourth of May Cosplay Saber]))
+				{
+					visit_url("inventory.php?which=3",false);
+					visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
+					use_skill(to_skill(7311)); //use the force
+					visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
+					visit_url("main.php"); //refresh, not sure if needed
+				}
+				else
+				{
+					use(1, $item[photocopied monster]);
+				}
+			}
 			else abort("You do not have a photocopied monster.");
 		}
 		else abort("No Y-RAY.");
@@ -2636,9 +3488,10 @@ void main(){
 		
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
+		try_effect($effect[Synthesis: Hot]);
 		
 		//DAY 2 LOV
-		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false))
+		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
 			visit_url("choice.php?whichchoice=1222&option=1&pwd");
@@ -2651,25 +3504,6 @@ void main(){
 			visit_url("choice.php?whichchoice=1227&option=1&pwd");
 			run_combat();
 			visit_url("choice.php?whichchoice=1228&option=3&pwd");
-			/*
-			set_property("choiceAdventure1223", 1);
-			set_property("choiceAdventure1225", 1);
-			set_property("choiceAdventure1227", 1);
-			//equipment room
-			set_property("choiceAdventure1224", 3);
-			//emergency room
-			set_property("choiceAdventure1226", 2);
-			//emporium 
-			set_property("choiceAdventure1228", 3);
-			visit_url("place.php?whichplace=town_wrong&action=townwrong_tunnel");
-			run_choice(1); //Enter lov tunnel
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Earrings
-			run_choice(1); //Fight
-			//run_choice(2); //Open Heart Surgery
-			run_choice(1); //Fight
-			//run_choice(3); //LOV Extraterrestrial Chocolate
-			*/
 			equip($slot[acc3], $item[LOV Earrings]);
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
@@ -2683,18 +3517,24 @@ void main(){
 			cli_execute("pool 1");
 		}
 
-		if((have_skill($skill[Leash of Linguini])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		if ((have_skill($skill[Leash of Linguini])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
 		{
 			force_skill(1, $skill[Leash of Linguini]);
 		}
 
-		if((have_skill($skill[Empathy of the Newt])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		if ((have_skill($skill[Empathy of the Newt])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
 		{
 			force_skill(1, $skill[Empathy of the Newt]);
 		}
 
-		cli_execute("genie effect Fireproof Lips");
-
+		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
+		{
+			cli_execute("genie effect Fireproof Lips");
+		}
+		if (item_amount($item[cuppa Frost Tea]) > 0)
+		{
+			use(1, $item[cuppa Frost Tea]);
+		}
 		if ((item_amount($item[heat-resistant gloves]) > 0) && (my_basestat($stat[moxie])>=35))
 		{
 			equip($slot[acc3], $item[heat-resistant gloves]);
@@ -2726,12 +3566,20 @@ void main(){
 		{
 			equip($slot[pants], $item[lava-proof pants]);
 		}
-		
+		if (item_amount($item[Glass pie plate]) > 0)
+		{
+			equip($slot[off-hand], $item[Glass pie plate]);
+		}
+		if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+		{
+			equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+		}
+		try_cloake_buff($skill[Become a Cloud of Mist]);
 		try_skill($skill[Love Mixology]);
 		if(elemental_resistance($element[hot]) < 94.93) {
 			if (lovepot(86.5,$stat[none]))
 			{
-				use(1, $item[Love Potion #XYZ]);
+				use(1, to_item(9745));
 			}
 		}
 		complete_quest("STEAM TUNNELS", 10);
@@ -2752,14 +3600,15 @@ void main(){
 		//use kramco before farming
 		if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 		{
-			equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+			//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 		}
-		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
+		
+		if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
 		}
 
-		if ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
+		while ((item_amount($item[boxed wine]) <= 0) && (item_amount($item[bottle of rum]) <= 0) && (item_amount($item[bottle of vodka]) <= 0) && (item_amount($item[bottle of gin]) <= 0) && (item_amount($item[bottle of whiskey]) <= 0) && (item_amount($item[bottle of tequila]) <= 0))
 		{
 			adventure(1, $location[Noob Cave]);
 		}
@@ -2845,7 +3694,6 @@ void main(){
 		}
 		
 		//spells
-
 		force_skill(1, $skill[The Power Ballad of the Arrowsmith]);
 		force_skill(1, $skill[Quiet Determination]);
 		force_skill(1, $skill[Rage of the Reindeer]);
@@ -2866,17 +3714,25 @@ void main(){
 		visit_url("place.php?whichplace=monorail&action=monorail_lyle");
 
 		//items
+		try_effect($effect[Synthesis: Strong]);
 		if ((have_effect($effect[Oily Flavor]) <= 0) && (item_amount($item[oily paste]) > 0))
 		{
 			chew(1, $item[oily paste]);
+		}
+		if ((have_effect($effect[The Power of LOV]) <= 0) && (item_amount($item[LOV Elixir #3]) > 0))
+		{
+			use(1, $item[LOV Elixir #3]);
 		}
 		if (item_amount($item[Ben-Gal&trade; Balm]) > 0)
 		{
 			use(1, $item[Ben-Gal&trade; Balm]);
 		}
-		if(item_amount($item[Crimbo peppermint bark]) > 0)
+		if (!have_skill($skill[Sweet Synthesis]))
 		{
-			use(1, $item[Crimbo peppermint bark]);
+			if(item_amount($item[Crimbo peppermint bark]) > 0)
+			{
+				use(1, $item[Crimbo peppermint bark]);
+			}
 		}
 		if (item_amount($item[giant giant moth dust]) > 0)
 		{
@@ -2989,6 +3845,8 @@ void main(){
 		{
 			force_skill(1, $skill[Blood Sugar Sauce Magic]);
 		}
+		
+		try_cloake_buff($skill[Become a Wolf]);
 
 		//check if wish required for donate blood
 		if(my_maxhp() - (my_buffedstat($stat[muscle]) + 3) < 30 * 58)
@@ -3005,13 +3863,16 @@ void main(){
 				print("G9: "+gnine_stat+"%");
 				print("Buff: "+gnine_add);
 			}
-			if (gnine_add>100.0)
+			if (item_amount($item[pocket wish]) > 0)
 			{
-				cli_execute("genie effect Experimental Effect G-9");
-			}
-			else
-			{
-				cli_execute("genie effect 'Roids of the Rhinoceros");
+				if (gnine_add>100.0)
+				{
+					cli_execute("genie effect Experimental Effect G-9");
+				}
+				else
+				{
+					cli_execute("genie effect 'Roids of the Rhinoceros");
+				}
 			}
 		}
 
@@ -3040,7 +3901,7 @@ void main(){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(56.5,$stat[muscle]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 
 		complete_quest("FEED CHILDREN", 2);
@@ -3059,8 +3920,12 @@ void main(){
 		try_skill($skill[Blessing of She-Who-Was]);
 		try_skill($skill[Song of Bravado]);
 		try_skill($skill[Stevedave's Shanty of Superiority]);
-
+		try_effect($effect[Synthesis: Smart]);
 		//item
+		if ((have_effect($effect[The Magic of LOV]) <= 0) && (item_amount($item[LOV Elixir #6]) > 0))
+		{
+			use(1, $item[LOV Elixir #6]);
+		}
 		if (item_amount($item[tomato juice of powerful power]) > 0)
 		{
 			use(1, $item[tomato juice of powerful power]);
@@ -3077,9 +3942,12 @@ void main(){
 		{
 			use(1, $item[glittery mascara]);
 		}
-		if(item_amount($item[Crimbo candied pecan]) > 0)
+		if (!have_skill($skill[Sweet Synthesis]))
 		{
-			use(1, $item[Crimbo candied pecan]);
+			if(item_amount($item[Crimbo candied pecan]) > 0)
+			{
+				use(1, $item[Crimbo candied pecan]);
+			}
 		}
 		if(item_amount($item[bag of grain]) > 0)
 		{
@@ -3163,12 +4031,21 @@ void main(){
 			visit_url("choice.php?whichchoice=1336&pwd=" + my_hash() + "&option=2&sumbit=Scavenge for gym equipment ",true);
 		}
 		
+		//Source Terminal Day 2 Combat
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			cli_execute("terminal enhance items.enh");
+			cli_execute("terminal enhance meat.enh");
+			cli_execute("terminal enhance substats.enh");
+		}
+		
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			use_familiar($familiar[God Lobster]);
 			equip($slot[familiar], $item[God Lobster's Scepter]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
@@ -3176,7 +4053,7 @@ void main(){
 			use_familiar(ToTour);
 		}
 		// NEP FIGHT
-		if (get_property("neverendingPartyAlways") == true)
+		if ((get_property("neverendingPartyAlways") == true) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			print("NEP fights", "green");
 			reach_mp(50);
@@ -3189,7 +4066,7 @@ void main(){
 			//use kramco before farming
 			if (item_amount($item[Lil' Doctor&trade; bag]) > 0)
 			{
-				equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
+				//equip($slot[acc2], $item[Lil' Doctor&trade; bag]);
 			}
 			if ((item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0) && (have_skill($skill[Soul Saucery])) && (my_soulsauce() >= 5))
 			{
@@ -3220,26 +4097,44 @@ void main(){
 			}
 		}
 		//GOD LOB
-		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))))
+		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
 			use_familiar($familiar[God Lobster]);
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			reach_hp(my_maxhp()-15);
+			reach_mp(20);
 			visit_url("main.php?fightgodlobster=1");
 			run_combat();
 			visit_url("main.php"); //refresh, i heard this works
 			run_choice(3); //exp
 			use_familiar(ToTour);
 		}
+		
+		if (get_property("sourceTerminalSpam") > 0)
+		{
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+			if (item_amount($item[Source essence]) >= 10)
+			{
+				cli_execute("terminal extrude booze gibson");
+			}
+		}
 
 		try_skill($skill[Love Mixology]);
 		if (lovepot(27.5,$stat[mysticality]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
@@ -3247,7 +4142,7 @@ void main(){
 
 		print("Task Prep (mox)", "blue");
 		//spells
-
+		try_effect($effect[Synthesis: Cool]);
 		force_skill(1, $skill[The Moxious Madrigal]);
 		force_skill(1, $skill[Blubber Up]);
 		if ((have_skill($skill[Quiet Desperation])) && (have_skill($skill[Disco Smirk])))
@@ -3274,6 +4169,10 @@ void main(){
 		try_skill($skill[Stevedave's Shanty of Superiority]);
 
 		//item
+		if ((have_effect($effect[The Moxie of LOV]) <= 0) && (item_amount($item[LOV Elixir #9]) > 0))
+		{
+			use(1, $item[LOV Elixir #9]);
+		}
 		if (item_amount($item[oil of expertise]) > 0)
 		{
 			use(1, $item[oil of expertise]);
@@ -3290,6 +4189,7 @@ void main(){
 		{
 			use(1, $item[hair spray]);
 		}
+		//feel free to use crimbo candy here, since we are past all synthesis
 		if(item_amount($item[Crimbo fudge]) > 0)
 		{
 			use(1, $item[Crimbo fudge]);
@@ -3378,7 +4278,12 @@ void main(){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(0.0,$stat[moxie]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
+		}
+		
+		if(item_amount($item[Rhinestone]) > 0)
+		{
+			use(item_amount($item[Rhinestone]), $item[Rhinestone]);
 		}
 
 		complete_quest("FEED CONSPIRATORS", 4);
@@ -3390,12 +4295,17 @@ void main(){
 		
 		if(item_amount($item[beastly paste]) > 0)
 		{
-			chew(1, $item[beastly paste]);
+			//chew(1, $item[beastly paste]);
 		}
 		if (have_effect($effect[Billiards Belligerence]) <= 0)
 		{
-			cli_execute("pool 1");
+			//cli_execute("pool 1");
 		}
+		try_effect($effect[Leash of Linguini]);
+		try_effect($effect[Empathy]);
+		try_effect($effect[Beastly Flavor]);
+		try_effect($effect[Billiards Belligerence]);
+		try_effect($effect[Blood Bond]);
 
 		//equips
 		if (item_amount($item[fish hatchet]) > 0)
@@ -3472,19 +4382,19 @@ void main(){
 		{
 			equip($slot[pants], $item[pantogram pants]);
 		}
-		if(item_amount($item[squeaky toy rose]) > 0)
+		if (item_amount($item[squeaky toy rose]) > 0)
 		{
 			use(1, $item[squeaky toy rose]);
 		}
-		if(item_amount($item[shady shades]) > 0)
+		if (item_amount($item[shady shades]) > 0)
 		{
 			use(1, $item[shady shades]);
 		}
-		if(item_amount($item[pocket wish]) > 0)
+		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
 		{
 			cli_execute("genie effect Disquiet Riot");
 		}
-		if(item_amount($item[pocket wish]) > 0) //might want to save pocket wish if not needed
+		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
 		{
 			cli_execute("genie effect Chocolatesphere");
 		}
@@ -3496,15 +4406,14 @@ void main(){
 			cli_execute("shrug The Sonata of Sneakiness");
 		}
 
+		set_property("hccs2da_progress" ,0 );
 		print("ASCENSION - DONATING YOUR BODY TO SCIENCE", "red");
 		visit_url("council.php");
 		visit_url("choice.php?pwd&whichchoice=1089&option=30");
 
-		// Restore previous CCS
-		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
-		remove_property("hccs2da_backupCCS");
-		set_property("dontStopForCounters", get_property("hccs2da_backupdontStopForCounters"));
-		remove_property("hccs2da_backupdontStopForCounters");
+		// Restore previous CCS and settings
+		
+		revert_settings();
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
@@ -3514,6 +4423,7 @@ void main(){
 		}
 		cli_execute("breakfast");
 		
+		//RECORDS
 		//Print quest completion speed
 		print("QUEST RECORDS", "purple");
 		print("COIL WIRE: " + get_property( "hccs2da_questrecord11" ), "blue");
@@ -3541,12 +4451,17 @@ void main(){
 		print(" ", "purple");
 		print("OTHER INFO", "purple");
 		print("TURN COUNT: " + my_turncount(), "blue");
-		print("EXCESS ADV: " + my_adventures(), "blue");
+		print("REMAINING ADV: " + my_adventures(), "blue");
 		print("MARZIPAN ITEM%: " + get_property( "hccs2da_marzipanhard" ), "blue");
 		print("MARZIPAN CANDY%: " + get_property( "hccs2da_marzipaneasy" ), "blue");
 		print("MOXIE AT FACTORY: " + get_property( "hccs2da_factorymox" ), "blue");
 		print("PVP ENABLED: " + get_property( "hccs2da_dopvp" ), "blue");
 		print("TOUR DISABLED: " + get_property( "hccs2da_notour" ), "blue");
+		print("SCALING MOBS DISABLED: " + get_property( "hccs2da_noscale" ), "blue");
+		print("STINGY MODE: " + get_property( "hccs2da_stingy" ), "blue");
+		print("DO BARRELS: " + get_property( "hccs2da_barrels" ), "blue");
+		print("DO CONSULTS: " + get_property( "hccs2da_consults" ), "blue");
+		
 		
 		print("FINISHED.", "red");
 	}
