@@ -2,7 +2,7 @@ READ THE ENTIRE README FILE (THIS FILE THAT YOU ARE READING NOW)
 
 Note: Download zip option is in the upper right. Place .ash in kolmafia/scripts/ and .css in kolmafia/css/  
 
-kmail iloath if there are any issues or bugs
+kmail iloath if there are any issues or bugs, no SVN for now so manually update frequently , especially if you encounter new issues.
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
