@@ -1,4 +1,4 @@
-READ ENTIRE HELP FILE
+READ THE ENTIRE README FILE (THIS FILE THAT YOU ARE READING NOW)
 
 Note: Download zip option is in the upper right. Place .ash in kolmafia/scripts/ and .css in kolmafia/css/  
 
