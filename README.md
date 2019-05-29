@@ -8,7 +8,7 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
-hccs2da.ash: stable automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult.
+hccs2da.ash: stable automation script, run this after perming skills and before diet or spending adv. Optional: BAFH whitelist for auto consult. RUN "hccs2da help" IN CLI FOR INFO
 
 hccs2daexp.ash: better but untested alternative automation script, EXPERIMENTAL AND UNTESTED, supports more IOTM. RUN "hccs2daexp help" IN CLI FOR INFO
 
