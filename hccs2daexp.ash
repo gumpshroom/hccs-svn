@@ -5,7 +5,6 @@ notify iloath;
 //kmail iloath if you found any bugs
 
 //TODO: burning cape
-//TODO: TEST Lightsaber "Yray"
 
 //Find Menu
 //SETTINGS
@@ -17,19 +16,67 @@ notify iloath;
 void show_help()
 {
 	print_html("iloath's HCCS 2day experimental");
-	print_html("Usage: hccs2dexp [game configuration].");
+	print_html("Usage: hccs2dexp [argument].");
 	print_html("");
 	print_html("Configuration options:");
 	print_html("<b>help</b> - Show this help message.");
-	print_html("<b>settings</b> - Allow you to (re)set your configuration.");
+	print_html("<b>settings</b> - Allow you to set your script configuration.");
 	print_html("<b>records</b> - Show this run's records and other statistics.");
 	print_html("<b>warnings</b> - Show warnings for missing IoTMs and perms.");
-	print_html("<b>run</b> - Run script.");
+	print_html("<b>revert</b> - Revert your setting to that before you ran script, used automatically when script donates your body, use this if you plan to finish run manually.");
+	print_html("<b>test</b> - FOR TESTERS ONLY. test an unknown code snippet");
+	print_html("<b>next</b> - NOT YET IMPLEMENTED. skip current step if script keep getting stuck on it");
+	print_html("<b>load</b> - NOT YET IMPLEMENTED. start from a certain step");
+	print_html("<b>resume</b> - NOT YET IMPLEMENTED. Resume script.");
+	print_html("<b>start</b> - Run script, starting from the beginning of a day.");
 	
 	print_html("");
-	print_html("Example commands:");
+	print_html("Example commands, type into kolmafia's CLI:");
 	print_html("<b>\"hccs2dexp warnings\"</b> Show warnings for missing IoTMs and perms.");
-	print_html("<b>\"hccs2dexp run\"</b> Run script.");
+	print_html("<b>\"hccs2dexp start\"</b> Run script.");
+}
+
+void revert_settings()
+{
+	//doc bag quest (dont work)
+	//set_property("choiceAdventure1340", get_property("hccs2da_backup_choiceAdventure1340"));
+	//remove_property("hccs2da_backup_choiceAdventure1340");
+
+	//The Baker's Dilemma
+	set_property("choiceAdventure114", get_property("hccs2da_backup_choiceAdventure114"));
+	remove_property("hccs2da_backup_choiceAdventure114");
+	//Oh No, Hobo
+	set_property("choiceAdventure115", get_property("hccs2da_backup_choiceAdventure115"));
+	remove_property("hccs2da_backup_choiceAdventure115");
+	//The Singing Tree
+	set_property("choiceAdventure116", get_property("hccs2da_backup_choiceAdventure116"));
+	remove_property("hccs2da_backup_choiceAdventure116");
+	//Trespasser
+	set_property("choiceAdventure117", get_property("hccs2da_backup_choiceAdventure117"));
+	remove_property("hccs2da_backup_choiceAdventure117");
+	//Temporarily Out of Skeletons
+	set_property("choiceAdventure1060", get_property("hccs2da_backup_choiceAdventure1060"));
+	remove_property("hccs2da_backup_choiceAdventure1060");
+
+	//Mana burning
+	set_property("manaBurningThreshold", get_property("hccs2da_backup_manaBurningThreshold"));
+	remove_property("hccs2da_backup_manaBurningThreshold");
+
+	//Settings
+	set_property("autoSatisfyWithNPCs", get_property("hccs2da_backup_autoSatisfyWithNPCs"));
+	remove_property("hccs2da_backup_autoSatisfyWithNPCs");
+	set_property("autoSatisfyWithCoinmasters", get_property("hccs2da_backup_autoSatisfyWithCoinmasters"));
+	remove_property("hccs2da_backup_autoSatisfyWithCoinmasters");
+	set_property("dontStopForCounters", get_property("hccs2da_backup_dontStopForCounters"));
+	remove_property("hccs2da_backup_dontStopForCounters");
+
+	//CCS
+	set_property("customCombatScript", get_property("hccs2da_backup_customCombatScript"));
+	remove_property("hccs2da_backup_customCombatScript");
+	
+	//progress
+	set_property("hccs2da_progress" ,0 );
+	remove_property("hccs2da_progress");
 }
 
 void set_settings()
@@ -92,12 +139,6 @@ void set_settings()
 	else
 	{
 		set_property("hccs2da_consults" ,false );
-	}
-	
-	//reset progress
-	if (user_confirm("Reset script progress to zero?"))
-	{
-		set_property("hccs2da_progress" ,0 );
 	}
 }
 
@@ -776,7 +817,7 @@ void use_bastille_battalion(int desired_stat, int desired_item, int desired_buff
 
 boolean lovepot(float thershold, stat test)
 {
-	if (item_amount($item[Love Potion #XYZ]) > 0)
+	if (item_amount(to_item(9745)) > 0)
 	{
 		//https://pastebin.com/EyzeE8A2
 		//it is assumed that you do test in order of mus->mys->mox
@@ -1356,27 +1397,55 @@ void main(string arguments){
 		show_warnings();
 		return;
 	}
-	if (arguments == "" || arguments.to_lower_case() == "test")
+	else if (arguments.to_lower_case() == "revert")
 	{
-		print("Testing a code snippet here", "blue");
-		if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
-		{
-			equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
-		}
-		if (have_equipped($item[Fourth of May Cosplay Saber]))
-		{
-			visit_url("inventory.php?which=3",false);
-			visit_url("inv_use.php?which=f0&whichitem=4873&pwd=" + my_hash(),false);
-			use_skill(to_skill(7311)); //use the force
-			visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
-			visit_url("main.php"); //refresh, not sure if needed
-		}
+		print("Reverting settings", "blue");
+		revert_settings();
 		return;
 	}
-	else if (arguments.to_lower_case() != "run")
+	else if (arguments.to_lower_case() == "next")
+	{
+		print("Skipping current step when resuming", "blue");
+		set_property("hccs2da_progress", to_int(get_property("hccs2da_progress"))+1);
+		return;
+	}
+	else if (arguments.to_lower_case() == "test")
+	{
+		print("Testing a code snippet here", "blue");
+		boolean done4 = false;
+		visit_url("clan_viplounge.php?action=hotdogstand", false);
+		while (!done4) {
+			string page = visit_url("clan_viplounge.php?preaction=eathotdog&whichdog=-92&sumbit=Eat",true);
+
+			if (page.contains_text("feel up to eating")) {
+				done4 = true;
+			}
+		}
+		print("Finished Hot Dogs", "blue");
+		return;
+	}
+	else if (arguments.to_lower_case() == "load" || arguments.to_lower_case() == "resume" || arguments.to_lower_case() != "start")
 	{
 		print("Unknown argument", "red");
+		print("Try refering to help page, type:", "red");
+		print("hccs2dexp help", "red");
+		print("into kolmafia's CLI", "red");
 		return;
+	}
+	
+	if (arguments.to_lower_case() == "load")
+	{
+		print("TODO: start from certain step number", "red");
+		set_property("hccs2da_progress" ,999999 );
+	}
+	else if (arguments.to_lower_case() == "resume")
+	{
+		print("TODO: Resuming run from aborted step", "blue");
+	}
+	else if (arguments.to_lower_case() == "start")
+	{
+		print("Starting from beginning of day", "blue");
+		set_property("hccs2da_progress" ,0 );
 	}
 	//init
 	//START
@@ -1523,16 +1592,7 @@ void main(string arguments){
 	item KGB = $item[Kremlin's Greatest Briefcase];
 
 	//TODO: reset these when script ascends
-	//The Baker's Dilemma
-	set_property("choiceAdventure114", 2);
-	//Oh No, Hobo
-	set_property("choiceAdventure115", 1);
-	//The Singing Tree
-	set_property("choiceAdventure116", 4);
-	//Trespasser
-	set_property("choiceAdventure117", 1);
-	//Temporarily Out of Skeletons
-	set_property("choiceAdventure1060", 1);
+	
 	
 	//doc bag quest (dont work)
 	//set_property("choiceAdventure1340", 1);
@@ -1553,10 +1613,42 @@ void main(string arguments){
 			set_property("hccs2da_progress" ,progresscheck );
 			print("hccs2da_progress: " + get_property("hccs2da_progress"), "green");
 			
-			print("Set up CSS.", "green");
-			set_property("hccs2da_backupdontStopForCounters", get_property("dontStopForCounters"));
+			print("Set up CSS and settings.", "green");
+			
+			//doc bag quest (dont work)
+			//set_property("hccs2da_backup_choiceAdventure1340", get_property("choiceAdventure1340"));
+			//set_property("choiceAdventure1340", 1);
+			
+			//The Baker's Dilemma
+			set_property("hccs2da_backup_choiceAdventure114", get_property("choiceAdventure114"));
+			set_property("choiceAdventure114", 2);
+			//Oh No, Hobo
+			set_property("hccs2da_backup_choiceAdventure115", get_property("choiceAdventure115"));
+			set_property("choiceAdventure115", 1);
+			//The Singing Tree
+			set_property("hccs2da_backup_choiceAdventure116", get_property("choiceAdventure116"));
+			set_property("choiceAdventure116", 4);
+			//Trespasser
+			set_property("hccs2da_backup_choiceAdventure117", get_property("choiceAdventure117"));
+			set_property("choiceAdventure117", 1);
+			//Temporarily Out of Skeletons
+			set_property("hccs2da_backup_choiceAdventure1060", get_property("choiceAdventure1060"));
+			set_property("choiceAdventure1060", 1);
+			
+			//Mana burning
+			set_property("hccs2da_backup_manaBurningThreshold", get_property("manaBurningThreshold"));
+			set_property("autoSatisfyWithNPCs", -0.05);
+			
+			//Settings
+			set_property("hccs2da_backup_autoSatisfyWithNPCs", get_property("autoSatisfyWithNPCs"));
+			set_property("autoSatisfyWithNPCs", true);
+			set_property("hccs2da_backup_autoSatisfyWithCoinmasters", get_property("autoSatisfyWithNPCs"));
+			set_property("autoSatisfyWithCoinmasters", true);
+			set_property("hccs2da_backup_dontStopForCounters", get_property("dontStopForCounters"));
 			set_property("dontStopForCounters", true);
-			set_property("hccs2da_backupCCS", get_property("customCombatScript"));
+			
+			//CCS
+			set_property("hccs2da_backup_customCombatScript", get_property("customCombatScript"));
 			set_property("customCombatScript", "hccs");
 		}
 		
@@ -1830,7 +1922,7 @@ void main(string arguments){
 				abort("mp cap too law for YRAY");
 			cli_execute("shower mp");
 
-			if(force_skill(1, $skill[Disintegrate], false))
+			if((force_skill(1, $skill[Disintegrate], false))||(item_amount($item[Fourth of May Cosplay Saber]) > 0)||(have_equipped($item[Fourth of May Cosplay Saber])))
 			{
 				if (item_amount($item[photocopied monster]) > 0)
 				{
@@ -1922,7 +2014,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(126.1,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		burn_mp();
 		complete_quest("COIL WIRE", 11);
@@ -2155,7 +2247,7 @@ void main(string arguments){
 		print("Farming until semirare", "blue");
 		while (get_counters("Fortune Cookie" ,0 ,0) == "")
 		{
-			if ((!have_skill($skill[Summon Clip Art])) && (item_amount($item[goat cheese]) <= 0) && (force_skill(1, $skill[Disintegrate], false)))
+			if ((!have_skill($skill[Summon Clip Art])) && (item_amount($item[goat cheese]) <= 0) && ((force_skill(1, $skill[Disintegrate], false))||(item_amount($item[Fourth of May Cosplay Saber]) > 0)||(have_equipped($item[Fourth of May Cosplay Saber]))))
 			{
 				//no clip art branch
 				cli_execute("mcd 0");
@@ -2677,7 +2769,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(121.4,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		burn_mp();
 		complete_quest("MAKE MARGARITAS", 9);
@@ -2833,7 +2925,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(114.9,$stat[none]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		complete_quest("MAKE SAUSAGE", 7);
 		
@@ -3259,7 +3351,7 @@ void main(string arguments){
 			//only do if >20 adv quest
 			if (lovepot(105.2,$stat[none]))
 			{
-				use(1, $item[Love Potion #XYZ]);
+				use(1, to_item(9745));
 			}
 		}
 		
@@ -3487,7 +3579,7 @@ void main(string arguments){
 		if(elemental_resistance($element[hot]) < 94.93) {
 			if (lovepot(86.5,$stat[none]))
 			{
-				use(1, $item[Love Potion #XYZ]);
+				use(1, to_item(9745));
 			}
 		}
 		complete_quest("STEAM TUNNELS", 10);
@@ -3809,7 +3901,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(56.5,$stat[muscle]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 
 		complete_quest("FEED CHILDREN", 2);
@@ -4042,7 +4134,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(27.5,$stat[mysticality]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 
 		complete_quest("BUILD PLAYGROUND MAZES", 3);
@@ -4186,7 +4278,7 @@ void main(string arguments){
 		try_skill($skill[Love Mixology]);
 		if (lovepot(0.0,$stat[moxie]))
 		{
-			use(1, $item[Love Potion #XYZ]);
+			use(1, to_item(9745));
 		}
 		
 		if(item_amount($item[Rhinestone]) > 0)
@@ -4319,11 +4411,9 @@ void main(string arguments){
 		visit_url("council.php");
 		visit_url("choice.php?pwd&whichchoice=1089&option=30");
 
-		// Restore previous CCS
-		set_property("customCombatScript", get_property("hccs2da_backupCCS"));
-		remove_property("hccs2da_backupCCS");
-		set_property("dontStopForCounters", get_property("hccs2da_backupdontStopForCounters"));
-		remove_property("hccs2da_backupdontStopForCounters");
+		// Restore previous CCS and settings
+		
+		revert_settings();
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
