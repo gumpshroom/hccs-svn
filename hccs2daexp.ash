@@ -16,7 +16,7 @@ notify iloath;
 void show_help()
 {
 	print_html("iloath's HCCS 2day experimental");
-	print_html("Usage: hccs2dexp [argument].");
+	print_html("Usage: hccs2daexp [argument].");
 	print_html("");
 	print_html("Configuration options:");
 	print_html("<b>help</b> - Show this help message.");
@@ -32,8 +32,8 @@ void show_help()
 	
 	print_html("");
 	print_html("Example commands, type into kolmafia's CLI:");
-	print_html("<b>\"hccs2dexp warnings\"</b> Show warnings for missing IoTMs and perms.");
-	print_html("<b>\"hccs2dexp start\"</b> Run script.");
+	print_html("<b>\"hccs2daexp warnings\"</b> Show warnings for missing IoTMs and perms.");
+	print_html("<b>\"hccs2daexp start\"</b> Run script.");
 }
 
 void revert_settings()
@@ -285,7 +285,7 @@ void show_warnings()
 		
 		if(my_class() != $class[Sauceror]) print("Not Sauceror, not recommanded!","red");
 		if(!in_hardcore()) print("Not Hardcore, not recommanded!","red");
-		if(my_path() != "Community Service") abort("Not Community Service! Aborting!");
+		if(my_path() != "Community Service") abort("Not Community Service! Will abort!");
 	}
 }
 
