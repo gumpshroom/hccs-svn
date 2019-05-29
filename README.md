@@ -1,4 +1,8 @@
+READ ENTIRE HELP FILE
+
 Note: Download zip option is in the upper right. Place .ash in kolmafia/scripts/ and .css in kolmafia/css/  
+
+kmail iloath if there are any issues or bugs
 
 www.reddit.com/r/kol/wiki/guides/iloath_hccs
 
