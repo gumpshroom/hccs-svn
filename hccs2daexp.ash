@@ -3103,15 +3103,17 @@ void main(string arguments){
 		{
 			cli_execute("hottub");
 		}
+		print("TEST TEST 1", "green");
 		while (make_sausage(1, my_meat() - 1500) > 0)
 		{
 			print("Made a sausage!", "green");
 		}
+		print("TEST TEST 2", "green");
 		while (item_amount($item[Magical sausage]) >= 1)
 		{
 			eat(1, $item[Magical sausage]);
 		}
-		
+		print("TEST TEST 3", "green");
 		
 
 		
@@ -3128,7 +3130,7 @@ void main(string arguments){
 			}
 			else abort("Not enough meat.");
 		}
-		
+		print("TEST TEST 4", "green");
 
 		//GOD LOB meteor lore trick
 		if (have_effect($effect[Meteor Showered]) <= 0)
