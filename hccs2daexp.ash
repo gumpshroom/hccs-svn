@@ -399,37 +399,55 @@ int lightsaber_buff(skill value)
 	//Become a Wolf (day2) 0.67 adv
 	//Giant Growth x3 (day2) 4adv x 3
 	//Meteor shower (MUST USE LIGHTSABER)
+	print("TEST1");
 	if (!have_skill(value))
 	{
+		print("TEST2");
 		return -1;
 	}
+	print("TEST3");
 	if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
 	{
+		print("TEST4");
 		equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
 	}
+	print("TEST5");
 	if (have_equipped($item[Fourth of May Cosplay Saber]))
 	{
+		print("TEST6");
 		if (my_adventures() == 0) abort("No adventures.");
+		print("TEST7");
 		if (get_counters("Fortune Cookie",0,0) != "") {
 			abort("Semirare! LastLoc: " + get_property("semirareLocation"));
 		}
+		print("TEST8");
 		if (have_effect($effect[Beaten Up]) > 0)
 		{
 			abort("Beaten up");
 		}
+		print("TEST9");
 		string page = visit_url("adventure.php?snarfblat=240");
+		print("TEST10");
 		if (page.contains_text("You're fighting")) {
+			print("TEST11");
 			use_skill(value);
+			print("TEST12");
 			use_skill(to_skill(7311)); //use the force
+			print("TEST13");
 			visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
+			print("TEST14");
 			visit_url("main.php"); //refresh, not sure if needed
+			print("TEST15");
 			return 0;
+			print("TEST16");
 		}
 		else
 		{
+			print("TEST17");
 			abort("NC");
 		}
 	}
+	print("TEST18");
 	return -1;
 }
 
@@ -2992,9 +3010,9 @@ void main(string arguments){
 		}
 
 		print("Task Prep (weapon dmg)", "blue");
-		
+		print("TESTA");
 		lightsaber_buff($skill[Meteor Shower]);
-
+		print("TESTB");
 		if (!force_skill(1, $skill[The Ode to Booze])) abort("Ode loop fail");
 
 		if (reach_meat(500)) ode_drink(1, $item[Sockdollager]);
