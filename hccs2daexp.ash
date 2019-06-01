@@ -369,6 +369,7 @@ int combat_buff(skill value, skill free_run_skill)
 	//Become a Cloud of Mist (day2) 2adv
 	//Become a Wolf (day2) 0.67 adv
 	//Giant Growth x3 (day2) 4adv x 3
+	//DO NOT USE Meteor shower (MUST USE LIGHTSABER)
 	
 	if (my_adventures() == 0) abort("No adventures.");
 	if (get_counters("Fortune Cookie",0,0) != "") {
@@ -384,8 +385,50 @@ int combat_buff(skill value, skill free_run_skill)
 		use_skill(free_run_skill);
 		return 0;
 	}
-	else if (page.contains_text("Just Paused")) {
+	else
+	{
 		abort("NC");
+	}
+	return -1;
+}
+
+int lightsaber_buff(skill value)
+{
+	//Become a Bat (day1) 3.33 adv
+	//Become a Cloud of Mist (day2) 2adv
+	//Become a Wolf (day2) 0.67 adv
+	//Giant Growth x3 (day2) 4adv x 3
+	//Meteor shower (MUST USE LIGHTSABER)
+	if (!have_skill(value))
+	{
+		return -1;
+	}
+	if (item_amount($item[Fourth of May Cosplay Saber]) > 0)
+	{
+		equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
+	}
+	if (have_equipped($item[Fourth of May Cosplay Saber]))
+	{
+		if (my_adventures() == 0) abort("No adventures.");
+		if (get_counters("Fortune Cookie",0,0) != "") {
+			abort("Semirare! LastLoc: " + get_property("semirareLocation"));
+		}
+		if (have_effect($effect[Beaten Up]) > 0)
+		{
+			abort("Beaten up");
+		}
+		string page = visit_url("adventure.php?snarfblat=240");
+		if (page.contains_text("You're fighting")) {
+			use_skill(value);
+			use_skill(to_skill(7311)); //use the force
+			visit_url("choice.php?whichchoice=1387&pwd=" + my_hash() + "&option=3",true); //drop stuff
+			visit_url("main.php"); //refresh, not sure if needed
+			return 0;
+		}
+		else
+		{
+			abort("NC");
+		}
 	}
 	return -1;
 }
@@ -528,6 +571,10 @@ boolean try_cloake_buff(skill buff_name)
 	// Uses a Vampyric Cloake skill if available and we have a free kill/run skill
 	// Returns true if the buff was successful, false otherwise
 	skill free_run_skill = get_free_run_skill();
+	if (item_amount($item[Vampyric cloake]) > 0)
+	{
+		equip($slot[back], $item[Vampyric cloake]);
+	}
 	if (equipped_item($slot[back]) == $item[Vampyric cloake] && free_run_skill != $skill[none])
 	{
 		reach_mp(50);
@@ -2871,6 +2918,7 @@ void main(string arguments){
 			use(1, $item[LOV Elixir #6]);
 		}
 
+		lightsaber_buff($skill[Meteor Shower]);
 		
 		force_skill(1, $skill[Spirit of Peppermint]);
 		force_skill(1, $skill[Simmer]);
@@ -2944,6 +2992,8 @@ void main(string arguments){
 		}
 
 		print("Task Prep (weapon dmg)", "blue");
+		
+		lightsaber_buff($skill[Meteor Shower]);
 
 		if (!force_skill(1, $skill[The Ode to Booze])) abort("Ode loop fail");
 
@@ -3045,8 +3095,9 @@ void main(string arguments){
 		}
 		
 		
+
 		
-		if((my_class() == $class[seal clubber]) && (have_skill($skill[Meteor Shower])) && (get_property("_sealsSummoned").to_int() < 10))
+		if((have_effect($effect[Meteor Showered]) <= 0) && (my_class() == $class[seal clubber]) && (have_skill($skill[Meteor Shower])) && (get_property("_sealsSummoned").to_int() < 10))
 		{
 			print("Experimental turn saving for seal clubber with meteor lore","blue");
 			print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
@@ -3062,38 +3113,40 @@ void main(string arguments){
 		
 
 		//GOD LOB meteor lore trick
-		if ((have_skill($skill[Meteor Shower])) || (knoll_available()))
+		if (have_effect($effect[Meteor Showered]) <= 0)
 		{
-			if (guild_store_available() && knoll_available())
+			if ((have_skill($skill[Meteor Shower])) || (knoll_available()))
 			{
-				//make meatcar
-				print("Experimental turn saving for knoll sign with meteor lore","blue");
-				print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
-				print("Run script again after rollover, combat should end without costing an adventure","blue");
-				cli_execute("make bitchin' meatcar");
-				visit_url("guild.php?place=paco"); //turn in meatcar quest
-				visit_url("guild.php?place=paco"); //ask for white castle quest
-				visit_url("choice.php?whichchoice=930&pwd=" + my_hash() + "&option=1",true); //accept white castle quest
-				visit_url("place.php?whichplace=forestvillage&action=fv_scientist",false);
-				visit_url("choice.php?whichchoice=1201&pwd=" + my_hash() + "&option=1",true); //fight tentacle
-				use_skill($skill[Meteor Shower]); //meteor shower, not sure if auto or needed
-			}
-			else
-			{
-				if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
+				if (guild_store_available() && knoll_available())
 				{
-					print("Experimental turn saving for god lobster with meteor lore","blue");
+					//make meatcar
+					print("Experimental turn saving for knoll sign with meteor lore","blue");
 					print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
 					print("Run script again after rollover, combat should end without costing an adventure","blue");
-					use_familiar($familiar[God Lobster]);
-					reach_hp(my_maxhp()-15);
-					reach_mp(20);
-					visit_url("main.php?fightgodlobster=1");
-					use_skill($skill[Meteor Shower]); //meteor shower
+					cli_execute("make bitchin' meatcar");
+					visit_url("guild.php?place=paco"); //turn in meatcar quest
+					visit_url("guild.php?place=paco"); //ask for white castle quest
+					visit_url("choice.php?whichchoice=930&pwd=" + my_hash() + "&option=1",true); //accept white castle quest
+					visit_url("place.php?whichplace=forestvillage&action=fv_scientist",false);
+					visit_url("choice.php?whichchoice=1201&pwd=" + my_hash() + "&option=1",true); //fight tentacle
+					use_skill($skill[Meteor Shower]); //meteor shower, not sure if auto or needed
+				}
+				else
+				{
+					if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
+					{
+						print("Experimental turn saving for god lobster with meteor lore","blue");
+						print("DO NOT FINISH COMBAT AND END DAY 1 WHEN ABORTED","blue");
+						print("Run script again after rollover, combat should end without costing an adventure","blue");
+						use_familiar($familiar[God Lobster]);
+						reach_hp(my_maxhp()-15);
+						reach_mp(20);
+						visit_url("main.php?fightgodlobster=1");
+						use_skill($skill[Meteor Shower]); //meteor shower
+					}
 				}
 			}
 		}
-		
 		abort("END DAY 1.");
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4333,12 +4386,14 @@ void main(string arguments){
 			equip($slot[acc2], $item[Brutal brogues]);
 		}
 
-		//borrow time here (TODO: borrow only if needed)
+		//borrow time here if needed
 		if ((item_amount($item[borrowed time]) > 0) && (my_adventures() <= 60))
 		{
 			print("Borrowing Time", "green");
 			use(1, $item[borrowed time]);
 		}
+		
+		lightsaber_buff($skill[Meteor Shower]);
 
 		complete_quest("BREED MORE COLLIES", 5);
 
