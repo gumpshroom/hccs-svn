@@ -14,6 +14,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ eldritch tentacle ]
 if hasskill Meteor Shower
@@ -44,6 +45,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ fiendish can of asparagus ]
 if hasskill Macrometeorite
@@ -54,6 +56,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ flame-broiled meat blob ]
 if hasskill Macrometeorite
@@ -64,6 +67,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ fluffy bunny ]
 skill extract
@@ -165,6 +169,7 @@ skill extract
 skill sing along
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ one-eyed gnoll ]
 skill extract
@@ -183,6 +188,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ remaindered skeleton ]
 if hasskill Macrometeorite
@@ -193,6 +199,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ sausage goblin ]
 skill micrometeorite
@@ -223,6 +230,7 @@ skill sing along
 skill release the boots
 skill stuffed mortar shell
 skill curse of weaksauce
+attack with weapon
 
 [ the haunted kitchen ]
 skill extract
