@@ -439,7 +439,6 @@ int lightsaber_buff(skill value)
 			visit_url("main.php"); //refresh, not sure if needed
 			print("TEST15");
 			return 0;
-			print("TEST16");
 		}
 		else
 		{
@@ -719,6 +718,11 @@ void ode_drink(int quantity, item booze)
 
 void drink_to(int inebriety)
 {
+	while (item_amount($item[bunch of sea grapes]) > 0)
+	{
+		use(item_amount($item[bunch of sea grapes]), $item[bunch of sea grapes]);
+	}
+
 	while (my_inebriety() < inebriety)
 	{
 		if (item_amount($item[punch-drunk punch]) > 0) ode_drink(1, $item[punch-drunk punch]); //6.5adv
@@ -731,7 +735,8 @@ void drink_to(int inebriety)
 		else if (item_amount($item[pumpkin beer]) > 0) ode_drink(1, $item[pumpkin beer]); //5.5adv
 		else if (item_amount($item[Sacramento wine]) > 1) ode_drink(1, $item[Sacramento wine]); //5.5adv
 		else if (item_amount($item[Agitated Turkey]) > 1) ode_drink(1, $item[Agitated Turkey]); //5.5adv
-		else if (item_amount($item[Friendly Turkey]) > 1) ode_drink(1, $item[Friendly Turkey]); //5/0adv
+		else if (item_amount($item[Friendly Turkey]) > 1) ode_drink(1, $item[Friendly Turkey]); //5.0adv
+		else if (item_amount($item[bottle of sea wine]) > 1) ode_drink(1, $item[bottle of sea wine]); //4.0adv
 		else if (item_amount($item[astral pilsner]) > 0) ode_drink(1, $item[astral pilsner]); //adv = level*0.5+0.5
 		else if (item_amount($item[Cold One]) > 0) ode_drink(1, $item[Cold One]); //adv = max(level,3.0)
 		//6.16adv per drunk perfect drink
@@ -1489,6 +1494,34 @@ void main(string arguments){
 		print("Finished Hot Dogs", "blue");
 		return;
 	}
+	else if (arguments.to_lower_case() == "hotdog" || arguments.to_lower_case() == "hotdogs")
+	{
+		//use before ascend
+		print("Stuffing down basic hotdogs", "blue");
+		boolean done4 = false;
+		visit_url("clan_viplounge.php?action=hotdogstand", false);
+		while (!done4) {
+			string page = visit_url("clan_viplounge.php?preaction=eathotdog&whichdog=-92&sumbit=Eat",true);
+
+			if (page.contains_text("feel up to eating")) {
+				done4 = true;
+			}
+		}
+		print("Finished Hot Dogs", "blue");
+		return;
+	}
+	else if (arguments.to_lower_case() == "3adv" || arguments.to_lower_case() == "calculate")
+	{
+		print("Attempt to calculate the universe for adv.", "blue");
+		try_num();
+		return;
+	}
+	else if (arguments.to_lower_case() == "consult" || arguments.to_lower_case() == "fortune")
+	{
+		print("Consulting fortune.", "blue");
+		try_consult();
+		return;
+	}
 	else if (arguments.to_lower_case() == "load" || arguments.to_lower_case() == "resume" || arguments.to_lower_case() != "start")
 	{
 		print("Unknown argument", "red");
@@ -1643,10 +1676,11 @@ void main(string arguments){
 			}
 		}
 	}
-	if (!(my_familiar() == $familiar[none]))
+	if ((!(my_familiar() == $familiar[none])) && (!(my_familiar() == $familiar[Trick-or-Treating Tot])))
 	{
 		ToTour = my_familiar();
 	}
+	
 	print("Touring familiar set to " + ToTour, "green");
 	print("Script will generally try to find a new familiar to tour guide each time.", "green");
 	print("Exception: Peppermint Rhino is set without clip arts until you can cap marzipan skull", "green");
@@ -2088,6 +2122,11 @@ void main(string arguments){
 			use(1, $item[a ten-percent bonus]);
 		else abort("You do not have a ten-percent bonus.");
 		
+		try_effect($effect[Pomp & Circumsands]);
+		try_effect($effect[Resting Beach Face]);
+		try_effect($effect[Do I Know You From Somewhere?]);
+		try_effect($effect[You Learned Something Maybe!]);
+		
 		//DAYCARE
 		print("Boxing Daycare", "green");
 		if ((get_property("daycareOpen") == true) && (get_property("_daycareNap") == false))
@@ -2243,14 +2282,17 @@ void main(string arguments){
 
 
 		print("Farming meat via casino", "blue");
+		reach_meat(100);
 		if (item_amount($item[hermit permit]) == 0)
 		{
 			buy(1 , $item[hermit permit], 100);
 		}
+		reach_meat(100);
 		if (item_amount($item[casino pass]) == 0)
 		{
 			buy(1 , $item[casino pass], 100);
 		}
+		reach_meat(1000);
 		hermit(999, $item[ten-leaf clover]);
 		while (item_amount($item[disassembled clover]) > 0)
 		{
@@ -2944,6 +2986,7 @@ void main(string arguments){
 		force_skill(1, $skill[Carol of the Hells]);
 		force_skill(1, $skill[Song of Sauce]);
 		force_skill(1, $skill[Arched Eyebrow of the Archmage]);
+		try_effect($effect[We're All Made of Starfish]);
 		//TODO: need 8 spooky res and 500hp, heal first
 		//try_skill(1, $skill[Deep Dark Visions]);
 
@@ -3026,6 +3069,7 @@ void main(string arguments){
 		use_familiar(ToTour);
 		
 		try_effect($effect[Frenzied, Bloody]);
+		try_effect($effect[Lack of Body-Building]);
 		force_skill(1, $skill[Rage of the Reindeer]);
 		force_skill(1, $skill[Scowl of the Auk]);
 		force_skill(1, $skill[Carol of the Bulls]);
@@ -3562,6 +3606,8 @@ void main(string arguments){
 		force_skill(1, $skill[Elemental Saucesphere]);
 		force_skill(1, $skill[Astral Shell]);
 		try_effect($effect[Synthesis: Hot]);
+		try_effect($effect[Hot-Headed]);
+		try_effect($effect[Too Cool for (Fish) School]);
 		
 		//DAY 2 LOV
 		if ((get_property("loveTunnelAvailable") == true) && (get_property("_loveTunnelUsed") == false) && !(to_boolean(get_property("hccs2da_noscale"))))
@@ -3581,24 +3627,7 @@ void main(string arguments){
 			use(1 , $item[LOV Extraterrestrial Chocolate]);
 		}
 
-		if (have_familiar($familiar[Exotic Parrot])) {
-			use_familiar($familiar[Exotic Parrot]);
-		}
 
-		if (have_effect($effect[Billiards Belligerence]) <= 0)
-		{
-			cli_execute("pool 1");
-		}
-
-		if ((have_skill($skill[Leash of Linguini])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
-		{
-			force_skill(1, $skill[Leash of Linguini]);
-		}
-
-		if ((have_skill($skill[Empathy of the Newt])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
-		{
-			force_skill(1, $skill[Empathy of the Newt]);
-		}
 
 		if ((item_amount($item[pocket wish]) > 0) && (!to_boolean(get_property("hccs2da_stingy"))))
 		{
@@ -3648,6 +3677,26 @@ void main(string arguments){
 			equip($slot[weapon], $item[Fourth of May Cosplay Saber]);
 		}
 		try_cloake_buff($skill[Become a Cloud of Mist]);
+		
+		if (have_familiar($familiar[Exotic Parrot])) {
+			use_familiar($familiar[Exotic Parrot]);
+		}
+
+		if (have_effect($effect[Billiards Belligerence]) <= 0)
+		{
+			cli_execute("pool 1");
+		}
+
+		if ((have_skill($skill[Leash of Linguini])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		{
+			force_skill(1, $skill[Leash of Linguini]);
+		}
+
+		if ((have_skill($skill[Empathy of the Newt])) && (familiar_weight($familiar[Exotic Parrot]) + weight_adjustment() < 20))
+		{
+			force_skill(1, $skill[Empathy of the Newt]);
+		}
+		
 		try_skill($skill[Love Mixology]);
 		if(elemental_resistance($element[hot]) < 94.93) {
 			if (lovepot(86.5,$stat[none]))
@@ -3842,6 +3891,9 @@ void main(string arguments){
 		{
 			use(1, $item[Blood of the Wereseal]);
 		}
+		try_effect($effect[Lack of Body-Building]);
+		//-1 spleen
+		try_effect($effect[Does a Body Good]);
 
 		//equipments
 		if (item_amount($item[chef's hat]) > 0)
@@ -4022,6 +4074,7 @@ void main(string arguments){
 				use(1, $item[Crimbo candied pecan]);
 			}
 		}
+		try_effect($effect[We're All Made of Starfish]);
 		if(item_amount($item[bag of grain]) > 0)
 		{
 			use(1, $item[bag of grain]);
@@ -4112,6 +4165,8 @@ void main(string arguments){
 			cli_execute("terminal enhance substats.enh");
 		}
 		
+		try_effect($effect[You Learned Something Maybe!]);
+		try_effect($effect[Resting Beach Face]);
 		//GOD LOB
 		if((have_familiar($familiar[God Lobster])) && (to_boolean(get_property("hccs2da_notour"))) && !(to_boolean(get_property("hccs2da_noscale"))))
 		{
@@ -4275,6 +4330,7 @@ void main(string arguments){
 		{
 			use(1, $item[pocket maze]);
 		}
+		try_effect($effect[Pomp & Circumsands]);
 		if((get_property("_madTeaParty") == false) && (item_amount($item[&quot;DRINK ME&quot; potion]) > 0))
 		{
 			if(item_amount($item[snorkel]) <= 0)
@@ -4379,6 +4435,7 @@ void main(string arguments){
 		try_effect($effect[Beastly Flavor]);
 		try_effect($effect[Billiards Belligerence]);
 		try_effect($effect[Blood Bond]);
+		try_effect($effect[Do I Know You From Somewhere?]);
 
 		//equips
 		if (item_amount($item[fish hatchet]) > 0)
