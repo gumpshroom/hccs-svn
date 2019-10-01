@@ -310,6 +310,23 @@ void use_telescope()
 	}
 }
 
+void try_beachcombing()
+{
+	// Use remaining free beachcombing turns
+	if (available_amount($item[Beach Comb]) > 0)
+	{
+		if (svn_exists("veracity0-beach"))
+		{
+			print("Running BeachComber Script", "green");
+			cli_execute("BeachComber 0");
+		}
+		else
+		{
+			print("If you install Veracity's BeachComber script, this script can comb the beach!", "red");
+		}
+	}
+}
+
 int adv1_NEP()
 {
 	//return 10 if boss
@@ -3211,6 +3228,10 @@ void main(string arguments){
 				}
 			}
 		}
+
+		// Use remaining free beach walks
+		try_beachcombing();
+
 		abort("END DAY 1.");
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4544,8 +4565,10 @@ void main(string arguments){
 		visit_url("choice.php?pwd&whichchoice=1089&option=30");
 
 		// Restore previous CCS and settings
-		
 		revert_settings();
+
+		// Use remaining free beach walks
+		try_beachcombing();
 
 		//DONT PULL WITH PVP
 		//cli_execute("pull all");
