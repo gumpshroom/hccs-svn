@@ -10,9 +10,9 @@ www.reddit.com/r/kol/wiki/guides/iloath_hccs
 Guide for manual 2DAY HCCS (without clip arts)
 www.reddit.com/r/kol/wiki/guides/iloath_hccs2
 
-hccs2da.ash: stable automation script, run this after perming skills and before diet or spending adv. RUN "hccs2da help" IN CLI FOR INFO
+hccs2daexp.ash: better but untested script, run this after perming skills and before diet or spending adv. RUN "hccs2daexp help" IN CLI FOR INFO
 
-hccs2daexp.ash: better but untested script, EXPERIMENTAL AND UNTESTED, supports more IOTM. RUN "hccs2daexp help" IN CLI FOR INFO
+hccs2da.ash: old automation script if the new one don't work, less turn saving. RUN "hccs2da help" IN CLI FOR INFO
 
 hccs.ccs: custom combat script for main script, should be automatically used as long as the ccs is installed by placing in css folder.
 (You need disintegrate, stuffed mortar shell and curse of weaksauce to use this css without modification, soul saucery is recommmanded if you have scaling IotM monsters.)
