@@ -315,6 +315,22 @@ void use_telescope()
 	}
 }
 
+boolean try_pillkeeper(string pill_name)
+{
+	// Uses the Eight Days a Week Pill Keeper to get the desired effect
+	if(available_amount($item[Eight Days a Week Pill Keeper ]) == 0)
+	{
+		return false;
+	} else if((my_spleen_use() >= spleen_limit()-2) && get_property("_freePillKeeperUsed").to_boolean() == true)
+	{
+		print("Not enough spleen to consume a pill", "red");
+		return false;
+	}
+
+	cli_execute("pillkeeper " + pill_name);
+	return true;
+}
+
 int adv1_NEP()
 {
 	//return 10 if boss
@@ -2558,9 +2574,14 @@ void main(string arguments){
 				eat(3 , $item[tasty tart]);
 				//(13/15)food
 
-				if (!eat_dog("optimal dog", AddHotdog))
-					abort("Cannot eat dog");
-				//(14/15)food
+				if(!try_pillkeeper("sem"))
+				{
+					if (!eat_dog("optimal dog", AddHotdog))
+					{
+						abort("Cannot eat dog");
+					}
+					//(14/15)food
+				} // TODO: Eat something else if we used pillkeeper
 
 				if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 				{
@@ -2571,7 +2592,7 @@ void main(string arguments){
 				}
 				else
 				{
-					abort("No optimal dog semirare.");
+					abort("No optimal dog or pillkeeper semirare.");
 				}
 				use(1,  $item[Knob Goblin lunchbox]);
 				eat(1 , $item[Knob pasty]);
@@ -2592,9 +2613,14 @@ void main(string arguments){
 					abort("No semirare.");
 				}
 
-				if (!eat_dog("optimal dog", AddHotdog))
-					abort("Cannot eat dog");
-				//(2/15)food
+				if(!try_pillkeeper("sem"))
+				{
+					if (!eat_dog("optimal dog", AddHotdog))
+					{
+						abort("Cannot eat dog");
+					}
+					//(2/15)food
+				} // TODO: Eat something else if we used pillkeeper
 
 				if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 				{
@@ -2605,7 +2631,7 @@ void main(string arguments){
 				}
 				else
 				{
-					abort("No optimal dog semirare.");
+					abort("No optimal dog or pillkeeper semirare.");
 				}
 			}
 
@@ -3700,8 +3726,13 @@ void main(string arguments){
 			}
 			else
 			{
-				if (!eat_dog("optimal dog", AddHotdog))
-					abort("Cannot eat optimal dog");
+				if(!try_pillkeeper("sem"))
+				{
+					if (!eat_dog("optimal dog", AddHotdog))
+					{
+						abort("Cannot eat optimal dog");
+					}
+				} // TODO: Eat something else if we used pillkeeper
 
 				if (get_counters("Fortune Cookie" ,0 ,0) == "Fortune Cookie")
 				{
@@ -3712,7 +3743,7 @@ void main(string arguments){
 				}
 				else
 				{
-					abort("No optimal dog semirare.");
+					abort("No optimal dog or pillkeeper semirare.");
 				}
 				eat(3 , $item[tasty tart]);
 			}
@@ -3814,6 +3845,7 @@ void main(string arguments){
 			}
 			
 			try_skill($skill[Love Mixology]);
+			try_pillkeeper("ele");
 			if(elemental_resistance($element[hot]) < 94.93) {
 				if (lovepot(86.5,$stat[none]))
 				{
@@ -4142,6 +4174,7 @@ void main(string arguments){
 			
 			
 			try_skill($skill[Love Mixology]);
+			try_pillkeeper("stats");
 			if (lovepot(56.5,$stat[muscle]))
 			{
 				use(1, to_item(9745));
@@ -4380,6 +4413,7 @@ void main(string arguments){
 			}
 
 			try_skill($skill[Love Mixology]);
+			try_pillkeeper("stats");
 			if (lovepot(27.5,$stat[mysticality]))
 			{
 				use(1, to_item(9745));
@@ -4526,6 +4560,7 @@ void main(string arguments){
 			}
 			
 			try_skill($skill[Love Mixology]);
+			try_pillkeeper("stats");
 			if (lovepot(0.0,$stat[moxie]))
 			{
 				use(1, to_item(9745));
@@ -4594,6 +4629,7 @@ void main(string arguments){
 			}
 			
 			lightsaber_buff($skill[Meteor Shower]);
+			try_pillkeeper("familiar");
 
 			complete_quest("BREED MORE COLLIES", 5);
 			if (stepmode == 1) { abort("step done"); }

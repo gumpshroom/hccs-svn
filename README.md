@@ -39,7 +39,7 @@ If you have IoTM with scaling monsters, you might want more skills like itchy fi
 
 (Partially) Supported IOTM:
 
-Beach Comb, Cosplay Saber, Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal
+Beach Comb, Cosplay Saber, Clip Arts, Kramco Sausage-o-Matic, Neverending Party, Bastille Battalion, BoomBox, God Lobster, LOV tunnels, Boxing Daycare, Voter Registration, FantasyRealm, January's Garbage Tote, pantogram, Pocket Meteor Guide, Kremlin's Greatest Briefcase, li'l orphan tot, Stomping Boots, Doctor Bag, pen pal, Eight Days a Week Pill Keeper
 
 WARNING: This script does not pick up after abort in the middle of the day. Please either 1. finish the day manually or 2. comment out /* */ everything the script already done before rerun (and undo changes to script when done)
 EXCEPTION: You can run script after manually setting your familiar, faxing your monsters and grabing your floundry item from clan of your choice.
